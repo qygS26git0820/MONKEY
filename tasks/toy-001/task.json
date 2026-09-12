@@ -1,0 +1,9 @@
+{
+  "id": "toy-001",
+  "description": "calc.add(a, b) 返回了错误的结果。修复 calc.py，使 tests/test_calc.py 全部通过。",
+  "repo": "repo",
+  "verify": {
+    "command": ["{python}", "-m", "unittest", "discover", "-s", "tests", "-t", ".", "-v"],
+    "cwd": "."
+  }
+}

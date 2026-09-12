@@ -1,0 +1,147 @@
+{
+  "COMMON_FIELDS": [
+    "schema_version",
+    "run_id",
+    "seq",
+    "ts_mono",
+    "ts_wall",
+    "type"
+  ],
+  "EVENT_TYPES": [
+    "run_start",
+    "agent_message",
+    "llm_request",
+    "llm_response",
+    "tool_call",
+    "tool_result",
+    "step_end",
+    "verification",
+    "error",
+    "run_end"
+  ],
+  "FAILURE_CLASSES": [
+    "none",
+    "agent_loop_limit",
+    "agent_gave_up",
+    "tool_error_repeated",
+    "verification_failed",
+    "timeout_wall",
+    "timeout_step",
+    "policy_denied",
+    "env_error",
+    "harness_error",
+    "aborted_by_user",
+    "cost_budget_exceeded"
+  ],
+  "FAILURE_DECISION_ORDER": [
+    "aborted_by_user",
+    "harness_error",
+    "env_error",
+    "cost_budget_exceeded",
+    "timeout_wall",
+    "timeout_step",
+    "tool_error_repeated",
+    "policy_denied",
+    "agent_gave_up",
+    "agent_loop_limit",
+    "verification_failed",
+    "none"
+  ],
+  "REQUIRED_FIELDS": {
+    "agent_message": [
+      "role",
+      "content"
+    ],
+    "error": [
+      "where",
+      "exception_type",
+      "message"
+    ],
+    "llm_request": [
+      "model",
+      "step"
+    ],
+    "llm_response": [
+      "model",
+      "step"
+    ],
+    "run_end": [
+      "status",
+      "failure_class",
+      "steps",
+      "duration_ms",
+      "totals"
+    ],
+    "run_start": [
+      "task_id",
+      "agent",
+      "executor",
+      "config_hash",
+      "harness_git_sha",
+      "python_version",
+      "schema_version"
+    ],
+    "step_end": [
+      "step",
+      "duration_ms"
+    ],
+    "tool_call": [
+      "call_id",
+      "tool",
+      "args",
+      "cwd"
+    ],
+    "tool_result": [
+      "call_id",
+      "tool",
+      "status",
+      "exit_code",
+      "duration_ms",
+      "stdout",
+      "stderr",
+      "stdout_stream",
+      "stderr_stream"
+    ],
+    "verification": [
+      "name",
+      "command",
+      "exit_code",
+      "status",
+      "duration_ms",
+      "stdout",
+      "stderr",
+      "stdout_stream",
+      "stderr_stream"
+    ]
+  },
+  "RUN_END_STATUSES": [
+    "completed",
+    "failed",
+    "aborted",
+    "error"
+  ],
+  "SCHEMA_VERSION": 1,
+  "STREAM_FIELDS": [
+    "bytes_total",
+    "bytes_delivered",
+    "elided_bytes",
+    "truncated",
+    "strategy",
+    "head_bytes",
+    "tail_bytes",
+    "marker_text",
+    "sha256_full",
+    "sha256_delivered",
+    "blob_ref"
+  ],
+  "TOOL_RESULT_STATUSES": [
+    "ok",
+    "error",
+    "timeout",
+    "denied"
+  ],
+  "TRUNCATION_STRATEGIES": [
+    "none",
+    "head_tail"
+  ]
+}

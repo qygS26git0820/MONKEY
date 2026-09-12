@@ -1,0 +1,9 @@
+{
+  "id": "toy-002",
+  "description": "scale(x) 的缩放倍数不对。需要同时查看 settings.py 与 scale.py 才能定位，修复后使 tests/test_scale.py 全部通过。",
+  "repo": "repo",
+  "verify": {
+    "command": ["{python}", "-m", "unittest", "discover", "-s", "tests", "-t", ".", "-v"],
+    "cwd": "."
+  }
+}

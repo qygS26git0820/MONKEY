@@ -1,0 +1,11 @@
+{
+  "agent": "scripted_ok",
+  "config_hash": "94ea229cbcdaaf50b4aab17a77b626024ab772f13236464f116780db52181114",
+  "executor": "local",
+  "harness_git_sha": null,
+  "python_version": "3.12.13",
+  "repo_variant": "repo",
+  "run_id": "20260912-053957-toy-002-scripted_ok",
+  "schema_version": 1,
+  "task_id": "toy-002"
+}
