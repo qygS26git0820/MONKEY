@@ -1,0 +1,20 @@
+# 移动直接触碰的那个字段：run_end.totals
+# 移动前：totals 里三个键是硬编码 None；移动后：从 run_ctx.usage 读，仍是 None。
+
+scenario                           batch   totals
+toy-001-scripted_bad_edit-repo     ab-local {steps:4, tool_calls:3, in:None, out:None, cost:None}
+toy-001-scripted_bad_edit-repo     mv-local {steps:4, tool_calls:3, in:None, out:None, cost:None}
+toy-001-scripted_denied-repo       ab-local {steps:2, tool_calls:2, in:None, out:None, cost:None}
+toy-001-scripted_denied-repo       mv-local {steps:2, tool_calls:2, in:None, out:None, cost:None}
+toy-001-scripted_gave_up-repo      ab-local {steps:1, tool_calls:0, in:None, out:None, cost:None}
+toy-001-scripted_gave_up-repo      mv-local {steps:1, tool_calls:0, in:None, out:None, cost:None}
+toy-001-scripted_loop_limit-repo   ab-local {steps:8, tool_calls:8, in:None, out:None, cost:None}
+toy-001-scripted_loop_limit-repo   mv-local {steps:8, tool_calls:8, in:None, out:None, cost:None}
+toy-001-scripted_ok-repo           ab-local {steps:4, tool_calls:3, in:None, out:None, cost:None}
+toy-001-scripted_ok-repo           mv-local {steps:4, tool_calls:3, in:None, out:None, cost:None}
+toy-001-scripted_ok-repo_faulty    ab-local {steps:4, tool_calls:3, in:None, out:None, cost:None}
+toy-001-scripted_ok-repo_faulty    mv-local {steps:4, tool_calls:3, in:None, out:None, cost:None}
+toy-001-scripted_tool_error-repo   ab-local {steps:3, tool_calls:3, in:None, out:None, cost:None}
+toy-001-scripted_tool_error-repo   mv-local {steps:3, tool_calls:3, in:None, out:None, cost:None}
+toy-002-scripted_ok-repo           ab-local {steps:4, tool_calls:4, in:None, out:None, cost:None}
+toy-002-scripted_ok-repo           mv-local {steps:4, tool_calls:4, in:None, out:None, cost:None}

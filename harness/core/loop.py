@@ -28,6 +28,7 @@ def run_agent(*, agent, task, tools, tool_ctx, run_ctx, executor) -> str:
     config = run_ctx.config
     budgets = config.budgets
     trace = run_ctx.trace
+    usage = run_ctx.usage
 
     def elapsed_ms(t0: float) -> int:
         return clock.ms_since(t0)
@@ -62,6 +63,12 @@ def run_agent(*, agent, task, tools, tool_ctx, run_ctx, executor) -> str:
 
     try:
         while failure_class is None:
+            # 成本检查必须排在墙上时钟检查之前：trace-schema.md §1.2 把
+            # cost_budget_exceeded 排第 4、timeout_wall 排第 5，两者同时成立
+            # 时先到者胜。顺序反过来就会违反已声明的判定顺序。
+            if usage.exceeded(budgets):
+                failure_class = "cost_budget_exceeded"
+                break
             if clock.now() - started > budgets.wall_timeout_s:
                 failure_class = "timeout_wall"
                 break
@@ -72,6 +79,11 @@ def run_agent(*, agent, task, tools, tool_ctx, run_ctx, executor) -> str:
             step += 1
             step_started = clock.now()
             action = agent.next_action(state)
+            # 单次模型响应就可能捅破上限，故决策一回来就再问一次，
+            # 不等到下一轮开头——否则被观测到的超支会多出整整一步。
+            if usage.exceeded(budgets):
+                failure_class = "cost_budget_exceeded"
+                break
 
             if isinstance(action, Finish):
                 state.append("agent", action.summary)
@@ -163,9 +175,9 @@ def run_agent(*, agent, task, tools, tool_ctx, run_ctx, executor) -> str:
     totals = {
         "steps": step,
         "tool_calls": tool_call_count,
-        "input_tokens": None,
-        "output_tokens": None,
-        "cost_usd": None,
+        "input_tokens": usage.input_tokens,
+        "output_tokens": usage.output_tokens,
+        "cost_usd": usage.cost_usd,
     }
     trace.emit(
         "run_end",

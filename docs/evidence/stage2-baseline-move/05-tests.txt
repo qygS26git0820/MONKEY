@@ -1,0 +1,25 @@
+# 移动后全套件
+
+$ PYTHONIOENCODING=utf-8 .venv/Scripts/python.exe -m unittest discover -s tests -t .
+
+...................................................................
+----------------------------------------------------------------------
+Ran 67 tests in 20.553s
+
+OK
+
+# 其中包含三重机械保障与阶段 1 语料的守卫：
+test_decision_order_is_a_permutation_of_failure_classes (tests.test_contract.ContractShapeTest.test_decision_order_is_a_permutation_of_failure_classes) ... ok
+test_event_types_unique_and_have_required_fields (tests.test_contract.ContractShapeTest.test_event_types_unique_and_have_required_fields) ... ok
+test_failure_classes_are_12_and_unique (tests.test_contract.ContractShapeTest.test_failure_classes_are_12_and_unique) ... ok
+test_schema_version_is_1 (tests.test_contract.ContractShapeTest.test_schema_version_is_1) ... ok
+test_snapshot_matches_live_contract (tests.test_contract.FrozenSnapshotTest.test_snapshot_matches_live_contract) ... ok
+test_failing_run_is_reproducible (tests.test_determinism.DeterminismTest.test_failing_run_is_reproducible) ... ok
+test_failure_output_embeds_run_path (tests.test_determinism.DeterminismTest.test_failure_output_embeds_run_path) ... ok
+test_passing_run_is_reproducible (tests.test_determinism.DeterminismTest.test_passing_run_is_reproducible) ... ok
+test_trace_records_workspace_relative_paths (tests.test_determinism.DeterminismTest.test_trace_records_workspace_relative_paths) ... ok
+
+----------------------------------------------------------------------
+Ran 14 tests in 1.358s
+
+OK

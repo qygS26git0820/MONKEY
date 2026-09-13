@@ -6,6 +6,7 @@ import shutil
 from pathlib import Path
 
 from . import contract, paths
+from .core.usage import UsageLedger
 from .env.docker import DEFAULT_IMAGE
 from .trace import TraceWriter
 
@@ -19,6 +20,8 @@ class RunContext:
         self.harness_git_sha = harness_git_sha
         self.python_version = platform.python_version()
         self.task = task
+        # 本次 run 的 token/成本累计。agent 侧写、主循环侧读，都在这一个对象上。
+        self.usage = UsageLedger()
 
         self.run_dir = paths.ensure_within(paths.RUNS_DIR / run_id)
         if self.run_dir.exists():

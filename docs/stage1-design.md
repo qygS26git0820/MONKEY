@@ -148,6 +148,17 @@ runs/<run_id>/
 
 **验收方式（把软要求变成硬证据）**：阶段 2 结束时，对**上表五个文件**做 `git diff`，**必须为空**。这条我会在阶段 2 的交付里主动执行并贴出结果给你核对。
 
+#### 变更记录 1：冻结基线移动（2026-09-13）
+
+**基线从 `3342dcf` 移到"登记本节的那个提交"，其主题为** `阶段 2：移动冻结基线（loop.py 的 token/成本读写接口定稿）`。
+SHA 用 `git log --format=%H -1 --grep="移动冻结基线"` 解析——本节无法引用自己的 SHA，故留命令而非占位符。
+
+- **原因**：`harness/core/loop.py` 注定要长功能，而它被冻了。阶段 2 必须让它（a）把 `run_end.totals` 的三个 `None` 换成真值，（b）在累计用量越过预算时以 `cost_budget_exceeded` 终止（`trace-schema.md` §1.3 #12）。冻结一个必须长功能的文件是设计漏洞：现在补的代价是一次登记，进阶段 2 之后再补的代价是冻结机制本身的可信度。
+- **范围**：**只有 `loop.py`**。`contract.py` 不动——`trace.py:116` 的 `emit` 只校验必需字段存在、`validate_records` 不拒绝未知字段，故给 `llm_request`/`llm_response` 加 `usage`/`latency_ms`/`stop_reason`/`cost_usd_estimate` 是零 schema 代价。`agent/base.py` 不动——累计量的读写都走注入的 `run_ctx.usage`，Agent 接口无需新增方法。`tools/base.py`、`env/base.py` 不动。
+- **只移一次**：`loop.py` 对 token/成本的全部知识在这一次定稿（读取侧 + 两处检查的**调用点**），被调用的实现落在非冻结文件 `harness/core/usage.py` 等。若把调用点留到实现时再加，`loop.py` 会被改第二次、基线要移两次。
+- **行为保持的证据**：`docs/evidence/stage2-baseline-move/`。8 组对照共 104 条事件，移动前后逐字段差异只有 `run_start.harness_git_sha`（构建来源字段，两批之间落了 `4e824e0`），抹掉它后零差异；`totals` 三个键在两批里都是 `None`。
+- **此后的验收基准**：本表五个文件的 `git diff` 相对**新基线**为空。`3342dcf` 只用于历史核对，不再是验收基准。
+
 三重机械保障，任一层被破坏都会立刻报警：
 1. `tests/fixtures/contract_snapshot.json` —— 契约常量的黄金快照，`tests/test_contract.py` 逐字段比对；
 2. `tests/fixtures/phase1-sample-trace.jsonl` —— 阶段 1 真实产出的轨迹，`tests/test_backcompat.py` 断言它永远合法；

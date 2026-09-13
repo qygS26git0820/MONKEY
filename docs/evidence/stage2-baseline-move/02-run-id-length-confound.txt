@@ -1,0 +1,30 @@
+# 一条方法论发现：run_id 长度会改变被观测到的字节数
+
+第一版比较用了前缀 ab-local-（9 字符）对 mv-（3 字符），结果每组失败场景的
+verification.stderr_stream 都多出 12 字节差。原因不是行为变了，是：
+
+  失败回溯里含工作区绝对路径，路径里含 run_id；run_id 短 6 字符，
+  路径在回溯里出现两次，于是 bytes_total / bytes_delivered 各少 12。
+
+tests/test_determinism.py 不受此影响，因为它的两条 run 用等长 run_id（t- + 10 位十六进制）。
+
+后果（值得记）：**run_id 长度是流字节数的一个混杂项**。跨 run 比较
+bytes_total / bytes_delivered 时 run_id 长度必须相同，否则差异里混进了与
+agent 行为无关的成分。第 01 份证据的两批 run 前缀等长（各 9 字符），
+就是为了消掉这个混杂项。
+
+## 原始输出（前缀长度不等的那一版）
+```
+DIFFERS   toy-001-scripted_bad_edit-repo  3 处字段差异 / 13 条事件
+   [0] run_start.harness_git_sha: 'a5568b1a98c359f0f8c2f3f52f94268febe8a1db' -> '4e824e0eb0493a7d92bacf64fd0bc2c08af11fd0'
+   [8] tool_result.stderr_stream: "{'blob_ref': None, 'bytes_delivered': 1549, 'bytes_total': 1549, 'elided_bytes':" -> "{'blob_ref': None, 'bytes_delivered': 1531, 'bytes_total': 1531, 'elided_bytes':"
+   [11] verification.stderr_stream: "{'blob_ref': None, 'bytes_delivered': 1549, 'bytes_total': 1549, 'elided_bytes':" -> "{'blob_ref': None, 'bytes_delivered': 1531, 'bytes_total': 1531, 'elided_bytes':"
+DIFFERS   toy-001-scripted_denied-repo  2 处字段差异 / 8 条事件
+   [0] run_start.harness_git_sha: 'a5568b1a98c359f0f8c2f3f52f94268febe8a1db' -> '4e824e0eb0493a7d92bacf64fd0bc2c08af11fd0'
+   [6] verification.stderr_stream: "{'blob_ref': None, 'bytes_delivered': 1132, 'bytes_total': 1132, 'elided_bytes':" -> "{'blob_ref': None, 'bytes_delivered': 1120, 'bytes_total': 1120, 'elided_bytes':"
+DIFFERS   toy-001-scripted_gave_up-repo  2 处字段差异 / 4 条事件
+   [0] run_start.harness_git_sha: 'a5568b1a98c359f0f8c2f3f52f94268febe8a1db' -> '4e824e0eb0493a7d92bacf64fd0bc2c08af11fd0'
+   [2] verification.stderr_stream: "{'blob_ref': None, 'bytes_delivered': 1134, 'bytes_total': 1134, 'elided_bytes':" -> "{'blob_ref': None, 'bytes_delivered': 1122, 'bytes_total': 1122, 'elided_bytes':"
+DIFFERS   toy-001-scripted_loop_limit-repo  2 处字段差异 / 27 条事件
+   [0] run_start.harness_git_sha: 'a5568b1a98c359f0f8c2f3f52f94268febe8a1db' -> '4e824e0eb0493a7d92bacf64fd0bc2c08af11fd0'
+```

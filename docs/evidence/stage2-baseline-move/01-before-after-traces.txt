@@ -1,0 +1,43 @@
+# 基线移动是否改变行为：移动前后轨迹逐字段比较
+
+before = runs/ab-local-*  （4e824e0 的文件内容，但当时 HEAD 还是 a5568b1）
+after  = runs/mv-local-*  （同一内容 + 本次移动）
+归一化口径与 tests/test_determinism.py 相同：抹 ts_mono/ts_wall/duration_ms/run_id、
+子进程自报耗时、由它派生的 sha256_*、以及源目录绝对路径。
+run_id 前缀长度两批相同（各 9 字符）——理由见 02。
+
+## 第一遍：什么字段都不多抹
+```
+DIFFERS   toy-001-scripted_bad_edit-repo  1 处字段差异 / 13 条事件
+   [0] run_start.harness_git_sha: 'a5568b1a98c359f0f8c2f3f52f94268febe8a1db' -> '4e824e0eb0493a7d92bacf64fd0bc2c08af11fd0'
+DIFFERS   toy-001-scripted_denied-repo  1 处字段差异 / 8 条事件
+   [0] run_start.harness_git_sha: 'a5568b1a98c359f0f8c2f3f52f94268febe8a1db' -> '4e824e0eb0493a7d92bacf64fd0bc2c08af11fd0'
+DIFFERS   toy-001-scripted_gave_up-repo  1 处字段差异 / 4 条事件
+   [0] run_start.harness_git_sha: 'a5568b1a98c359f0f8c2f3f52f94268febe8a1db' -> '4e824e0eb0493a7d92bacf64fd0bc2c08af11fd0'
+DIFFERS   toy-001-scripted_loop_limit-repo  1 处字段差异 / 27 条事件
+   [0] run_start.harness_git_sha: 'a5568b1a98c359f0f8c2f3f52f94268febe8a1db' -> '4e824e0eb0493a7d92bacf64fd0bc2c08af11fd0'
+DIFFERS   toy-001-scripted_ok-repo  1 处字段差异 / 13 条事件
+   [0] run_start.harness_git_sha: 'a5568b1a98c359f0f8c2f3f52f94268febe8a1db' -> '4e824e0eb0493a7d92bacf64fd0bc2c08af11fd0'
+DIFFERS   toy-001-scripted_ok-repo_faulty  1 处字段差异 / 13 条事件
+   [0] run_start.harness_git_sha: 'a5568b1a98c359f0f8c2f3f52f94268febe8a1db' -> '4e824e0eb0493a7d92bacf64fd0bc2c08af11fd0'
+DIFFERS   toy-001-scripted_tool_error-repo  1 处字段差异 / 11 条事件
+   [0] run_start.harness_git_sha: 'a5568b1a98c359f0f8c2f3f52f94268febe8a1db' -> '4e824e0eb0493a7d92bacf64fd0bc2c08af11fd0'
+DIFFERS   toy-002-scripted_ok-repo  1 处字段差异 / 15 条事件
+   [0] run_start.harness_git_sha: 'a5568b1a98c359f0f8c2f3f52f94268febe8a1db' -> '4e824e0eb0493a7d92bacf64fd0bc2c08af11fd0'
+
+8 组对照，8 组有差异   (抹掉的字段: ('ts_mono', 'ts_wall', 'duration_ms', 'run_id'))
+```
+
+## 第二遍：把 harness_git_sha 也抹掉（它记的是 HEAD，两批之间落了 4e824e0）
+```
+identical toy-001-scripted_bad_edit-repo  (13 条事件，逐字段)
+identical toy-001-scripted_denied-repo  (8 条事件，逐字段)
+identical toy-001-scripted_gave_up-repo  (4 条事件，逐字段)
+identical toy-001-scripted_loop_limit-repo  (27 条事件，逐字段)
+identical toy-001-scripted_ok-repo  (13 条事件，逐字段)
+identical toy-001-scripted_ok-repo_faulty  (13 条事件，逐字段)
+identical toy-001-scripted_tool_error-repo  (11 条事件，逐字段)
+identical toy-002-scripted_ok-repo  (15 条事件，逐字段)
+
+8 组对照，0 组有差异   (抹掉的字段: ('ts_mono', 'ts_wall', 'duration_ms', 'run_id', 'harness_git_sha'))
+```
