@@ -1,0 +1,10 @@
+backend  seq type         tool       cwd         status
+-------------------------------------------------------
+local      2 tool_call    read_file  workspace   
+local      5 tool_call    write_file workspace   
+local      8 tool_call    run_verify workspace   
+local     12 verification -          workspace   passed
+docker     2 tool_call    read_file  /workspace  
+docker     5 tool_call    write_file /workspace  
+docker     8 tool_call    run_verify /workspace  
+docker    12 verification -          /workspace  passed

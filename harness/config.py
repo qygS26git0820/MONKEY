@@ -13,6 +13,7 @@ from dataclasses import dataclass
 from pathlib import Path
 
 from . import paths
+from .env.factory import EXECUTOR_KINDS
 
 
 class ConfigError(ValueError):
@@ -43,6 +44,10 @@ class Config:
     budgets: Budgets
     trace: TraceOptions
     raw: dict
+    # 必须排在 raw 之后：raw 无默认值，带默认值的字段只能跟在后面。
+    # 选了 local 后端的配置里没有 [executor].image，此处为 None 表示
+    # "用 DockerExecutor 自己的 DEFAULT_IMAGE"，而不是"没有镜像"。
+    docker_image: "str | None" = None
 
     def config_hash(self) -> str:
         blob = json.dumps(self.raw, sort_keys=True, separators=(",", ":")).encode("utf-8")
@@ -74,9 +79,14 @@ def load_config(name: str = "default") -> Config:
             tail_chars=int(t["tail_chars"]),
         )
         executor_kind = str(raw["executor"]["kind"])
+        executor_image = raw["executor"].get("image")
     except KeyError as exc:
         raise ConfigError(f"配置缺少字段: {exc}") from exc
 
+    if executor_kind not in EXECUTOR_KINDS:
+        raise ConfigError(
+            f"未知的 executor kind: {executor_kind!r}（已知: {', '.join(EXECUTOR_KINDS)}）"
+        )
     if not (budgets.max_denied_calls < budgets.max_tool_error_streak < budgets.max_steps):
         raise ConfigError(
             "不变量被破坏，要求 max_denied_calls < max_tool_error_streak < max_steps，"
@@ -93,4 +103,5 @@ def load_config(name: str = "default") -> Config:
             f"实际为 {trace.head_chars} + {trace.tail_chars} > {trace.truncate_threshold_bytes}"
         )
 
-    return Config(executor_kind=executor_kind, budgets=budgets, trace=trace, raw=raw)
+    return Config(executor_kind=executor_kind, budgets=budgets, trace=trace, raw=raw,
+                  docker_image=executor_image)

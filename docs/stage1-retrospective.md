@@ -190,12 +190,15 @@ D2 是这批里后果最直接的一条：它是**唯一一处会让你的验收
 
 ## 7. 明确保留的已知残差
 
-两条，都写进了 `docs/stage1-design.md` §13，不是本文档独家：
+前两条写进了 `docs/stage1-design.md` §13，不是本文档独家；第三条发生在这份设计文档冻结之后，登记处改在阶段 2 的证据目录：
 
 1. **`run_end` 的 `BaseException` 缺口**。`SystemExit`/`GeneratorExit` 会同时漏掉 `run_end` 与 `run_ctx.close()`。阶段 1 没有任何代码路径会抛这两类异常，所以本阶段未修；阶段 2 若引入，在 `loop.py` 外层补 `finally`。
 2. **跨后端失败输出的可比性**。见 §3.2 第 2 条。阶段 2 切容器后端时必须重新评估，否则"agent 看到的自己失败的原因"会随后端而变。
+3. **`harness/env/base.py` 的 docstring 已过时（2026-09-13 登记）**。它写着"阶段 3 增加 DockerExecutor"，而容器后端按决定被提前到阶段 2 落地。该文件在冻结清单内，故意不改：一次 docstring 修改不值得单独移动冻结基线；阶段 2 若因其它理由动 `base.py`，与那次改动合并做一次基线移动。登记处：`docs/evidence/stage2-docker/00-README.md` 限制第 3 条。
 
-这两条我**没有偷偷抹掉，也没有在文档里软化**，它们各自有一条测试或一节文档盯着。
+第 2 条的实测已经落地：`docs/evidence/stage2-docker/05-replay-path-diff.txt` 里同一个 `read_file` 在 local 记 `workspace`、在 docker 记 `/workspace`。第 3 条与 D7/D10 同性质——冻结一个文件，就同时冻结了它已经过时的陈述。
+
+这三条我**没有偷偷抹掉，也没有在文档里软化**，它们各自有一条测试或一节文档盯着。
 
 ---
 

@@ -1,0 +1,10 @@
+task     agent                variant      expected               actual
+-----    --------             -------      --------               ------
+toy-001  scripted_ok          repo         none                   none
+toy-002  scripted_ok          repo         none                   none
+toy-001  scripted_bad_edit    repo         verification_failed    verification_failed
+toy-001  scripted_ok          repo_faulty  verification_failed    verification_failed
+toy-001  scripted_tool_error  repo         tool_error_repeated    tool_error_repeated
+toy-001  scripted_denied      repo         policy_denied          policy_denied
+toy-001  scripted_gave_up     repo         agent_gave_up          agent_gave_up
+toy-001  scripted_loop_limit  repo         agent_loop_limit       agent_loop_limit

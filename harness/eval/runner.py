@@ -5,8 +5,8 @@
 """
 
 import re
-import sys
 
+from ..env.expand import expand_command
 from ..trace import prepare_stream
 
 RAN_RE = re.compile(r"Ran (\d+) tests? in")
@@ -32,14 +32,10 @@ def parse_unittest(text: str) -> dict:
     return {"tests_total": total, "failures": failures, "errors": errors, "passed": passed}
 
 
-def _substitute(token: str) -> str:
-    return sys.executable if token == "{python}" else token
-
-
 def run_verification(run_ctx, executor) -> dict:
     config = run_ctx.config
     spec = run_ctx.task.verify
-    command = [_substitute(a) for a in spec["command"]]
+    command = expand_command(spec["command"], executor)
     cwd = run_ctx.workspace / spec.get("cwd", ".")
 
     result = executor.run(command, cwd, config.budgets.verify_timeout_s)

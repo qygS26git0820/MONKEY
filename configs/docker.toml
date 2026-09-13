@@ -1,0 +1,23 @@
+[executor]
+kind = "docker"
+# 与 docs/evidence/stage2-docker/01-pull-python.txt 记录的是同一个镜像位
+# （digest sha256:78387bc3881b8273120a12ebe6c1ab22b018ccc2c9adf565ae1ac9b536e184ea）。
+# --pull never 保证用的就是本地这一份。
+image = "python:3.12-slim"
+
+# budgets 与 default.toml 逐字相同：这是刻意的。
+# 若为了让容器后端"跑得过"而放宽预算，A/B 对照就不再是同一把尺子。
+# 容器启动有固定开销，若真的在 60s 墙上撞限，那本身是要如实报告的现象。
+[budgets]
+max_steps = 8
+wall_timeout_s = 60.0
+step_timeout_s = 30.0
+per_tool_timeout_s = 10.0
+verify_timeout_s = 30.0
+max_tool_error_streak = 3
+max_denied_calls = 2
+
+[trace]
+truncate_threshold_bytes = 8192
+head_chars = 3000
+tail_chars = 3000

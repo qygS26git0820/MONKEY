@@ -6,6 +6,7 @@
 
 import os
 import subprocess
+import sys
 from pathlib import Path
 
 from .. import clock
@@ -17,6 +18,15 @@ class LocalExecutor(Executor):
 
     def __init__(self, visible_root: Path):
         self._root = Path(visible_root).resolve()
+
+    def python_argv(self) -> list:
+        """任务验证命令里 {python} 的解析结果。
+
+        阶段 1 这个解析写死在 shell_tools/eval.runner 里，等于假设
+        "解释器就在宿主上"。容器后端打破了这个假设，故下移到执行器：
+        同一个问题，两种答案。local 的答案与阶段 1 逐字节相同。
+        """
+        return [sys.executable]
 
     def visible_path(self, host_path) -> str:
         resolved = Path(host_path).resolve()

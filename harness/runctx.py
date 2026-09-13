@@ -6,6 +6,7 @@ import shutil
 from pathlib import Path
 
 from . import contract, paths
+from .env.docker import DEFAULT_IMAGE
 from .trace import TraceWriter
 
 
@@ -49,6 +50,11 @@ class RunContext:
             "harness_git_sha": self.harness_git_sha,
             "python_version": self.python_version,
         }
+        if executor_kind == "docker":
+            # 记录用的是哪个镜像位，否则两条 docker 轨迹无法判断是否同一后端。
+            # 注意 python_version 仍是**宿主**版本，不是容器里的：容器里的
+            # python 只是镜像的属性，这里没有多起一个容器去问它。
+            meta["executor_image"] = config.docker_image or DEFAULT_IMAGE
         (self.run_dir / "meta.json").write_text(
             json.dumps(meta, ensure_ascii=False, indent=2, sort_keys=True) + "\n",
             encoding="utf-8",

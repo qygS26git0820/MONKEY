@@ -15,7 +15,7 @@ from . import paths
 from .agent.scripted import AGENT_NAMES, ScriptedAgent
 from .config import ConfigError, load_config
 from .core.loop import run_agent
-from .env.local import LocalExecutor
+from .env.factory import make_executor
 from .report import text_report
 from .runctx import RunContext
 from .tasks.loader import TaskError, load_task
@@ -73,7 +73,7 @@ def cmd_run(args) -> int:
         print(f"无法创建运行目录: {exc}", file=sys.stderr)
         return 2
 
-    executor = LocalExecutor(run_ctx.run_dir)
+    executor = make_executor(config, run_ctx.run_dir, run_ctx.workspace)
     tools = ToolRegistry()
     tool_ctx = ToolContext(
         workspace=run_ctx.workspace,

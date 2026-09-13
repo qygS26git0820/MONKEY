@@ -1,0 +1,11 @@
+$ git diff 3342dcf --name-only -- harness/contract.py harness/core/loop.py harness/agent/base.py harness/tools/base.py harness/env/base.py
+(以上无输出 = 冻结清单相对基线 3342dcf 零改动)
+
+$ git diff 3342dcf --stat -- harness/
+ harness/__main__.py          |  4 ++--
+ harness/config.py            | 13 ++++++++++++-
+ harness/env/local.py         | 10 ++++++++++
+ harness/eval/runner.py       |  8 ++------
+ harness/runctx.py            |  6 ++++++
+ harness/tools/shell_tools.py | 13 ++-----------
+ 6 files changed, 34 insertions(+), 20 deletions(-)

@@ -1,9 +1,8 @@
 """命令执行工具与验证工具。命令一律以参数列表给出，绝不走 shell。"""
 
-import sys
-
 from .. import clock
 from ..core.messages import ToolOutcome
+from ..env.expand import expand_command
 from .base import Tool
 from .policy import PathPolicyError, resolve_in_workspace
 
@@ -41,7 +40,7 @@ class RunVerify(Tool):
 
     def execute(self, ctx, args) -> ToolOutcome:
         spec = ctx.task.verify
-        command = [_substitute(a) for a in spec["command"]]
+        command = expand_command(spec["command"], ctx.executor)
         try:
             cwd = resolve_in_workspace(ctx.workspace, spec.get("cwd", "."))
         except PathPolicyError as exc:
@@ -56,14 +55,6 @@ class RunVerify(Tool):
         reason = "" if status == "ok" else ("tool_timeout" if status == "timeout" else "tests_failed")
         return ToolOutcome(status, result.exit_code, stdout=result.stdout, stderr=result.stderr,
                            reason=reason, duration_ms=result.duration_ms)
-
-
-def _substitute(token: str) -> str:
-    if token == "{python}":
-        return sys.executable
-    if token == "{workspace}":
-        return "."
-    return token
 
 
 def _ms(started: float) -> int:
