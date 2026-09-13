@@ -1,0 +1,16 @@
+### CONTROL: known-existing value (ProductName)
+系统找不到指定的路径。
+错误: 无效语法。
+键入 "REG QUERY /?" 了解用法信息。
+exit=1
+### CONTROL: Lxss key listing (no /v)
+系统找不到指定的路径。
+错误: 系统找不到指定的注册表项或值。
+exit=1
+### FileSystem key, value LongPathsEnabled
+系统找不到指定的路径。
+错误: 系统找不到指定的注册表项或值。
+exit=1
+### FileSystem key, all values (head)
+系统找不到指定的路径。
+错误: 系统找不到指定的注册表项或值。

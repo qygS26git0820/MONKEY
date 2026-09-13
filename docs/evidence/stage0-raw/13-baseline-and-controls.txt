@@ -1,0 +1,64 @@
+### NEGATIVE CONTROL 1: nonexistent WSL distro (expect nonzero)
+exit=127 (expect nonzero)
+### NEGATIVE CONTROL 2: hash change detection
+before=2c8b08da5ce60398 after=27dd8ed44a83ff94 changed=YES
+### NEGATIVE CONTROL 3: container exit code propagation
+exit=42 (expect 42)
+
+### BASELINE: files under D:/SWE Agent excluding runs/
+ebd108486d5a3413b0a6d4bfc337523d22f9c711e4fd827b59dd94a12a7f5a0f *D:/SWE Agent/tmp/bench.sh
+e09d75ceda903d2f116c75086e258a39fef9e73e9f28bba8a60033a226bcfc81 *D:/SWE Agent/tmp/probe-reg.bat
+### BASELINE: dir listing
+D:/SWE Agent
+D:/SWE Agent/docs
+D:/SWE Agent/runs
+D:/SWE Agent/tmp
+### D root top-level (compare to first listing)
+$RECYCLE.BIN
+123.jpg
+360RecycleBin
+AppGallery
+CCC
+Config.Msi
+DeliveryOptimization
+DumpStack.log.tmp
+HUAWEI
+Huawei Share
+MapData
+OneDriveTemp
+PEOPLE
+Pi
+Program Files
+SWE Agent
+System Volume Information
+WUDownloadCache
+Windows (C).lnk
+WindowsApps
+WpSystem
+ai
+ai1
+ai2
+ai3
+ai4
+cursor
+dsAgent
+my_papers
+node-v24.16.0-x64.msi
+pagefile.sys
+pnpm-global
+qiuzhao
+shuju
+skills
+skills.claude
+skills.codex
+tryitem
+video_series
+xhktSoft
+xinlangs.docx
+zongjie
+保存
+华为云盘
+应用
+文档1
+新建 文本文档.txt
+桌面1

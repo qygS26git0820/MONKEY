@@ -1,0 +1,22 @@
+### $HOME/.docker/daemon.json
+-rw-r--r-- 1 HUAWEI 197609 252 Sep 12 12:45 /c/Users/HUAWEI/.docker/daemon.json
+{
+  "builder": {
+    "gc": {
+      "defaultKeepStorage": "20GB",
+      "enabled": true
+    }
+  },
+  "experimental": false,
+  "registry-mirrors": [
+    "https://docker.m.daocloud.io",
+    "https://docker.1ms.run",
+    "https://docker.xuanyuan.me"
+  ]
+}
+### $HOME/.docker/config.json existence only (NOT read: may hold credentials)
+-rw-r--r-- 1 HUAWEI 197609 353 Sep 12 12:45 /c/Users/HUAWEI/.docker/config.json
+### Docker Desktop settings-store.json (registry-mirror keys only)
+-rw-r--r-- 1 HUAWEI 197609 281 Sep 12 12:45 C:\Users\HUAWEI\AppData\Roaming/Docker/settings-store.json
+### daemon.json under APPDATA
+ls: cannot access 'C:\Users\HUAWEI\AppData\Roaming/Docker/daemon.json': No such file or directory

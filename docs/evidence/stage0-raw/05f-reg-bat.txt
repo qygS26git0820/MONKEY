@@ -1,0 +1,48 @@
+### CONTROL-ProductName
+
+HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion
+    ProductName    REG_SZ    Windows 10 Home China
+
+exit=0
+### LongPathsEnabled
+
+HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem
+    LongPathsEnabled    REG_DWORD    0x1
+
+exit=0
+### Lxss-subkeys
+
+HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Lxss
+    DefaultVersion    REG_DWORD    0x2
+    NatIpAddress    REG_SZ    172.29.99.197
+    OOBEComplete    REG_DWORD    0x1
+    DefaultDistribution    REG_SZ    {71fe6c41-b00d-4bb3-b9a9-7d89bc3bf050}
+
+HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Lxss\{71fe6c41-b00d-4bb3-b9a9-7d89bc3bf050}
+exit=0
+### Lxss-recurse
+
+HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Lxss
+    DefaultVersion    REG_DWORD    0x2
+    NatIpAddress    REG_SZ    172.29.99.197
+    OOBEComplete    REG_DWORD    0x1
+    DefaultDistribution    REG_SZ    {71fe6c41-b00d-4bb3-b9a9-7d89bc3bf050}
+
+HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Lxss\{71fe6c41-b00d-4bb3-b9a9-7d89bc3bf050}
+    State    REG_DWORD    0x1
+    DistributionName    REG_SZ    docker-desktop
+    Version    REG_DWORD    0x2
+    BasePath    REG_SZ    \\?\D:\CCC\docker\DockerDesktopWSL\main
+    Flags    REG_DWORD    0xf
+    DefaultUid    REG_DWORD    0x0
+    RunOOBE    REG_DWORD    0x0
+    VhdFileName    REG_SZ    ext4.vhdx
+    Modern    REG_DWORD    0x1
+    DockerDesktopBuildNumber    REG_SZ    238018
+
+exit=0
+### VirtualizationBasedSecurity
+
+
+ERROR: The system was unable to find the specified registry key or value.
+exit=1

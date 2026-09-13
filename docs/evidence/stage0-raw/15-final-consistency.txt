@@ -1,0 +1,35 @@
+### re-hash non-runs files (compare with raw/13 capture)
+ebd108486d5a3413b0a6d4bfc337523d22f9c711e4fd827b59dd94a12a7f5a0f *D:/SWE Agent/tmp/bench.sh
+e09d75ceda903d2f116c75086e258a39fef9e73e9f28bba8a60033a226bcfc81 *D:/SWE Agent/tmp/probe-reg.bat
+### raw evidence files
+total 57
+drwxr-xr-x 1 HUAWEI 197609    0 Sep 12 12:49 .
+drwxr-xr-x 1 HUAWEI 197609    0 Sep 12 12:39 ..
+-rw-r--r-- 1 HUAWEI 197609  337 Sep 12 12:39 01-host-os-disk.txt
+-rw-r--r-- 1 HUAWEI 197609 1109 Sep 12 12:39 02-host-tooling.txt
+-rw-r--r-- 1 HUAWEI 197609  543 Sep 12 12:39 03-wsl-status.txt
+-rw-r--r-- 1 HUAWEI 197609  726 Sep 12 12:40 03b-wsl-diagnose.txt
+-rw-r--r-- 1 HUAWEI 197609  120 Sep 12 12:39 04-wsl-internals.txt
+-rw-r--r-- 1 HUAWEI 197609  499 Sep 12 12:41 05b-reg-longpaths-sparsevhd.txt
+-rw-r--r-- 1 HUAWEI 197609  121 Sep 12 12:41 05c-reg-via-cmd.txt
+-rw-r--r-- 1 HUAWEI 197609  452 Sep 12 12:41 05d-reg-control.txt
+-rw-r--r-- 1 HUAWEI 197609  257 Sep 12 12:41 05e-reg-retry.txt
+-rw-r--r-- 1 HUAWEI 197609 1621 Sep 12 12:42 05f-reg-bat.txt
+-rw-r--r-- 1 HUAWEI 197609 3776 Sep 12 12:41 06-docker-host.txt
+-rw-r--r-- 1 HUAWEI 197609  891 Sep 12 12:44 07-network.txt
+-rw-r--r-- 1 HUAWEI 197609  818 Sep 12 12:45 08-docker-config.txt
+-rw-r--r-- 1 HUAWEI 197609  662 Sep 12 12:46 09-registry-mirrors.txt
+-rw-r--r-- 1 HUAWEI 197609 2718 Sep 12 12:47 10-docker-pull.txt
+-rw-r--r-- 1 HUAWEI 197609  887 Sep 12 12:48 11-fs-benchmark.txt
+-rw-r--r-- 1 HUAWEI 197609 1135 Sep 12 12:48 12-k8s-kind-record.txt
+-rw-r--r-- 1 HUAWEI 197609 1168 Sep 12 12:48 13-baseline-and-controls.txt
+-rw-r--r-- 1 HUAWEI 197609 1164 Sep 12 12:49 14-outside-pollution-mtime.txt
+-rw-r--r-- 1 HUAWEI 197609  269 Sep 12 12:49 15-final-consistency.txt
+### runs dir contents
+D:/SWE Agent/runs
+D:/SWE Agent/runs/env-20260912-123911
+D:/SWE Agent/runs/env-20260912-123911/raw
+### docs dir (should be empty pre-report)
+total 0
+drwxr-xr-x 1 HUAWEI 197609 0 Sep 12 12:39 .
+drwxr-xr-x 1 HUAWEI 197609 0 Sep 12 12:42 ..

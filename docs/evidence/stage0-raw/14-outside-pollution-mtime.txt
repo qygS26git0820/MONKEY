@@ -1,0 +1,25 @@
+### D:/ most recently modified entries (top 15)
+total 3759061
+drwxr-xr-x 1 HUAWEI 197609          0 Sep 12 12:42 SWE Agent
+drwxr-xr-x 1 HUAWEI 197609          0 Sep 12 10:42 .
+drwxr-xr-x 1 HUAWEI 197609          0 Sep 12 10:42 ..
+-rw-r--r-- 1 HUAWEI 197609 3815878656 Sep 11 22:57 pagefile.sys
+drwxr-xr-x 1 HUAWEI 197609          0 Sep 11 20:53 WindowsApps
+drwxr-xr-x 1 HUAWEI 197609          0 Sep 11 20:23 WUDownloadCache
+drwxr-xr-x 1 HUAWEI 197609          0 Sep 10 13:20 ai
+drwxr-xr-x 1 HUAWEI 197609          0 Sep  7 22:24 dsAgent
+drwxr-xr-x 1 HUAWEI 197609          0 Sep  7 22:11 CCC
+drwxr-xr-x 1 HUAWEI 197609          0 Sep  7 13:57 保存
+-rw-r--r-- 1 HUAWEI 197609      12288 Sep  6 14:19 DumpStack.log.tmp
+drwxr-xr-x 1 HUAWEI 197609          0 Sep  3 13:27 ai1
+drwxr-xr-x 1 HUAWEI 197609          0 Aug 30 14:19 cursor
+drwxr-xr-x 1 HUAWEI 197609          0 Aug 29 22:05 ai2
+-rw-r--r-- 1 HUAWEI 197609      25197 Aug 29 20:24 123.jpg
+
+### audit window was 12:39 ~ 12:49 on 2026-09-12
+### aka.ms reachability (WSL distro install path)
+http=302 time=0.556516s ip=23.35.101.160
+exit=0
+### learn.microsoft.com reachability
+http=302 time=0.523565s
+exit=0

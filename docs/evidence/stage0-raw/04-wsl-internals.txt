@@ -1,0 +1,3 @@
+### default distro run
+wsl: wsl2.sparseVhd:C:\Users\HUAWEI\.wslconfig -N„v.• 5 *gåw
+/bin/sh: bash: Permission denied

@@ -1,0 +1,15 @@
+### date(host)
+Sat Sep 12 12:39:22     2026
+### cmd ver
+
+Microsoft Windows [版本 10.0.26200.9168]
+exit=0
+### LongPathsEnabled
+错误: 无效语法。
+键入 "REG QUERY /?" 了解用法信息。
+exit=1
+### df -h
+Filesystem      Size  Used Avail Use% Mounted on
+C:              120G   81G   40G  68% /c
+D:              338G  108G  231G  32% /d
+exit=0

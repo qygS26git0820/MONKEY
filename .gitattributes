@@ -1,0 +1,4 @@
+# 阶段 0 证据固化副本：必须是原始字节的逐字节保真副本。
+# 本机 core.autocrlf=true，若不关掉行尾转换，git 会在提交时把 CRLF 改成 LF，
+# 于是"副本与原件逐字节一致"这句话就不成立了。故显式标注为 binary（-text）。
+docs/evidence/** -text

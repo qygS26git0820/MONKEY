@@ -1,0 +1,23 @@
+### wsl -l -v (iconv utf16le->utf8)
+  NAME              STATE           VERSION
+* docker-desktop    Stopped         2
+exit=0
+### wsl -l -q
+docker-desktop
+### wsl --version
+WSL 版本: 2.7.13.0
+内核版本: 6.18.33.2-2
+WSLg 版本: 1.0.73.2
+MSRDC 版本: 1.2.7214
+Direct3D 版本: 1.611.1-81528511
+DXCore 版本: 10.0.26100.1-240331-1435.ge-release
+Windows: 10.0.26200.9168
+### wsl --status
+默认分发: docker-desktop
+默认版本: 2
+### registry Lxss
+����: ��Ч�﷨��
+���� "REG QUERY /?" �˽��÷���Ϣ��
+### wsl -l --online (head)
+无法从 'https://raw.githubusercontent.com/microsoft/WSL/master/distributions/DistributionInfo.json' 提取通讯组列表。操作超时 
+错误代码: Wsl/WININET_E_TIMEOUT

@@ -1,0 +1,27 @@
+### pypi.org/simple
+curl: (28) Operation timed out after 20003 milliseconds with 13856961 out of 45960119 bytes received
+http=200 time=20.003253s ip=2a04:4e42:400::223
+exit=28
+### pypi.tuna mirror
+curl: (28) Operation timed out after 20001 milliseconds with 23183090 out of 45345318 bytes received
+http=200 time=20.001035s ip=101.6.15.130
+exit=28
+### files.pythonhosted.org
+http=200 time=0.463922s ip=2a04:4e42:200::223
+exit=0
+### raw.githubusercontent.com
+curl: (28) Connection timed out after 20011 milliseconds
+http=000 time=20.011050s ip=
+exit=28
+### github.com
+http=200 time=3.587320s ip=20.205.243.166
+exit=0
+### registry-1.docker.io (docker hub)
+curl: (28) Connection timed out after 20005 milliseconds
+http=000 time=20.005317s ip=
+exit=28
+### reference-only: api.anthropic.com (UNCONFIRMED endpoint)
+http=403 time=1.160082s ip=2607:6bc0::10
+exit=0
+### proxy env vars
+none

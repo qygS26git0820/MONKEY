@@ -1,0 +1,38 @@
+### docker pull hello-world (approved)
+Using default tag: latest
+latest: Pulling from library/hello-world
+4f55086f7dd0: Pulling fs layer
+d5e71e642bf5: Download complete
+4f55086f7dd0: Download complete
+4f55086f7dd0: Pull complete
+Digest: sha256:5e23090353324d887c48ad5e5c56d294eab81588df9605b07d1afe895f9cc8f8
+Status: Downloaded newer image for hello-world:latest
+docker.io/library/hello-world:latest
+exit=0
+### docker pull alpine (ADDITIONAL, small, for FS benchmark - disclosed)
+Using default tag: latest
+latest: Pulling from library/alpine
+Digest: sha256:28bd5fe8b56d1bd048e5babf5b10710ebe0bae67db86916198a6eec434943f8b
+Status: Image is up to date for alpine:latest
+docker.io/library/alpine:latest
+exit=0
+### docker images
+IMAGE                                                        ID             DISK USAGE   CONTENT SIZE   EXTRA
+alpine:latest                                                28bd5fe8b56d         13MB         3.93MB        
+docker.1ms.run/jkroepke/kube-webhook-certgen:1.8.8           cd85a621724c       37.8MB         9.55MB        
+ghcr.io/chaos-mesh/chaos-daemon:v2.8.4                       0d28dbd95b03        803MB          196MB        
+ghcr.io/chaos-mesh/chaos-dashboard:v2.8.4                    8a8ec8d4c9ea        265MB         66.2MB        
+ghcr.io/chaos-mesh/chaos-mesh:v2.8.4                         9e48285bb44c        116MB         27.9MB        
+ghcr.io/jkroepke/kube-webhook-certgen:1.8.8                  cd85a621724c       37.8MB         9.55MB        
+hello-world:latest                                           5e2309035332       25.9kB         9.49kB        
+kindest/node:v1.31.0                                         25a3504b2b34       1.49GB          437MB   U    
+localhost:5000/chaos-mesh/chaos-daemon:v2.8.4                0d28dbd95b03        803MB          196MB        
+localhost:5000/chaos-mesh/chaos-dashboard:v2.8.4             8a8ec8d4c9ea        265MB         66.2MB        
+localhost:5000/chaos-mesh/chaos-mesh:v2.8.4                  9e48285bb44c        116MB         27.9MB        
+localhost:5000/ghcr.io/jkroepke/kube-webhook-certgen:1.8.8   cd85a621724c       37.8MB         9.55MB        
+m.daocloud.io/ghcr.io/chaos-mesh/chaos-daemon:v2.8.4         0d28dbd95b03        803MB          196MB        
+m.daocloud.io/ghcr.io/chaos-mesh/chaos-dashboard:v2.8.4      8a8ec8d4c9ea        265MB         66.2MB        
+nginx:latest                                                 05b8cb60c354        253MB         69.2MB        
+registry:2                                                   a3d8aaa63ed8       37.4MB         10.3MB   U    
+### docker info server summary
+Server=29.7.2 Driver=overlayfs Cgroup=2 Mem=8327917568 CPUs=6 OS=Docker Desktop Arch=x86_64

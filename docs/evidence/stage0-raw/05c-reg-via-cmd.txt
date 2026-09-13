@@ -1,0 +1,5 @@
+### LongPathsEnabled
+错误: 系统找不到指定的注册表项或值。
+exit=1
+### Lxss distros
+错误: 系统找不到指定的注册表项或值。

@@ -1,0 +1,14 @@
+### LongPathsEnabled (MSYS_NO_PATHCONV)
+错误: 无效语法。
+键入 "REG QUERY /?" 了解用法信息。
+exit=1
+### Lxss distros (registry)
+错误: 无效语法。
+键入 "REG QUERY /?" 了解用法信息。
+### sparseVhd warning recapture
+### wslconfig raw bytes
+0000000   [   w   s   l   2   ]  \n   m   e   m   o   r   y   =   8   G
+0000020   B  \n   p   r   o   c   e   s   s   o   r   s   =   6  \n   s
+0000040   w   a   p   =   4   G   B  \n   s   p   a   r   s   e   V   h
+0000060   d   =   t   r   u   e  \n
+0000067

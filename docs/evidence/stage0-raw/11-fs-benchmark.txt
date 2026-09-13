@@ -1,0 +1,19 @@
+=== A: container-internal /tmp (Docker VM ext4) ===
+67108864 bytes (64.0MB) copied, 0.033219 seconds, 1.9GB/s
+create_2000_files_s=0
+delete_2000_files_s=0
+=== B: bind mount /w (Windows NTFS through Docker Desktop) ===
+67108864 bytes (64.0MB) copied, 0.527822 seconds, 121.3MB/s
+create_2000_files_s=6
+delete_2000_files_s=4
+=== C: semantics on /w ===
+-rw-r--r--    1 root     root             6 Sep 12 04:48 /w/casefile
+case: INSENSITIVE (CASEFILE resolved)
+--- bytes written via od:
+0000000   a  \r  \n   b  \r  \n
+0000006
+=== D: mount types ===
+D:\ on /w type 9p (rw,noatime,aname=drvfs;path=D:\;uid=0;gid=0;metadata;symlinkroot=/mnt/host/,cache=0x5,access=client,msize=65536,trans=fd,rfd=5,wfd=5)
+=== E: container ===
+Linux version 6.18.33.2-microsoft-standard-WSL2 (root@f1bbfb02316b) (gcc (GCC) 13.2.0, GNU ld (GNU Binutils) 2.41) #1 SMP PREEMPT_DYNAMIC Thu Jun 18 21:54:43 UTC 2026
+6

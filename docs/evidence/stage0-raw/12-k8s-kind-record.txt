@@ -1,0 +1,27 @@
+### kubectl version
+Client Version: v1.36.1
+Kustomize Version: v5.8.1
+### kubectl current-context
+kind-chaos
+exit=0
+### kubectl config get-contexts
+CURRENT   NAME         CLUSTER      AUTHINFO     NAMESPACE
+*         kind-chaos   kind-chaos   kind-chaos   
+### kubectl get nodes (timeout 8s)
+NAME                  STATUS   ROLES           AGE     VERSION
+chaos-control-plane   Ready    control-plane   5d16h   v1.31.0
+exit=0
+### docker ps -a (kind node containers?)
+NAMES                 IMAGE                  STATUS
+chaos-control-plane   kindest/node:v1.31.0   Up 2 minutes
+registry              registry:2             Exited (2) 2 days ago
+### docker volumes
+DRIVER    VOLUME NAME
+local     5dc28930dc439731ac5c0016ff9461d87a00d8cf5af418d354a71ba1705a7d86
+local     71360528e3604d5d6f8b157326be5d187842fcec855793a88b52ea7fec11bc61
+### docker system df
+TYPE            TOTAL     ACTIVE    SIZE      RECLAIMABLE
+Images          9         2         2.904GB   1.259GB (43%)
+Containers      2         1         3.457MB   20.48kB (0%)
+Local Volumes   2         2         5.696GB   0B (0%)
+Build Cache     0         0         0B        0B

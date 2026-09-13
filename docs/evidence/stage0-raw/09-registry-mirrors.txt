@@ -1,0 +1,23 @@
+### https://docker.m.daocloud.io/v2/
+http=401 time=1.077120s ip=47.100.39.122
+exit=0
+### https://docker.1ms.run/v2/
+http=401 time=1.145381s ip=36.156.81.221
+exit=0
+### https://docker.xuanyuan.me/v2/
+http=401 time=1.159250s ip=2606:4700:3034::6815:715
+exit=0
+### https://registry-1.docker.io/v2/
+curl: (28) Connection timed out after 12004 milliseconds
+http=000 time=12.004139s ip=
+exit=28
+### https://hub-mirror.c.163.com/v2/
+curl: (6) Could not resolve host: hub-mirror.c.163.com
+http=000 time=0.111033s ip=
+exit=6
+### docker engine re-check
+29.7.2
+exit=0
+### wsl -l -v
+  NAME              STATE           VERSION
+* docker-desktop    Running         2

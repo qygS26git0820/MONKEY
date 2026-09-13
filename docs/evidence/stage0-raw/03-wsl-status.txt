@@ -1,0 +1,22 @@
+### wsl -l -v
+  NAME              STATE           VERSION
+* docker-desktop    Stopped         2
+exit=0
+### wsl --status
+Øž¤‹RÑS: docker-desktop
+Øž¤‹Hr,g: 2
+### wsl --version
+WSL Hr,g: 2.7.13.0
+…Q8hHr,g: 6.18.33.2-2
+WSLg Hr,g: 1.0.73.2
+MSRDC Hr,g: 1.2.7214
+Direct3D Hr,g: 1.611.1-81528511
+DXCore Hr,g: 10.0.26100.1-240331-1435.ge-release
+Windows: 10.0.26200.9168
+### .wslconfig (/c/Users/HUAWEI/.wslconfig)
+-rw-r--r-- 1 HUAWEI 197609 55 Sep  6 14:46 /c/Users/HUAWEI/.wslconfig
+[wsl2]
+memory=8GB
+processors=6
+swap=4GB
+sparseVhd=true
