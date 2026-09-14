@@ -89,7 +89,7 @@
 |---|---|
 | `bytes_total` | **截断前的原始字节数** |
 | `bytes_delivered` | **截断后交付给 agent 的字节数** |
-| `elided_bytes` | `bytes_total - bytes_delivered`（被省略的字节数） |
+| `elided_bytes` | `bytes_total - head_bytes - tail_bytes`（被省略的字节数） |
 | `truncated` | 布尔 |
 | `strategy` | `none` 或 `head_tail` |
 | `head_bytes` / `tail_bytes` | `head_tail` 策略下两段各自保留的字节数 |
@@ -99,6 +99,12 @@
 | `blob_ref` | 完整内容在 `blobs/<sha256>.blob` 的引用 |
 
 你要求的"截断前原始长度"与"截断后长度"即 `bytes_total` 与 `bytes_delivered`；额外给出的 `elided_bytes` 让"被切掉多少"可以直接聚合，不必做减法。
+
+注意 `bytes_delivered` 与 `elided_bytes` **不互补**：交付文本是 `head_text + marker_text + tail_text`，所以
+`bytes_delivered` **包含** `marker_text` 自身的字节数，而 `elided_bytes` **不含**标记——标记是观测工具加的开销，
+不是"被省略的内容"。两者的关系是
+`bytes_total - bytes_delivered == elided_bytes - len(marker_text.encode("utf-8"))`。
+（本式原先写作 `elided_bytes = bytes_total - bytes_delivered`，与实现相差一个标记的长度；2026-09-14 修正，见变更记录 4。）
 
 ### 2.2 一处会影响观测正确性的策略选择：head + tail
 
@@ -244,7 +250,9 @@ SHA，故留命令，与记录 1 同）。
 
 这条偏差**先于本次改动就存在**（截断一向如此算），本次只改了重叠区的保留量。可选修法：
 把公式改成 `bytes_total - head_bytes - tail_bytes`，并写明等式
-`交付文本 = head_text + marker_text + tail_text`。是否改由你定。
+`交付文本 = head_text + marker_text + tail_text`。
+
+**→ 已裁决（2026-09-14）：按上述修法改公式、保留语义。执行与登记见记录 4。**
 
 **(b) 旧轨迹在报告里的读取路径。**
 
@@ -252,6 +260,9 @@ SHA，故留命令，与记录 1 同）。
 **同时有 token 又只有 `cost_usd`**，成本行会打印 `None`。阶段 1 不存在这种轨迹（无 LLM 则
 token 恒为 `null`，报告走"阶段 1 无 LLM"分支），故我没有加回退——那属于为不存在的场景加分支。
 若你认为该覆盖，请指出。
+
+**→ 已裁决（2026-09-14）：接受，不加回退。** 阶段 1 的轨迹里 `cost_usd` 恒为 `null`，
+不存在"有 token 又只有 `cost_usd`"的场景；加回退属于为不存在的场景加分支。
 
 事后核对命令：
 
@@ -262,4 +273,24 @@ git diff --numstat $OLD HEAD -- harness/contract.py harness/core/loop.py \
 # 期望：contract.py 形如 "N  0"（0 删除）；loop.py 形如 "N  1"；其余三个文件不出现
 git diff -U0 $OLD HEAD -- harness/core/loop.py | grep "^[+-]"   # 唯一的 "-" 行是 cost_usd -> cost
 ```
+
+### 记录 4：§2.1 的 `elided_bytes` 公式修正（2026-09-14）
+
+**基线与记录 3 相同**（主题含 `第二次移动冻结基线` 的提交），本次**没有再移基线**。
+本次动的是 §2.1 的一行公式文本，故必须登记。
+
+- **改**：§2.1 表格里 `elided_bytes` 的算式从 `bytes_total - bytes_delivered` 改为
+  `bytes_total - head_bytes - tail_bytes`；并在表后写明两个等式——交付文本是
+  `head_text + marker_text + tail_text`，故 `bytes_delivered` 含标记、`elided_bytes` 不含，
+  两者不互补。
+- **语义未变**：`elided_bytes` 一直是"被省略的字节数"，`head_bytes`/`tail_bytes` 一直是
+  "两段各自保留的字节数"，`marker_text` 一直是"插入的省略标记原文"。改的是文档里写错的
+  算式——它此前与实现相差一个标记的长度（先于记录 3 的改动就存在）。
+- **字段名、字段语义、判定顺序、标签集合均未动**；`contract.py` 未改，冻结清单 diff 为空。
+- 该偏差由记录 3 §3.5(a) 登记，裁决为"改公式、保留语义"；三处实现（`trace.py::prepare_stream`）
+  与新公式一致，故**没有代码改动**，只有文档改动。
+- 记录 3 §3.5(b) 的裁决为"接受，不加回退"，同样没有代码改动。
+
+事后核对命令：`git diff eadd1a8 --stat` 应只列出 `docs/trace-schema.md`；
+`git diff eadd1a8 -- harness/` 应无输出。
 
