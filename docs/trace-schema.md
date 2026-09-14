@@ -140,3 +140,27 @@
 
 事后核对命令：`git diff 3342dcf -- harness/contract.py` 应无输出——本次移动没有碰契约常量。
 
+### 记录 2：成本上限的启动前拒绝（2026-09-13）
+
+**基线与记录 1 相同**（主题含 `移动冻结基线` 的提交），本次**没有再移基线**。
+改动全在非冻结文件：`harness/core/usage.py`（写侧 `record()` 与判定 `exceeded()`）、
+`harness/config.py`（可选预算字段与拒绝逻辑）、`harness/llm/pricing.py`（新增）。
+
+登记一条可能被读作动条款的改动，交你裁决：
+
+- **§1.2 声明了两条配置不变量（`max_denied_calls < max_tool_error_streak < max_steps`、
+  `step_timeout_s < wall_timeout_s`），本次新增了第三条同性质的规则**：`max_cost_usd`
+  非 `None` 时，要求 `[llm].model` 存在且能在 `harness/llm/pricing.py` 查到单价，
+  否则抛 `ConfigError`、拒绝启动、不创建 run 目录。它只在启动前生效，**不参与 run 内
+  的判定**，故不影响"先到者胜"的顺序。我把它视为**新增**（冻结后允许新增），若你认为
+  它属于改条款，请指出，我改。
+- **判定顺序不变**，§1.3 的标签语义不变。`#12 cost_budget_exceeded` 现在有了真实的
+  产生点（判定实现落地），这与记录 1 里"变成有产生点"那句一致。
+- **新增的配置字段是可选、默认 `None`**，故 `configs/*.toml` 一字未改，
+  `config_hash` 未变——阶段 1 那批轨迹的配置归属仍成立。
+- **`run_end.status` 的映射表未动**：`cost_budget_exceeded` 仍落到 `aborted`（默认值）。
+  语义上它是"被预算中止"，与用户打断共用 `status=aborted`，区分靠 `failure_class`。
+
+事后核对命令：`git diff <基线> -- harness/contract.py` 应无输出；
+`load_config("default").config_hash()` 仍应等于阶段 1 样本 `meta.json` 里的哈希。
+

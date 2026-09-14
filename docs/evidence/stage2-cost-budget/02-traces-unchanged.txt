@@ -1,0 +1,51 @@
+# B（usage.record 写入侧 + exceeded 判定 + 预算配置项）是否改变了脚本化语料的行为
+#
+# before = runs/mv-local-*（冻结基线移动之后、B 之前）
+# after  = runs/b2-local-*（B 之后，同一批 8 组对照、同一 configs/default.toml）
+# 两批 run_id 前缀等长（8 字符），故 bytes_total 里的路径长度不含混杂项。
+
+$ bash tmp/run-controls.sh default b2-local
+ran b2-local-toy-001-scripted_ok-repo
+ran b2-local-toy-002-scripted_ok-repo
+ran b2-local-toy-001-scripted_bad_edit-repo
+ran b2-local-toy-001-scripted_ok-repo_faulty
+ran b2-local-toy-001-scripted_tool_error-repo
+ran b2-local-toy-001-scripted_denied-repo
+ran b2-local-toy-001-scripted_gave_up-repo
+ran b2-local-toy-001-scripted_loop_limit-repo
+
+# 第一遍：如实列出全部差异，不预先抹掉任何字段。
+$ .venv/Scripts/python.exe tmp/cmp-traces.py mv-local b2-local
+DIFFERS   toy-001-scripted_bad_edit-repo  1 处字段差异 / 13 条事件
+   [0] run_start.harness_git_sha: '4e824e0eb0493a7d92bacf64fd0bc2c08af11fd0' -> 'b6f983fbdbc5b137c59a455331b425a6257e0f17'
+DIFFERS   toy-001-scripted_denied-repo  1 处字段差异 / 8 条事件
+   [0] run_start.harness_git_sha: '4e824e0eb0493a7d92bacf64fd0bc2c08af11fd0' -> 'b6f983fbdbc5b137c59a455331b425a6257e0f17'
+DIFFERS   toy-001-scripted_gave_up-repo  1 处字段差异 / 4 条事件
+   [0] run_start.harness_git_sha: '4e824e0eb0493a7d92bacf64fd0bc2c08af11fd0' -> 'b6f983fbdbc5b137c59a455331b425a6257e0f17'
+DIFFERS   toy-001-scripted_loop_limit-repo  1 处字段差异 / 27 条事件
+   [0] run_start.harness_git_sha: '4e824e0eb0493a7d92bacf64fd0bc2c08af11fd0' -> 'b6f983fbdbc5b137c59a455331b425a6257e0f17'
+DIFFERS   toy-001-scripted_ok-repo  1 处字段差异 / 13 条事件
+   [0] run_start.harness_git_sha: '4e824e0eb0493a7d92bacf64fd0bc2c08af11fd0' -> 'b6f983fbdbc5b137c59a455331b425a6257e0f17'
+DIFFERS   toy-001-scripted_ok-repo_faulty  1 处字段差异 / 13 条事件
+   [0] run_start.harness_git_sha: '4e824e0eb0493a7d92bacf64fd0bc2c08af11fd0' -> 'b6f983fbdbc5b137c59a455331b425a6257e0f17'
+DIFFERS   toy-001-scripted_tool_error-repo  1 处字段差异 / 11 条事件
+   [0] run_start.harness_git_sha: '4e824e0eb0493a7d92bacf64fd0bc2c08af11fd0' -> 'b6f983fbdbc5b137c59a455331b425a6257e0f17'
+DIFFERS   toy-002-scripted_ok-repo  1 处字段差异 / 15 条事件
+   [0] run_start.harness_git_sha: '4e824e0eb0493a7d92bacf64fd0bc2c08af11fd0' -> 'b6f983fbdbc5b137c59a455331b425a6257e0f17'
+
+8 组对照，8 组有差异   (抹掉的字段: ('ts_mono', 'ts_wall', 'duration_ms', 'run_id'))
+
+# 第二遍：把构建来源字段也抹掉。harness_git_sha 记的是 HEAD 而非工作树内容，
+# 两批抓取时 HEAD 不同（4e824e0 / b6f983f），与 B 的行为无关——这正是
+# docs/evidence/stage2-docker/00-README.md 第 1 条登记的已知残差。
+$ .venv/Scripts/python.exe tmp/cmp-traces.py mv-local b2-local harness_git_sha
+identical toy-001-scripted_bad_edit-repo  (13 条事件，逐字段)
+identical toy-001-scripted_denied-repo  (8 条事件，逐字段)
+identical toy-001-scripted_gave_up-repo  (4 条事件，逐字段)
+identical toy-001-scripted_loop_limit-repo  (27 条事件，逐字段)
+identical toy-001-scripted_ok-repo  (13 条事件，逐字段)
+identical toy-001-scripted_ok-repo_faulty  (13 条事件，逐字段)
+identical toy-001-scripted_tool_error-repo  (11 条事件，逐字段)
+identical toy-002-scripted_ok-repo  (15 条事件，逐字段)
+
+8 组对照，0 组有差异   (抹掉的字段: ('ts_mono', 'ts_wall', 'duration_ms', 'run_id', 'harness_git_sha'))

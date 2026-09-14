@@ -9,6 +9,7 @@ import unittest
 from pathlib import Path
 
 from harness import contract
+from harness.config import load_config
 from harness.trace import read_trace, validate_records
 
 FIXTURES = Path(__file__).resolve().parent / "fixtures"
@@ -42,3 +43,16 @@ class Phase1SampleTraceTest(unittest.TestCase):
         meta = json.loads(SAMPLE_META.read_text(encoding="utf-8"))
         self.assertEqual(contract.SCHEMA_VERSION, meta["schema_version"])
         self.assertEqual(self.records[0]["run_id"], meta["run_id"])
+
+
+class Phase1ConfigHashTest(unittest.TestCase):
+    """阶段 1 配置的哈希必须不变。
+
+    config_hash 是整份配置字典的哈希，所以"给预算加两个可选字段"这类改动
+    只要没碰 TOML 文件，哈希就不该动；一旦动了，那批轨迹的配置归属就断了。
+    这条测试是"不碰 default.toml"这条纪律的运行时对应物。
+    """
+
+    def test_default_config_hash_still_matches_the_phase1_sample(self):
+        meta = json.loads(SAMPLE_META.read_text(encoding="utf-8"))
+        self.assertEqual(meta["config_hash"], load_config("default").config_hash())

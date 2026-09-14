@@ -1,0 +1,37 @@
+########## 一、启动前的拒绝：设了成本上限却算不出成本
+
+$ .venv/Scripts/python.exe tmp/probe-cost-cap.py
+RUNS_DIR（探针用）: D:\SWE Agent\tmp\probe-runs
+启动前目录数: 0
+
+[拒绝] 有 max_cost_usd，没有 [llm].model
+       ConfigError: 配置了 budgets.max_cost_usd 但没有 [llm].model，无法估算成本；拒绝启动
+[拒绝] 有 max_cost_usd，模型名查不到单价
+       ConfigError: 模型 'no-such-model' 在 harness/llm/pricing.py 里没有单价，无法用 max_cost_usd 约束成本；拒绝启动
+
+启动后目录数: 0（应仍为 0）
+RUNS_DIR 未被触碰
+
+########## 二、运行中的终止：累计用量越过上限
+
+$ .venv/Scripts/python.exe tmp/probe-budget-stop.py
+cost 0.9 / 上限 0.5      → 应超支
+    failure_class = cost_budget_exceeded
+    run_end: status=aborted totals={'cost_usd': 0.9, 'input_tokens': None, 'output_tokens': None, 'steps': 1, 'tool_calls': 0}
+    验证事件 1 条（R3：无论因何终止都照跑）  轨迹校验 = OK
+cost 0.5 / 上限 0.5      → 刚好，不超支
+    failure_class = verification_failed
+    run_end: status=failed totals={'cost_usd': 0.5, 'input_tokens': None, 'output_tokens': None, 'steps': 1, 'tool_calls': 0}
+    验证事件 1 条（R3：无论因何终止都照跑）  轨迹校验 = OK
+只报 input，上限 0.5     → 成本未知，不超支
+    failure_class = verification_failed
+    run_end: status=failed totals={'cost_usd': None, 'input_tokens': 10, 'output_tokens': None, 'steps': 1, 'tool_calls': 0}
+    验证事件 1 条（R3：无论因何终止都照跑）  轨迹校验 = OK
+token 60+50 / 上限 100   → 应超支
+    failure_class = cost_budget_exceeded
+    run_end: status=aborted totals={'cost_usd': None, 'input_tokens': 60, 'output_tokens': 50, 'steps': 1, 'tool_calls': 0}
+    验证事件 1 条（R3：无论因何终止都照跑）  轨迹校验 = OK
+cost 999 / 无上限        → 不超支
+    failure_class = verification_failed
+    run_end: status=failed totals={'cost_usd': 999.0, 'input_tokens': None, 'output_tokens': None, 'steps': 1, 'tool_calls': 0}
+    验证事件 1 条（R3：无论因何终止都照跑）  轨迹校验 = OK

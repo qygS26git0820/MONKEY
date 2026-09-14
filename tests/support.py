@@ -46,7 +46,8 @@ def make_config(*, max_steps=8, wall_timeout_s=60.0, step_timeout_s=30.0,
                 per_tool_timeout_s=10.0, verify_timeout_s=30.0,
                 max_tool_error_streak=3, max_denied_calls=2,
                 truncate_threshold_bytes=8192, head_chars=3000, tail_chars=3000,
-                executor_kind="local", docker_image=None) -> Config:
+                executor_kind="local", docker_image=None,
+                max_cost_usd=None, max_total_tokens=None, llm_model=None) -> Config:
     return Config(
         executor_kind=executor_kind,
         budgets=Budgets(
@@ -57,6 +58,8 @@ def make_config(*, max_steps=8, wall_timeout_s=60.0, step_timeout_s=30.0,
             verify_timeout_s=verify_timeout_s,
             max_tool_error_streak=max_tool_error_streak,
             max_denied_calls=max_denied_calls,
+            max_cost_usd=max_cost_usd,
+            max_total_tokens=max_total_tokens,
         ),
         trace=TraceOptions(
             truncate_threshold_bytes=truncate_threshold_bytes,
@@ -65,14 +68,21 @@ def make_config(*, max_steps=8, wall_timeout_s=60.0, step_timeout_s=30.0,
         ),
         raw={},
         docker_image=docker_image,
+        llm_model=llm_model,
     )
 
 
-def run_scenario(agent, task, *, config=None, variant=None):
+def run_scenario(agent, task, *, config=None, variant=None, attach=None):
     """跑完整主循环，返回 (failure_class, run_dir)。
 
     后端由 config.executor_kind 决定，与 __main__.cmd_run 走同一个
     make_executor：测试跑的后端与线上跑的后端不是两份实现。
+
+    attach 是可选的 `(run_ctx, agent) -> None`，在 run_ctx 建好、主循环
+    开跑之前调用。用途是让 agent 拿到 run_ctx 里的对象——累计账本
+    `usage`、轨迹写入端 `trace`——这两样都由 RunContext 内部创建，测试
+    拿不到，但真 LLM agent 必须在构造时注入它们。因此这不是测试专用开关，
+    它是线上注入路径在测试里的同一个入口。
     """
     config = config or make_config()
     run_ctx = RunContext(
@@ -92,6 +102,8 @@ def run_scenario(agent, task, *, config=None, variant=None):
         task=task,
         verification_dir=run_ctx.verification_dir,
     )
+    if attach is not None:
+        attach(run_ctx, agent)
     failure_class = run_agent(
         agent=agent, task=task, tools=ToolRegistry(),
         tool_ctx=tool_ctx, run_ctx=run_ctx, executor=executor,

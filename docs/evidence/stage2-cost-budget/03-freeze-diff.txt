@@ -1,0 +1,22 @@
+# B 是否碰了冻结文件、契约常量、或阶段 1 的配置文件
+# 基线 = b6f983f（主题含 移动冻结基线）
+
+$ git diff b6f983f --stat
+ harness/config.py        | 31 ++++++++++++++++++++-
+ harness/core/usage.py    | 72 +++++++++++++++++++++++++++++++++++++++++-------
+ tests/support.py         | 16 +++++++++--
+ tests/test_backcompat.py | 14 ++++++++++
+ 4 files changed, 120 insertions(+), 13 deletions(-)
+
+$ git diff b6f983f -- harness/contract.py harness/core/loop.py harness/agent/base.py harness/tools/base.py harness/env/base.py
+（以上无输出 = 5 个冻结文件对基线逐字节相同）
+
+$ git diff 3342dcf -- harness/contract.py
+（以上无输出 = 契约常量自阶段 1 起从未改动）
+
+# 阶段 1 配置未动，故 config_hash 不变；这条由 tests/test_backcompat.py 的
+# Phase1ConfigHashTest 守着（它拿 tests/fixtures/phase1-sample-meta.json 比对）。
+$ .venv/Scripts/python.exe -c "from harness.config import load_config as L; c=L(\"default\"); print(c.config_hash(), c.budgets.max_cost_usd, c.llm_model)"
+94ea229cbcdaaf50b4aab17a77b626024ab772f13236464f116780db52181114 None None
+阶段 1 样本 meta.json 记录的 config_hash = 94ea229cbcdaaf50b4aab17a77b626024ab772f13236464f116780db52181114
+（两行哈希相同；后两个 None 是新增可选字段的默认值——它们不在 TOML 里，故不进 config_hash）
