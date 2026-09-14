@@ -1,0 +1,5 @@
+# 直接依赖，精确钉版本。
+# 传递依赖的实测版本（httpcore / h11 / anyio / idna / certifi /
+# typing_extensions）记在 docs/evidence/stage2-llm-client/02-installed-packages.txt，
+# 那里是装完后的 pip 实况，不是手抄的。
+httpx==0.28.1

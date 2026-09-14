@@ -1,0 +1,8 @@
+ M docs/trace-schema.md
+ M harness/llm/__init__.py
+ M harness/llm/credentials.py
+?? docs/evidence/stage2-llm-client/
+?? harness/llm/client.py
+?? requirements.txt
+?? tests/test_llm_client_timeouts.py
+?? thought/

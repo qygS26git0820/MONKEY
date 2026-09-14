@@ -361,3 +361,71 @@ grep -rn "max_cost_cny\|pricing_currency\|price_for" harness/
 # 期望：无输出
 ```
 
+### 记录 6：A2 落地——客户端的单次请求超时（2026-09-14）
+
+**基线与记录 5 相同**（主题含 `第三次移动冻结基线` 的提交），本次**没有再移基线**。
+改动全在非冻结文件与新增文件，`contract.py` / `core/loop.py` / `agent/base.py` /
+`tools/base.py` / `env/base.py` 一个字未动。
+
+这一条登记的是**第五条"防线"从纸面变成执行点**。§1.2 的判定顺序、§1.3 的标签语义、
+`LLM_FAILURE_CLASSES` 均**不变**；本记录不新增标签、不改字段名。
+
+#### 6.1 A2：单次 LLM 调用挂住时，抢占点在哪里
+
+审计 §5.2 的结论：`loop.py:81` 是**同步**调用，`timeout_step`（返回之后才查）与
+`timeout_wall`（下一轮开头才查）都无法掐断一个未返回的调用。冻结的 `loop.py` 无法
+抢占同步调用，故抢占由传输层自带（`harness/llm/client.py`），三层：
+
+1. httpx 逐阶段 `Timeout(connect=5, read=45, write=10, pool=5)`；
+2. httpcore 之下的真实 socket（httpx 内建，不覆写）——让第 1 层的 `read` 生效；
+3. **总时限 90s** 包住**整次交换**（建连 + 收响应头 + 读正文），做成**线程级**包装：
+   整次调用放进 worker 线程，主线程 `join(90)`，超时则关闭底层连接解阻塞。
+
+第 3 层为什么不能写成"迭代 chunk 时查截止"：`read` 是**两次读之间的最大间隔**，一个
+每 40s 送 1 字节的滴流网关永远骗过它；而若滴流发生在**响应头之前**，任何"响应头之后"
+的截止检查一次都跑不到——请求阻塞在"等头"上，那里没有我们的代码。
+
+#### 6.2 标签落点（照 §1.3 #13–#15，未新增标签）
+
+- 连不上 / 连接或读写超时 / 连接被重置 / 响应编码坏掉 → `llm_transport_error`
+- HTTP 非 200（含 401 / 402 / 429 / 5xx，本批不重试）→ `llm_api_rejected`
+- 200 但 body 非 JSON / 缺必需结构 / `tool_calls[].function.arguments` 不是合法 JSON
+  → `llm_response_invalid`
+- **我们自己的 bug 不伪装成传输失败**：`base_url` 协议不支持、凭据缺失等被原样抛出，
+  留给主循环落成 `harness_error`（§1.1 要保护的那条信号）。
+
+#### 6.3 与 `timeout_step`（#7）的分工
+
+一条挂住的调用，其唯一可能抢占者是客户端的总时限，故它**必然**先落成
+`llm_transport_error`，而不是 #7 的 `timeout_step`——#7 在挂住场景下根本无法触发
+（这正是 A2 的内容）。#7 因此被收窄为"慢而未挂"的情形：`configs/llm.toml` 把
+`step_timeout_s` 设在总时限（90s）之上，使客户端成为先到者，拿到更具体的"网关没响应"。
+这条顺序不变量**由测试钉住**，不靠注释。
+
+#### 6.4 生产超时值（钉在测试里，改动因此可见）
+
+`connect 5s / read 45s / write 10s / pool 5s / total 90s`，且 `read < total`——静默应
+先以更具体的"读取超时"落定，总时限只兜底滴流。改这四个数必须同时改
+`tests/test_llm_client_timeouts.py::ShippedTimeoutTest`。
+
+#### 6.5 验证方式：真实回环 socket，不用 `MockTransport`
+
+第 1/2 层超时由 httpcore 之下的 socket 实现，`httpx.MockTransport` 把整个传输层换掉，
+根本走不到 socket——用它写出来的"通过"是假的。故 `tests/test_llm_client_timeouts.py`
+的每个用例都把客户端指向 `127.0.0.1` 上的原始 TCP 服务器，由服务器脚本决定怎么卡住：
+静默（→ 读取超时）、正文滴流（→ 总时限）、**响应头滴流且永不结束**（→ 总时限，即
+A2 陷阱本身）。并配一条反向对照（正常服务器必须成功），否则"一切都超时"也会显绿。
+
+离线、零网络、零成本：超时值经 `LlmTimeouts` 注入到亚秒级。
+
+事后核对命令：
+
+```bash
+git diff --numstat HEAD -- harness/contract.py harness/core/loop.py \
+    harness/agent/base.py harness/tools/base.py harness/env/base.py
+# 期望：无输出（本批 0 冻结改动）
+PYTHONIOENCODING=utf-8 .venv/Scripts/python.exe -m unittest \
+    tests.test_llm_client_timeouts -v
+# 期望：16 项通过，其中静默报"读取超时"、两种滴流报"总时限"
+```
+
