@@ -1,0 +1,39 @@
+=== validate-trace ===
+轨迹合法: D:\SWE Agent\tmp\offline-llm-demo\t-c45478f8d5\trace.jsonl
+=== replay ===
+[  1]    0.001s run_start
+[  2]    0.001s step=1 LLM→  fake-model messages=2 tools=4 params={'max_tokens': 2048, 'stream': False, 'tool_choice': 'auto'}
+[  3]    0.005s step=1 LLM←  fake-model stop=tool_calls 1ms in=100 out=20
+[  3]    0.005s step=1        ↳ read_file {'path': 'calc.py'}
+[  4]    0.006s step=1 CALL  read_file {'path': 'calc.py'} (cwd=workspace)
+[  5]    0.007s step=1 RESULT read_file status=ok exit=0 1ms
+           | def add(a, b):
+           |     return a - b
+[  6]    0.007s step=1 step_end
+[  7]    0.007s step=2 LLM→  fake-model messages=4 tools=4 params={'max_tokens': 2048, 'stream': False, 'tool_choice': 'auto'}
+[  8]    0.007s step=2 LLM←  fake-model stop=tool_calls 1ms in=100 out=20
+[  8]    0.007s step=2        ↳ write_file {'content': 'def add(a, b):\n    return a + b\n', 'path': 'calc.py'}
+[  9]    0.007s step=2 CALL  write_file {'content': 'def add(a, b):\n    return a + b\n', 'path': 'calc.py'} (cwd=workspace)
+[ 10]    0.008s step=2 RESULT write_file status=ok exit=0 1ms
+           | wrote 32 chars to calc.py
+[ 11]    0.008s step=2 step_end
+[ 12]    0.008s step=3 LLM→  fake-model messages=6 tools=4 params={'max_tokens': 2048, 'stream': False, 'tool_choice': 'auto'}
+[ 13]    0.008s step=3 LLM←  fake-model stop=tool_calls 1ms in=100 out=20
+[ 13]    0.008s step=3        ↳ run_verify {}
+[ 14]    0.008s step=3 CALL  run_verify {} (cwd=workspace)
+[ 15]    0.102s step=3 RESULT run_verify status=ok exit=0 93ms
+           | test_negative (tests.test_calc.TestAdd.test_negative) ... ok
+           | test_positive (tests.test_calc.TestAdd.test_positive) ... ok
+           | test_zero (tests.test_calc.TestAdd.test_zero) ... ok
+           | 
+           | ----------------------------------------------------------------------
+           | Ran 3 tests in 0.000s
+           | 
+           | OK
+[ 16]    0.102s step=3 step_end
+[ 17]    0.102s step=4 LLM→  fake-model messages=8 tools=4 params={'max_tokens': 2048, 'stream': False, 'tool_choice': 'auto'}
+[ 18]    0.102s step=4 LLM←  fake-model stop=stop 1ms in=100 out=20
+           | 已修复 calc.py 的减法错误，并已通过任务验证。
+[ 19]    0.102s step=4 AGENT 已修复 calc.py 的减法错误，并已通过任务验证。
+[ 20]    0.187s VERIFY status=passed exit=0 parsed={'errors': 0, 'failures': 0, 'passed': 3, 'tests_total': 3}
+[ 21]    0.187s END   status=completed failure_class=none steps=4 totals={'input_tokens': 400, 'output_tokens': 80, 'steps': 4, 'tool_calls': 3}

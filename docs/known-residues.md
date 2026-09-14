@@ -63,3 +63,27 @@
 - **为什么不处理**：该前缀是引入时的历史标记，改动它属于冻结文档正文的无意义噪音，
   且会稀释 diff 的可读性。
 - **影响**：纯观感，无语义影响。
+
+## R-006 `step` 是 agent 自计数的，靠"不重试"维持与主循环对齐
+
+- **是什么**：`contract.py` 要求 `llm_request`/`llm_response` 带 `step`，但
+  `ConversationState` 里没有 step，`loop.py` 也不发这两个事件（冻结）。`LlmAgent`
+  因此自数调用次数。对齐成立的前提是**一次 `next_action` 恰好发一次请求**。
+- **为什么不处理**：正确的修法是让 `loop.py` 发这两个事件（把 step 交给它），那要
+  移冻结基线；而当前"不重试"的取舍使自计数恰好等价，代价是这条隐含契约不写在任何
+  接口里（审计 §7.1）。
+- **影响**：一旦将来引入重试（一个 step 内多次请求），自计数会与主循环 `step` 错位，
+  且 `validate_records` 不检查 step 合理性、发现不了。**缓解**：`tests/test_llm_agent.py::
+  test_the_self_counted_step_matches_the_loop_step` 钉住等号关系，加重试时该测试先红。
+- **出处**：`harness/llm/agent.py`、`tests/test_llm_agent.py`。
+
+## R-007 工具 schema 与系统提示词的措辞是未版本化的实验条件
+
+- **是什么**：模型看到什么（工具描述、系统提示词的用词）本身就是观测的一部分，
+  但这些文本只随代码走，`config_hash` 覆盖不到——换一版措辞不会改变配置归属。
+- **为什么不处理**：审计 §7.3 建议的"把观测侧描述显式版本化"尚未做。当前只有一个
+  版本，还没有需要区分的情形。
+- **影响**：跨版本对比轨迹时，无法从 `config_hash` 看出"提示词改过"。缓解：这些文本
+  在 `harness/llm/prompt.py` 里，`git log` 可查；`trace.jsonl` 的每条 `llm_request`
+  都带当时的 `messages`/`tools` 全文，故**逐条可复核**。
+

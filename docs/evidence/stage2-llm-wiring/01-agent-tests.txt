@@ -1,0 +1,30 @@
+test_the_agent_reports_the_name (tests.test_llm_agent.LlmAgentNamingTest.test_the_agent_reports_the_name) ... ok
+test_the_cli_accepts_the_name (tests.test_llm_agent.LlmAgentNamingTest.test_the_cli_accepts_the_name) ... ok
+test_the_name_is_not_in_the_scripted_list (tests.test_llm_agent.LlmAgentNamingTest.test_the_name_is_not_in_the_scripted_list) ... ok
+test_a_full_offline_run_completes_with_a_valid_trace (tests.test_llm_agent.LlmAgentRunTest.test_a_full_offline_run_completes_with_a_valid_trace) ... ok
+test_a_length_truncated_reply_aborts_and_leaves_the_reason_in_the_trace (tests.test_llm_agent.LlmAgentRunTest.test_a_length_truncated_reply_aborts_and_leaves_the_reason_in_the_trace) ... ok
+test_a_transport_failure_lands_as_llm_transport_error (tests.test_llm_agent.LlmAgentRunTest.test_a_transport_failure_lands_as_llm_transport_error) ... ok
+test_an_empty_reply_aborts (tests.test_llm_agent.LlmAgentRunTest.test_an_empty_reply_aborts) ... ok
+test_an_unbound_agent_is_our_bug_not_a_gateway_error (tests.test_llm_agent.LlmAgentRunTest.test_an_unbound_agent_is_our_bug_not_a_gateway_error) ... ok
+test_arguments_round_trip_as_a_json_string_on_the_wire (tests.test_llm_agent.LlmAgentRunTest.test_arguments_round_trip_as_a_json_string_on_the_wire) ... ok
+test_the_first_request_carries_the_system_prompt_the_task_and_the_tools (tests.test_llm_agent.LlmAgentRunTest.test_the_first_request_carries_the_system_prompt_the_task_and_the_tools) ... ok
+test_the_next_request_carries_the_tool_result_with_its_call_id (tests.test_llm_agent.LlmAgentRunTest.test_the_next_request_carries_the_tool_result_with_its_call_id) ... ok
+test_the_self_counted_step_matches_the_loop_step (tests.test_llm_agent.LlmAgentRunTest.test_the_self_counted_step_matches_the_loop_step) ... ok
+test_usage_is_accumulated_into_the_run_totals (tests.test_llm_agent.LlmAgentRunTest.test_usage_is_accumulated_into_the_run_totals) ... ok
+test_agent_llm_without_an_llm_model_is_refused_before_any_artifacts (tests.test_llm_agent.LlmCliRefusalTest.test_agent_llm_without_an_llm_model_is_refused_before_any_artifacts) ... ok
+test_the_client_deadline_is_below_the_step_timeout (tests.test_llm_agent.ShippedLlmConfigTest.test_the_client_deadline_is_below_the_step_timeout) ... ok
+test_the_config_names_a_model_and_an_endpoint (tests.test_llm_agent.ShippedLlmConfigTest.test_the_config_names_a_model_and_an_endpoint) ... ok
+test_the_phase1_config_is_still_untouched (tests.test_llm_agent.ShippedLlmConfigTest.test_the_phase1_config_is_still_untouched) ... ok
+test_the_smoke_run_is_not_budget_capped (tests.test_llm_agent.ShippedLlmConfigTest.test_the_smoke_run_is_not_budget_capped) ... ok
+test_a_workspace_path_with_braces_renders_verbatim (tests.test_llm_tool_schemas.SystemPromptTest.test_a_workspace_path_with_braces_renders_verbatim) ... ok
+test_the_prompt_names_every_registered_tool (tests.test_llm_tool_schemas.SystemPromptTest.test_the_prompt_names_every_registered_tool) ... ok
+test_the_workspace_is_substituted_not_left_as_a_placeholder (tests.test_llm_tool_schemas.SystemPromptTest.test_the_workspace_is_substituted_not_left_as_a_placeholder) ... ok
+test_each_schema_is_a_well_formed_function_description (tests.test_llm_tool_schemas.ToolSchemaDriftTest.test_each_schema_is_a_well_formed_function_description) ... ok
+test_registered_tools_and_schemas_are_the_same_set (tests.test_llm_tool_schemas.ToolSchemaDriftTest.test_registered_tools_and_schemas_are_the_same_set) ... ok
+test_run_verify_declares_no_arguments (tests.test_llm_tool_schemas.ToolSchemaDriftTest.test_run_verify_declares_no_arguments) ... ok
+test_schema_names_are_unique (tests.test_llm_tool_schemas.ToolSchemaDriftTest.test_schema_names_are_unique) ... ok
+
+----------------------------------------------------------------------
+Ran 25 tests in 1.614s
+
+OK

@@ -1,0 +1,14 @@
+ configs/llm.toml                                   |  33 +++
+ docs/evidence/stage2-llm-wiring/00-README.md       |  67 ++++++
+ docs/evidence/stage2-llm-wiring/01-agent-tests.txt |  29 +++
+ docs/evidence/stage2-llm-wiring/02-full-suite.txt  |   8 +
+ .../stage2-llm-wiring/03-offline-run-replay.txt    |  39 ++++
+ docs/known-residues.md                             |  24 ++
+ docs/trace-schema.md                               |  29 +++
+ harness/__main__.py                                |  39 +++-
+ harness/config.py                                  |  16 +-
+ harness/llm/agent.py                               | 148 +++++++++++++
+ harness/llm/prompt.py                              | 128 +++++++++++
+ tests/test_llm_agent.py                            | 244 +++++++++++++++++++++
+ tests/test_llm_tool_schemas.py                     |  71 ++++++
+ 13 files changed, 871 insertions(+), 4 deletions(-)

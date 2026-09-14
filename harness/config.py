@@ -59,6 +59,10 @@ class Config:
     # [llm].model。阶段 1 的配置里没有这一节，故为 None；阶段 2 的 LLM
     # 配置靠它记 llm_request.model。local 假 agent 不看它。
     llm_model: "str | None" = None
+    # None 表示"用 LlmClient 自己的默认值"，与 docker_image 的 None 同一约定：
+    # 配置层不认识具体后端的端点与默认值。
+    llm_base_url: "str | None" = None
+    llm_max_output_tokens: "int | None" = None
 
     def config_hash(self) -> str:
         blob = json.dumps(self.raw, sort_keys=True, separators=(",", ":")).encode("utf-8")
@@ -94,7 +98,13 @@ def load_config(name: str = "default") -> Config:
         )
         executor_kind = str(raw["executor"]["kind"])
         executor_image = raw["executor"].get("image")
-        llm_model = (raw.get("llm") or {}).get("model")
+        llm_section = raw.get("llm") or {}
+        llm_model = llm_section.get("model")
+        llm_base_url = llm_section.get("base_url")
+        llm_max_output_tokens = (
+            None if llm_section.get("max_output_tokens") is None
+            else int(llm_section["max_output_tokens"])
+        )
     except KeyError as exc:
         raise ConfigError(f"配置缺少字段: {exc}") from exc
 
@@ -126,4 +136,6 @@ def load_config(name: str = "default") -> Config:
         )
 
     return Config(executor_kind=executor_kind, budgets=budgets, trace=trace, raw=raw,
-                  docker_image=executor_image, llm_model=llm_model)
+                  docker_image=executor_image, llm_model=llm_model,
+                  llm_base_url=llm_base_url,
+                  llm_max_output_tokens=llm_max_output_tokens)

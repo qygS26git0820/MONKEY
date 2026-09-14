@@ -429,3 +429,32 @@ PYTHONIOENCODING=utf-8 .venv/Scripts/python.exe -m unittest \
 # 期望：16 项通过，其中静默报"读取超时"、两种滴流报"总时限"
 ```
 
+#### 6.6 接线落地：`llm_request` / `llm_response` 实际写入哪些字段
+
+同批次的第二个提交把 agent 侧接上（`harness/llm/prompt.py`、`harness/llm/agent.py`、
+`configs/llm.toml`、CLI）。**契约常量仍未动**：以下都是**新增字段**，§1.4 的规则
+本就允许，`REQUIRED_FIELDS` 一个字没改（这正是本文件在阶段 2 不需要再移基线的理由）。
+
+- `llm_request`：必需 `model`/`step`；另写
+  `messages`（本次实际发给网关的 wire 消息全文）、`tools`（工具 schema 全文）、
+  `params`（`max_tokens`/`stream`/`tool_choice`）。**记录全文而不记摘要**，因为
+  "模型看到了什么"正是本项目的一等观测目标；提示词措辞的版本漂移因此逐条可复核。
+- `llm_response`：必需 `model`/`step`；另写 `content`、`tool_calls`
+  （已归一化为 `[{id,name,arguments}]`，`arguments` 是对象而非 JSON 字符串）、
+  `stop_reason`、`usage{input_tokens,output_tokens}`、`latency_ms`。
+- **缺 `usage` 时写 `null` 而不是炸 run**（`usage` 三个键一律可为 null）。取舍见
+  `docs/known-residues.md` R-001：未知量无法触发 token 上限，但"网关没回 usage"
+  本身就是该被观测到的事实。
+- **写入顺序：先 `llm_request`、再发请求、再 `llm_response`。** 于是"挂住"在轨迹里
+  留下"有请求、无响应"的形状——这就是审计 §5.2 说的信号，`replay` 会把它照着打出来。
+
+`step` 的处理是本次唯一的接口妥协：它由 **agent 自计数**（`ConversationState` 里没有
+step，`loop.py` 冻结且不发这两个事件）。因为本批**不重试**，一次 `next_action` 恰好
+一次请求，自计数恒等于主循环的 `step`。这条隐含契约（审计 §7.1）由
+`tests/test_llm_agent.py::test_the_self_counted_step_matches_the_loop_step` 机械钉住，
+并登记为 R-006。
+
+`stop_reason == "length"`（被 `max_tokens` 截断）时 agent 只能返回 `Abort`，故标签仍
+是 `agent_gave_up`——§5.4 指出的语义错位**未被消除**，只是真因留在了
+`llm_response.stop_reason` 里，这正是 §5.4 自己给出的辨识信号。
+

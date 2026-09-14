@@ -16,12 +16,17 @@ from .agent.scripted import AGENT_NAMES, ScriptedAgent
 from .config import ConfigError, load_config
 from .core.loop import run_agent
 from .env.factory import make_executor
+from .llm.agent import LLM_AGENT_NAME, LlmAgent
+from .llm.client import (DEFAULT_BASE_URL, DEFAULT_MAX_OUTPUT_TOKENS,
+                         LlmClient)
 from .report import text_report
 from .runctx import RunContext
 from .tasks.loader import TaskError, load_task
 from .tools.context import ToolContext
 from .tools.registry import ToolRegistry
 from .trace import ContractViolation, read_trace, validate_records
+
+AGENT_CHOICES = list(AGENT_NAMES) + [LLM_AGENT_NAME]
 
 
 def _git_sha() -> str | None:
@@ -44,6 +49,18 @@ def _resolve_run_dir(value: str) -> Path:
     return paths.ensure_within(paths.RUNS_DIR / value)
 
 
+def _build_agent(args, config):
+    """假 agent 与真 agent 在这里分岔。两者的差别只是"动作从哪来"。"""
+    if args.agent == LLM_AGENT_NAME:
+        client = LlmClient(
+            model=config.llm_model,
+            base_url=config.llm_base_url or DEFAULT_BASE_URL,
+            max_output_tokens=config.llm_max_output_tokens or DEFAULT_MAX_OUTPUT_TOKENS,
+        )
+        return LlmAgent(client)
+    return ScriptedAgent(args.agent)
+
+
 def cmd_run(args) -> int:
     try:
         config = load_config(args.config)
@@ -54,6 +71,14 @@ def cmd_run(args) -> int:
         task = load_task(args.task)
     except TaskError as exc:
         print(f"任务错误: {exc}", file=sys.stderr)
+        return 2
+
+    if args.agent == LLM_AGENT_NAME and not config.llm_model:
+        # 选了真 agent 却没配模型。与"配了模型却没凭据"同一条理由：此刻拒绝
+        # 不产生任何产物；等到建完 run 目录、第一次请求才炸，就是用一次失败的
+        # 实验换一个本可以启动前报出的错误。
+        print(f"配置错误: --agent {LLM_AGENT_NAME} 需要配置 {args.config!r} 里的 "
+              f"[llm].model；该配置未提供", file=sys.stderr)
         return 2
 
     stamp = dt.datetime.now(dt.timezone.utc).strftime("%Y%m%d-%H%M%S")
@@ -82,7 +107,11 @@ def cmd_run(args) -> int:
         task=task,
         verification_dir=run_ctx.verification_dir,
     )
-    agent = ScriptedAgent(args.agent)
+    agent = _build_agent(args, config)
+    if isinstance(agent, LlmAgent):
+        # 轨迹写入端与累计账本由 RunContext 内部创建，agent 拿不到，必须由
+        # 外部注入——与 tests/support.py::run_scenario(attach=...) 同一条路径。
+        agent.attach(run_ctx)
 
     try:
         failure_class = run_agent(
@@ -122,6 +151,20 @@ def cmd_replay(args) -> int:
                 if stream["truncated"]:
                     print(f"           [{key} 截断] 原始 {stream['bytes_total']} B → "
                           f"交付 {stream['bytes_delivered']} B，完整内容 {stream['blob_ref']}")
+        elif et == "llm_request":
+            usage_note = f"params={rec['params']}" if rec.get("params") else ""
+            print(f"{prefix}{step} LLM→  {rec['model']} "
+                  f"messages={len(rec.get('messages') or [])} "
+                  f"tools={len(rec.get('tools') or [])} {usage_note}")
+        elif et == "llm_response":
+            usage = rec.get("usage") or {}
+            print(f"{prefix}{step} LLM←  {rec['model']} stop={rec['stop_reason']} "
+                  f"{rec['latency_ms']}ms in={usage.get('input_tokens')} "
+                  f"out={usage.get('output_tokens')}")
+            if rec.get("content"):
+                print(_indent(rec["content"][:600]))
+            for call in rec.get("tool_calls") or []:
+                print(f"{prefix}{step}        ↳ {call['name']} {call['arguments']}")
         elif et == "verification":
             print(f"{prefix} VERIFY status={rec['status']} exit={rec['exit_code']} "
                   f"parsed={rec['parsed']}")
@@ -171,7 +214,7 @@ def build_parser() -> argparse.ArgumentParser:
 
     p_run = sub.add_parser("run", help="跑一个任务")
     p_run.add_argument("--task", required=True)
-    p_run.add_argument("--agent", required=True, choices=list(AGENT_NAMES))
+    p_run.add_argument("--agent", required=True, choices=AGENT_CHOICES)
     p_run.add_argument("--config", default="default")
     p_run.add_argument("--run-id", default=None)
     p_run.add_argument("--variant", default=None,

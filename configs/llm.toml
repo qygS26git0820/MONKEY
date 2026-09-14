@@ -1,0 +1,33 @@
+# 真 LLM agent 的配置。刻意**不**改 default.toml：那份配置的哈希是阶段 1
+# 轨迹的配置归属凭据（tests/test_backcompat.py 的 Phase1ConfigHashTest 钉着）。
+
+[executor]
+kind = "local"
+
+[budgets]
+# 一次 run = 每步一次模型调用，故 max_steps 同时也是**花费上限**（次调用数）。
+max_steps = 20
+wall_timeout_s = 600.0
+# 必须**大于**客户端的单次请求总时限（90s，见 harness/llm/client.py 的
+# SHIPPED_TIMEOUTS）。这样"慢而未挂"的调用会先被客户端判成更具体的
+# llm_transport_error，而不是泛化的 timeout_step。挂住的调用则由客户端独占
+# 抢占权（timeout_step 在挂住场景下根本无法触发，见 trace-schema 记录 6 §6.3）。
+# 这条不变量由 tests/test_llm_agent.py::ShippedLlmConfigTest 钉住。
+step_timeout_s = 120.0
+per_tool_timeout_s = 10.0
+verify_timeout_s = 30.0
+max_tool_error_streak = 3
+max_denied_calls = 2
+# max_total_tokens 本批留空：冒烟任务足够小，不设上限以免被误截断。
+# 预算路径本身由 tests/test_token_budget.py 覆盖。
+
+[trace]
+truncate_threshold_bytes = 8192
+head_chars = 3000
+tail_chars = 3000
+
+[llm]
+# 端点在冒烟探针里第一次被真实触碰，模型名如有出入会在那里以 400/404 暴露。
+model = "deepseek-chat"
+base_url = "https://api.deepseek.com"
+max_output_tokens = 2048
