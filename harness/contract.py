@@ -36,6 +36,9 @@ FAILURE_CLASSES = (
     "harness_error",
     "aborted_by_user",
     "cost_budget_exceeded",
+    "llm_transport_error",
+    "llm_api_rejected",
+    "llm_response_invalid",
 )
 
 # 先到者胜。主循环顺序执行，终止条件在时间上有序，故每次 run 精确命中一个。
@@ -43,6 +46,9 @@ FAILURE_DECISION_ORDER = (
     "aborted_by_user",
     "harness_error",
     "env_error",
+    "llm_transport_error",
+    "llm_api_rejected",
+    "llm_response_invalid",
     "cost_budget_exceeded",
     "timeout_wall",
     "timeout_step",
@@ -52,6 +58,15 @@ FAILURE_DECISION_ORDER = (
     "agent_loop_limit",
     "verification_failed",
     "none",
+)
+
+# 模型调用失败的三个标签。它们排在 env_error 之后：与"执行环境不可用"同属
+# 外部原因，而不是我们代码的 bug——这正是把它们从 harness_error 里分出来的
+# 理由。三者内部无先后语义：一次 run 只可能由其中一个信号终止。
+LLM_FAILURE_CLASSES = (
+    "llm_transport_error",
+    "llm_api_rejected",
+    "llm_response_invalid",
 )
 
 TOOL_RESULT_STATUSES = ("ok", "error", "timeout", "denied")

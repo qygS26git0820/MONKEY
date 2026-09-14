@@ -114,7 +114,8 @@ def generate(run_dir: Path) -> Path:
     else:
         lines.append(f"- 输入 token：{totals['input_tokens']}")
         lines.append(f"- 输出 token：{totals['output_tokens']}")
-        lines.append(f"- 成本（估算）：{totals['cost_usd']}")
+        lines.append(f"- 成本（估算）：{totals.get('cost')} "
+                     f"{totals.get('pricing_currency', '')}")
     lines.append(f"- 工具调用次数：{totals.get('tool_calls', '-')}")
     lines.append("")
 

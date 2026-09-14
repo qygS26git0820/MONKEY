@@ -20,6 +20,7 @@ def _live() -> dict:
         "EVENT_TYPES": list(contract.EVENT_TYPES),
         "FAILURE_CLASSES": list(contract.FAILURE_CLASSES),
         "FAILURE_DECISION_ORDER": list(contract.FAILURE_DECISION_ORDER),
+        "LLM_FAILURE_CLASSES": list(contract.LLM_FAILURE_CLASSES),
         "TOOL_RESULT_STATUSES": list(contract.TOOL_RESULT_STATUSES),
         "TRUNCATION_STRATEGIES": list(contract.TRUNCATION_STRATEGIES),
         "STREAM_FIELDS": list(contract.STREAM_FIELDS),
@@ -40,8 +41,10 @@ class ContractShapeTest(unittest.TestCase):
     def test_schema_version_is_1(self):
         self.assertEqual(1, contract.SCHEMA_VERSION)
 
-    def test_failure_classes_are_12_and_unique(self):
-        self.assertEqual(12, len(contract.FAILURE_CLASSES))
+    def test_failure_classes_are_at_least_the_frozen_twelve_and_unique(self):
+        # 下界而非等值：冻结允许新增标签（阶段 2 加了 3 个 LLM 标签），
+        # 但绝不允许减少——减少就意味着历史轨迹里的标签失去定义。
+        self.assertGreaterEqual(len(contract.FAILURE_CLASSES), 12)
         self.assertEqual(len(contract.FAILURE_CLASSES), len(set(contract.FAILURE_CLASSES)))
 
     def test_decision_order_is_a_permutation_of_failure_classes(self):

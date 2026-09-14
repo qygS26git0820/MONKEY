@@ -47,7 +47,7 @@ def make_config(*, max_steps=8, wall_timeout_s=60.0, step_timeout_s=30.0,
                 max_tool_error_streak=3, max_denied_calls=2,
                 truncate_threshold_bytes=8192, head_chars=3000, tail_chars=3000,
                 executor_kind="local", docker_image=None,
-                max_cost_usd=None, max_total_tokens=None, llm_model=None) -> Config:
+                max_cost_cny=None, max_total_tokens=None, llm_model=None) -> Config:
     return Config(
         executor_kind=executor_kind,
         budgets=Budgets(
@@ -58,7 +58,7 @@ def make_config(*, max_steps=8, wall_timeout_s=60.0, step_timeout_s=30.0,
             verify_timeout_s=verify_timeout_s,
             max_tool_error_streak=max_tool_error_streak,
             max_denied_calls=max_denied_calls,
-            max_cost_usd=max_cost_usd,
+            max_cost_cny=max_cost_cny,
             max_total_tokens=max_total_tokens,
         ),
         trace=TraceOptions(

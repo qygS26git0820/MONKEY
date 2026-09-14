@@ -14,6 +14,7 @@ import traceback
 from .. import clock, contract
 from ..eval.runner import run_verification
 from ..trace import prepare_stream
+from .errors import ModelFailure
 from .messages import Abort, ConversationState, Finish, ToolCalls
 
 _STATUS_BY_CLASS = {
@@ -21,6 +22,9 @@ _STATUS_BY_CLASS = {
     "verification_failed": "failed",
     "env_error": "error",
     "harness_error": "error",
+    "llm_transport_error": "error",
+    "llm_api_rejected": "error",
+    "llm_response_invalid": "error",
 }
 
 
@@ -146,6 +150,14 @@ def run_agent(*, agent, task, tools, tool_ctx, run_ctx, executor) -> str:
 
     except KeyboardInterrupt:
         failure_class = "aborted_by_user"
+    except ModelFailure as exc:
+        # 网关问题与我们自己的 bug 必须分开：否则同一条 harness_error 里混着
+        # "DeepSeek 连不上"和"我们写错了"，两者要采取的行动完全不同。
+        failure_class = (exc.failure_class if exc.failure_class in contract.LLM_FAILURE_CLASSES
+                         else "harness_error")
+        trace.emit("error", where="llm", exception_type=type(exc).__name__,
+                   message=str(exc), failure_class=failure_class,
+                   traceback_tail=traceback.format_exc()[-2000:])
     except Exception as exc:
         trace.emit("error", where="loop", exception_type=type(exc).__name__, message=str(exc),
                    traceback_tail=traceback.format_exc()[-2000:])
@@ -177,7 +189,8 @@ def run_agent(*, agent, task, tools, tool_ctx, run_ctx, executor) -> str:
         "tool_calls": tool_call_count,
         "input_tokens": usage.input_tokens,
         "output_tokens": usage.output_tokens,
-        "cost_usd": usage.cost_usd,
+        "cost": usage.cost,
+        "pricing_currency": run_ctx.pricing_currency,
     }
     trace.emit(
         "run_end",

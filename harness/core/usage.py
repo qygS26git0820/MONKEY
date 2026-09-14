@@ -45,10 +45,10 @@ class UsageLedger:
         return None if self._output is _UNKNOWN else self._output
 
     @property
-    def cost_usd(self):
+    def cost(self):
         return None if self._cost is _UNKNOWN else self._cost
 
-    def record(self, *, input_tokens=None, output_tokens=None, cost_usd=None) -> None:
+    def record(self, *, input_tokens=None, output_tokens=None, cost=None) -> None:
         """记一笔用量。三个量缺省 None，表示"这次响应没有报告它"。
 
         强制 keyword-only：调用点必须写明记的是哪个量。input/output 写反
@@ -56,7 +56,7 @@ class UsageLedger:
         """
         self._input = _acc(self._input, input_tokens)
         self._output = _acc(self._output, output_tokens)
-        self._cost = _acc(self._cost, cost_usd)
+        self._cost = _acc(self._cost, cost)
 
     def exceeded(self, budgets) -> bool:
         """累计用量是否已**越过**任一上限。
@@ -65,14 +65,14 @@ class UsageLedger:
 
         - **严格大于**：刚好花到上限不算超支，上限是"允许花这么多"。
         - **未知不触发**：累计量是 None（没有记录，或记录缺失已污染）时，
-          `cost_usd > max_cost_usd` 直接短路为假。我们无法证明它超了，就
+          `cost > max_cost_cny` 直接短路为假。我们无法证明它超了，就
           不凭它终止。代价是这个量上的超支会漏判——这条已知残差登记在
           `docs/evidence/stage2-cost-budget/`。
 
         `max_total_tokens` 的"总量"指输入 + 输出之和。
         """
-        if (budgets.max_cost_usd is not None and self.cost_usd is not None
-                and self.cost_usd > budgets.max_cost_usd):
+        if (budgets.max_cost_cny is not None and self.cost is not None
+                and self.cost > budgets.max_cost_cny):
             return True
         if (budgets.max_total_tokens is not None
                 and self.input_tokens is not None and self.output_tokens is not None

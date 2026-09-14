@@ -30,6 +30,7 @@
 1. 进程被外部中断（SIGINT / 外部终止）→ `aborted_by_user`
 2. 我们自身代码抛未捕获异常或不变式被破坏 → `harness_error`
 3. 执行环境不可用（执行器起不来、工作区建不出、仓库缺失）→ `env_error`
+    - 紧接其后（阶段 2 新增，不改变上面各条编号）：模型调用失败 → `llm_transport_error`（连不上）/ `llm_api_rejected`（网关拒绝）/ `llm_response_invalid`（响应不合协议）
 4. 累计 token/成本超预算 → `cost_budget_exceeded`
 5. 整个 run 墙上时钟超 `wall_timeout` → `timeout_wall`
 6. 单个 step 累计耗时超 `step_timeout` → `timeout_step`
@@ -63,6 +64,9 @@
 | 10 | `harness_error` | 我们自身代码异常或不变式被破坏：未捕获异常、trace 写入失败、schema 校验失败、任务定义非法、验证结果无法解析 | 工具未注册**不算**：记 `tool_result(status=error, reason=unknown_tool)` 并计入 #4 |
 | 11 | `aborted_by_user` | **【建议新增】** 进程收到外部中断（SIGINT/Ctrl-C、外部 kill） | 原 10 个的**遗漏项**：此前只能勉强归入 #10，会把"用户打断"误导成"我们的代码有 bug" |
 | 12 | `cost_budget_exceeded` | **【建议新增】** 累计 token/成本超预算 | 原 10 个的**第二处遗漏**：阶段 2 必然需要花费上限，且成本是你的一等观察目标，用 #6 代偿语义错误 |
+| 13 | `llm_transport_error` | 模型请求没能完成一次"传输"：DNS 解析失败、TCP/TLS 连不上、连接或读取超时、连接被重置 | 与 #10 的区别：请求根本没到达网关，不是我们拼错了请求；与 #5 的区别：没有任何响应可比对 |
+| 14 | `llm_api_rejected` | 网关**明确**拒绝了请求：带错误体的 4xx/5xx（鉴权失败、余额不足、限流、模型名不存在） | 与 #13 的区别：拿到了明确的拒绝理由，可据此改配置；与 #15 的区别：拒绝是网关给的，不是我们解析出来的 |
+| 15 | `llm_response_invalid` | 网关返回成功状态，但响应不合协议：非 JSON、缺必需字段、结构与约定不符 | 与 #14 的区别：HTTP 层面成功；与 #10 的区别：不是我们代码抛的异常，是外部数据不合约定 |
 
 ### 1.4 关于我发现的这两处遗漏
 
@@ -163,4 +167,99 @@
 
 事后核对命令：`git diff <基线> -- harness/contract.py` 应无输出；
 `load_config("default").config_hash()` 仍应等于阶段 1 样本 `meta.json` 里的哈希。
+
+### 记录 3：第二次冻结基线移动（2026-09-14）
+
+**基线从 `b6f983f` 移到主题含** `第二次移动冻结基线` **的提交**
+（SHA 用 `git log --format=%H -1 --grep="第二次移动冻结基线"` 解析——本节无法引用自己的
+SHA，故留命令，与记录 1 同）。
+
+前两次移动都只登记、没动条款。**这次动了**，因此下面每一条都写明属于"新增"还是"改"。
+
+#### 3.1 新增三个标签（§1.2 判定顺序插入，§1.3 表格新增三行）
+
+`llm_transport_error` / `llm_api_rejected` / `llm_response_invalid`，语义见 §1.3 #13–#15。
+
+- **新增，不是改**：原 12 个标签一个没动、一个没删，§1.3 的既有行逐字未改；判定顺序
+  只在 §1.2 第 3 条（`env_error`）**之后插入**这三项，其余各条的相对顺序逐项不变。
+- **为什么单列**：把"DeepSeek 连不上"和"我们写错了"塞进同一条 `harness_error`，是网关类
+  问题永远无法与我们自身 bug 区分开的根源——两者要采取的行动完全不同。
+- **产生点**：`harness/core/errors.py::ModelFailure(failure_class, detail)`，由 agent 侧抛出；
+  冻结的 `loop.py` 多一个 `except ModelFailure`。**用异常而不是给 `next_action` 增加返回
+  类型**，是因为 Agent 接口本身在冻结清单里——加返回类型就是改接口。
+- **降级分支**：`contract.LLM_FAILURE_CLASSES` 是"主循环认识哪些标签"的判据。抛出方给了
+  不认识的标签时降级为 `harness_error`，绝不让未声明的 `failure_class` 进轨迹。
+- **`run_end.status`**：三者都映射到 `error`（见 §1.3 与 `loop.py::_STATUS_BY_CLASS`）。
+  它们是"出错了"，不是"被中止"。
+
+#### 3.2 改：`run_end.totals.cost_usd` → `cost`，并新增 `pricing_currency`
+
+**这是本次唯一的删除行，也是"移基线"唯一的硬理由。** §3 的冻结声明禁止改字段名，
+只有移动基线能做。
+
+- **理由**：单价是人民币（`llm/pricing.py::CURRENCY`），字段名却写着 `usd`。将来换一个
+  以美元计费的网关，同一份轨迹里两个 `cost_usd` 就是两种货币，而分析代码无法区分。
+- **`pricing_currency`（值 `"CNY"`）与 `cost` 相邻落盘**：一个没有单位的成本数字，事后
+  无法判断能不能和别的批次相加。
+- **币种单点提供**：`llm/pricing.py::CURRENCY` → `run_ctx.pricing_currency` → `loop.py` 写入
+  `totals`。绕这一圈是为了让冻结的 `loop.py` **仍然不 import `harness.llm`**——主循环不绑定
+  具体后端这条不变式不动。
+- **`max_cost_usd` → `max_cost_cny`**（配置字段与 TOML 键，非冻结文件，零成本）。`configs/*.toml`
+  里没有这个键，故 `config_hash` 未变，阶段 1 那批轨迹的配置归属仍成立。
+- **旧轨迹仍然合法**：`validate_records` 从不检查 `totals` 的子键。
+  `tests/fixtures/phase1-sample-trace.jsonl` **保持 `cost_usd` 原样**、逐字节未改，
+  `test_backcompat` 照旧通过。
+
+#### 3.3 登记：§1.2 的第四条配置不变量
+
+与记录 2 的第三条同性质，按裁决并进本条：
+
+- 配了 `[llm].model` 却读不到环境变量 `MONKEY_DEEPSEEK_KEY` 时，抛 `ConfigError`、拒绝启动、
+  不创建 run 目录（`__main__` 返回 exit 2）。它**只在启动前生效，不参与 run 内判定**。
+- 理由：晚一步失败意味着 run 目录、轨迹、agent 的第一次工具调用都已产生——等于用一次
+  失败的实验，换一个本可以在启动前报出的错误。
+- 凭据读取收在 `harness/llm/credentials.py`：该模块只回答"在不在"、**不返回值**，调用方
+  因此没有机会把它写进轨迹。
+- 该检查排在成本上限检查**之后**：否则"有上限但模型无单价"会先撞到这里，报出与根因无关的
+  缺 key。
+
+#### 3.4 追认：同批次的另一个提交（`5b8c445`）不改 schema，但改变了观测值
+
+`5b8c445`（环境隔离、截断、缺 key 拒绝启动）不含 schema 改动，登记两点影响备查：
+
+- **A3 修好了重叠区的交付量**：此前 head/tail 按字符切、不卡字节，多字节输出在"总字符数 ≤
+  head+tail 而字节数 > 阈值"的区间里，交付文本可能比原文还长、`elided_bytes` 为负、agent
+  读到 `[truncated -8193 bytes]` 这类乱码标记。**字段名与语义没变，值变了**——同一段超长
+  多字节输出，修复前后交付给 agent 的字节数不同。这是修掉了一个观察错误，不是改了契约。
+- **A1 让子进程看不到 `MONKEY_*`**：宿主侧的观测不再可能把自身的凭据带进 `trace.jsonl`。
+- A4 即 3.3。
+
+#### 3.5 登记两处偏差，交你裁决（我不改条款）
+
+**(a) §2.1 里 `elided_bytes` 的公式与实现不符。**
+
+条款写 `bytes_total - bytes_delivered`，实现是 `bytes_total - head_bytes - tail_bytes`。
+两者相差 `marker_text` 自身的字节数：交付文本里**包含省略标记**，而标记不是"被省略的内容"。
+该行文字描述（"被省略的字节数"）与实现一致，需要改的是那个公式。
+
+这条偏差**先于本次改动就存在**（截断一向如此算），本次只改了重叠区的保留量。可选修法：
+把公式改成 `bytes_total - head_bytes - tail_bytes`，并写明等式
+`交付文本 = head_text + marker_text + tail_text`。是否改由你定。
+
+**(b) 旧轨迹在报告里的读取路径。**
+
+`report/text_report.py` 读 `totals.get('cost')`，没有对 `cost_usd` 的兼容回退。若某份旧轨迹
+**同时有 token 又只有 `cost_usd`**，成本行会打印 `None`。阶段 1 不存在这种轨迹（无 LLM 则
+token 恒为 `null`，报告走"阶段 1 无 LLM"分支），故我没有加回退——那属于为不存在的场景加分支。
+若你认为该覆盖，请指出。
+
+事后核对命令：
+
+```
+OLD=b6f983f
+git diff --numstat $OLD HEAD -- harness/contract.py harness/core/loop.py \
+    harness/agent/base.py harness/tools/base.py harness/env/base.py
+# 期望：contract.py 形如 "N  0"（0 删除）；loop.py 形如 "N  1"；其余三个文件不出现
+git diff -U0 $OLD HEAD -- harness/core/loop.py | grep "^[+-]"   # 唯一的 "-" 行是 cost_usd -> cost
+```
 

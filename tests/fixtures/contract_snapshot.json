@@ -31,12 +31,18 @@
     "env_error",
     "harness_error",
     "aborted_by_user",
-    "cost_budget_exceeded"
+    "cost_budget_exceeded",
+    "llm_transport_error",
+    "llm_api_rejected",
+    "llm_response_invalid"
   ],
   "FAILURE_DECISION_ORDER": [
     "aborted_by_user",
     "harness_error",
     "env_error",
+    "llm_transport_error",
+    "llm_api_rejected",
+    "llm_response_invalid",
     "cost_budget_exceeded",
     "timeout_wall",
     "timeout_step",
@@ -46,6 +52,11 @@
     "agent_loop_limit",
     "verification_failed",
     "none"
+  ],
+  "LLM_FAILURE_CLASSES": [
+    "llm_transport_error",
+    "llm_api_rejected",
+    "llm_response_invalid"
   ],
   "REQUIRED_FIELDS": {
     "agent_message": [

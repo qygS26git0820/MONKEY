@@ -47,7 +47,7 @@ tail_chars = 3000
 
 
 class ConfigCostCapTest(unittest.TestCase):
-    """设了 max_cost_usd 却没有可信单价 → 拒绝启动。"""
+    """设了 max_cost_cny 却没有可信单价 → 拒绝启动。"""
 
     def setUp(self):
         self.scratch = self.enterContext(support.scratch_dir("cfg"))
@@ -60,11 +60,11 @@ class ConfigCostCapTest(unittest.TestCase):
         # 测试者 shell 里真实的值不受影响。
         self.enterContext(mock.patch.dict(os.environ, {API_KEY_ENV: "present-for-test"}))
 
-    def _write_and_load(self, *, model=None, max_cost_usd=None,
+    def _write_and_load(self, *, model=None, max_cost_cny=None,
                         max_total_tokens=None):
         extra = ""
-        if max_cost_usd is not None:
-            extra += f"max_cost_usd = {max_cost_usd}\n"
+        if max_cost_cny is not None:
+            extra += f"max_cost_cny = {max_cost_cny}\n"
         if max_total_tokens is not None:
             extra += f"max_total_tokens = {max_total_tokens}\n"
         llm = "" if model is None else f'\n[llm]\nmodel = "{model}"\n'
@@ -74,13 +74,13 @@ class ConfigCostCapTest(unittest.TestCase):
 
     def test_cap_without_a_model_is_refused(self):
         with self.assertRaises(ConfigError) as caught:
-            self._write_and_load(max_cost_usd=1.0)
+            self._write_and_load(max_cost_cny=1.0)
         self.assertIn("model", str(caught.exception))
 
     def test_cap_with_an_unpriced_model_is_refused(self):
         # pricing.PRICES 目前为空，任何模型名都查不到单价。
         with self.assertRaises(ConfigError) as caught:
-            self._write_and_load(model="no-such-model", max_cost_usd=1.0)
+            self._write_and_load(model="no-such-model", max_cost_cny=1.0)
         self.assertIn("no-such-model", str(caught.exception))
 
     def test_cap_with_a_priced_model_loads(self):
@@ -89,14 +89,14 @@ class ConfigCostCapTest(unittest.TestCase):
         pricing.PRICES["test-model"] = (1.0, 2.0, "test fixture", "2026-09-13")
         self.addCleanup(pricing.PRICES.pop, "test-model", None)
 
-        config = self._write_and_load(model="test-model", max_cost_usd=1.0)
-        self.assertEqual(1.0, config.budgets.max_cost_usd)
+        config = self._write_and_load(model="test-model", max_cost_cny=1.0)
+        self.assertEqual(1.0, config.budgets.max_cost_cny)
         self.assertEqual("test-model", config.llm_model)
 
     def test_unpriced_model_without_a_cost_cap_loads(self):
         # 没有上限时，成本未知是可接受的：跑得起来，只是拿不到成本数字。
         config = self._write_and_load(model="no-such-model")
-        self.assertIsNone(config.budgets.max_cost_usd)
+        self.assertIsNone(config.budgets.max_cost_cny)
         self.assertEqual("no-such-model", config.llm_model)
 
     def test_token_cap_alone_needs_no_price(self):
@@ -144,7 +144,7 @@ class BudgetStopTest(unittest.TestCase):
         return failure_class, records
 
     def test_cost_cap_trips_on_a_single_overspend(self):
-        failure_class, records = self._run({"cost_usd": 0.9}, max_cost_usd=0.5)
+        failure_class, records = self._run({"cost": 0.9}, max_cost_cny=0.5)
         self.assertEqual("cost_budget_exceeded", failure_class)
 
         end = records[-1]
@@ -152,12 +152,12 @@ class BudgetStopTest(unittest.TestCase):
         self.assertEqual("cost_budget_exceeded", end["failure_class"])
         # cost_budget_exceeded 不在 _STATUS_BY_CLASS 里，落到默认值 aborted。
         self.assertEqual("aborted", end["status"])
-        self.assertEqual(0.9, end["totals"]["cost_usd"])
+        self.assertEqual(0.9, end["totals"]["cost"])
         self.assertEqual([], validate_records(records))
 
     def test_verification_still_runs_after_a_budget_stop(self):
         # schema R3：无论因何终止，只要工作区在就照跑验证。
-        _, records = self._run({"cost_usd": 0.9}, max_cost_usd=0.5)
+        _, records = self._run({"cost": 0.9}, max_cost_cny=0.5)
         verifications = [r for r in records if r["type"] == "verification"]
         self.assertEqual(1, len(verifications))
         # 这个 agent 没改任何文件，toy-001 的仓库仍是坏的。
@@ -165,9 +165,9 @@ class BudgetStopTest(unittest.TestCase):
 
     def test_spending_exactly_at_the_cap_does_not_trip(self):
         # 严格大于：花到上限不算超支。故这里正常收尾，落在验证失败上。
-        failure_class, records = self._run({"cost_usd": 0.5}, max_cost_usd=0.5)
+        failure_class, records = self._run({"cost": 0.5}, max_cost_cny=0.5)
         self.assertEqual("verification_failed", failure_class)
-        self.assertEqual(0.5, records[-1]["totals"]["cost_usd"])
+        self.assertEqual(0.5, records[-1]["totals"]["cost"])
 
     def test_token_cap_trips_on_input_plus_output(self):
         failure_class, records = self._run(
@@ -178,14 +178,14 @@ class BudgetStopTest(unittest.TestCase):
 
     def test_no_cap_records_the_usage_but_never_trips(self):
         # 对照组：同样的记账、不同的配置。证明终止来自上限而非记账本身。
-        failure_class, records = self._run({"cost_usd": 999.0})
+        failure_class, records = self._run({"cost": 999.0})
         self.assertEqual("verification_failed", failure_class)
-        self.assertEqual(999.0, records[-1]["totals"]["cost_usd"])
+        self.assertEqual(999.0, records[-1]["totals"]["cost"])
 
     def test_unknown_cost_is_recorded_as_none_and_cannot_trip(self):
         # 已知残差：只报了一部分量时，那个量是未知的（None），而未知不能
         # 触发终止——我们无法证明它超了。
-        failure_class, records = self._run({"input_tokens": 10}, max_cost_usd=0.5)
+        failure_class, records = self._run({"input_tokens": 10}, max_cost_cny=0.5)
         self.assertEqual("verification_failed", failure_class)
         self.assertEqual(10, records[-1]["totals"]["input_tokens"])
-        self.assertIsNone(records[-1]["totals"]["cost_usd"])
+        self.assertIsNone(records[-1]["totals"]["cost"])
