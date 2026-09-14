@@ -7,6 +7,10 @@
 
 成本上限比上面几条更严：`max_cost_usd` 要求成本可被算出（模型名已知且
 有单价），否则那条上限永远不可能触发。同样在建 run 目录之前拒绝启动。
+
+配了 `[llm].model` 却拿不到凭据时也拒绝启动：晚一步失败意味着 run 目录、
+轨迹、agent 的第一次工具调用都已产生，等于用一次失败的实验换一个本可以
+提前报出的错误。
 """
 
 import hashlib
@@ -17,6 +21,7 @@ from pathlib import Path
 
 from . import paths
 from .env.factory import EXECUTOR_KINDS
+from .llm.credentials import API_KEY_ENV, api_key_present
 from .llm.pricing import price_for
 
 
@@ -131,6 +136,15 @@ def load_config(name: str = "default") -> Config:
                 f"模型 {llm_model!r} 在 harness/llm/pricing.py 里没有单价，"
                 "无法用 max_cost_usd 约束成本；拒绝启动"
             )
+    if llm_model and not api_key_present():
+        # 配了模型却没有凭据：跑到第一次请求才失败的话，run 目录、轨迹、
+        # 甚至 agent 的第一次工具调用都已经产生了——用一次失败的实验换取
+        # 一个本可以在启动前就报出的错误。故与成本上限同样处理：在建 run
+        # 目录之前拒绝启动。此检查必须排在上面的成本上限之后，否则"有上限
+        # 但模型无单价"会先撞到这里，报出与根因无关的缺 key。
+        raise ConfigError(
+            f"配置了 [llm].model={llm_model!r} 但环境变量 {API_KEY_ENV} 未设置；拒绝启动"
+        )
 
     return Config(executor_kind=executor_kind, budgets=budgets, trace=trace, raw=raw,
                   docker_image=executor_image, llm_model=llm_model)

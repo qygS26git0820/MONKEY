@@ -29,17 +29,66 @@ def write_blob(blob_dir: Path, data: str, sha: str) -> str:
     return name
 
 
+def _marker(elided: int) -> str:
+    return f"\n...[truncated {elided} bytes]...\n"
+
+
+def _head_within(data: str, chars: int, byte_cap: int) -> str:
+    """取前若干字符，字符数不超过 chars、UTF-8 字节数不超过 byte_cap。
+
+    上限按字节、切点按字符——多字节内容下保留的字符数会少于 chars，但绝不会
+    把某个字符切成两半。
+    """
+    text = data[:chars]
+    if len(text.encode("utf-8")) <= byte_cap:
+        return text
+    kept, used = [], 0
+    for ch in text:
+        size = len(ch.encode("utf-8"))
+        if used + size > byte_cap:
+            break
+        used += size
+        kept.append(ch)
+    return "".join(kept)
+
+
+def _tail_within(data: str, chars: int, byte_cap: int) -> str:
+    """尾部对称版本：从末尾往回取。"""
+    text = data[-chars:] if chars else ""
+    if len(text.encode("utf-8")) <= byte_cap:
+        return text
+    kept, used = [], 0
+    for ch in reversed(text):
+        size = len(ch.encode("utf-8"))
+        if used + size > byte_cap:
+            break
+        used += size
+        kept.append(ch)
+    return "".join(reversed(kept))
+
+
 def prepare_stream(data: str, opts, blob_dir: Path) -> tuple[str, dict]:
     """返回 (交付给 agent 的文本, 落盘的流元数据)。
 
     head/tail 按**字符**切分，因此切点不会落在多字节字符中间，
     于是字节层面的重建是精确的。
+
+    但保留量按**字节**设上限：多字节内容下 head_chars 个字符可能是它三倍的
+    字节，"只按字符切"会让 head 与 tail 合起来覆盖甚至超过原文——那样交付的
+    文本比原文还长、`elided_bytes` 为负、agent 读到"截断 -8193 字节"这种乱码
+    标记。上限保证 head_bytes + tail_bytes < total，即截断真的截掉了东西。
     """
     raw = data.encode("utf-8")
     total = len(raw)
     sha_full = _sha256_bytes(raw)
 
-    if total <= opts.truncate_threshold_bytes:
+    # 标记自身要占字节，故上限先把它扣掉。标记里的省略量落在 [0, total]，它的
+    # 十进制位数不超过 total 的位数，故用 total 算出的标记是它的**长度上界**。
+    marker_reserve = len(_marker(total).encode("utf-8"))
+
+    # 第二个条件只在阈值小到放不下标记时才成立（total 略大于阈值、且阈值 <
+    # 约 30 字节）。那种配置下截断只会让交付量变大，故按原样交付。
+    if total <= opts.truncate_threshold_bytes or total - marker_reserve < 1:
         delivered = data
         meta = {
             "bytes_total": total,
@@ -56,12 +105,15 @@ def prepare_stream(data: str, opts, blob_dir: Path) -> tuple[str, dict]:
         }
         return delivered, meta
 
-    head_text = data[: opts.head_chars]
-    tail_text = data[-opts.tail_chars:] if opts.tail_chars else ""
+    kept_cap = min(opts.truncate_threshold_bytes, total - marker_reserve)
+    char_total = opts.head_chars + opts.tail_chars
+    head_cap = kept_cap * opts.head_chars // char_total if char_total else 0
+    head_text = _head_within(data, opts.head_chars, head_cap)
+    tail_text = _tail_within(data, opts.tail_chars, kept_cap - head_cap)
     head_bytes = len(head_text.encode("utf-8"))
     tail_bytes = len(tail_text.encode("utf-8"))
     elided = total - head_bytes - tail_bytes
-    marker = f"\n...[truncated {elided} bytes]...\n"
+    marker = _marker(elided)
     delivered = head_text + marker + tail_text
     meta = {
         "bytes_total": total,

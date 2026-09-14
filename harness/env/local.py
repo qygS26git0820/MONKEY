@@ -2,6 +2,10 @@
 
 一律 shell=False + 参数列表：既避开路径含空格的问题，也消除命令注入。
 显式 utf-8 解码：Windows 默认走本地代码页（GBK），不指定会乱码。
+
+子进程**不继承**宿主环境里 HIDDEN_ENV_PREFIX 开头的变量。docker 后端本就不
+继承宿主环境（只透传显式 -e），这里补的是同一件事的宿主版本——否则同一份
+观测在两种后端下能看到的环境不同。
 """
 
 import os
@@ -11,6 +15,22 @@ from pathlib import Path
 
 from .. import clock
 from .base import ExecResult, Executor
+
+# 被观测命令看不到以这个前缀开头的宿主环境变量。凭据（MONKEY_DEEPSEEK_KEY）
+# 就在这个前缀下：agent 一句 printenv 就能读到它，而那条输出会进 trace.jsonl
+# 与 blobs/——观测数据里出现自己的凭据，就是观测工具污染了观测对象。
+# 显式传入的 env 不受此限制：那条路径是调用方有意为之。
+HIDDEN_ENV_PREFIX = "MONKEY_"
+
+
+def _child_env(extra) -> dict:
+    child_env = {k: v for k, v in os.environ.items()
+                 if not k.startswith(HIDDEN_ENV_PREFIX)}
+    child_env["PYTHONHASHSEED"] = "0"
+    child_env["PYTHONIOENCODING"] = "utf-8"
+    if extra:
+        child_env.update(extra)
+    return child_env
 
 
 class LocalExecutor(Executor):
@@ -37,11 +57,7 @@ class LocalExecutor(Executor):
         return rel.as_posix() or "."
 
     def run(self, args, cwd, timeout_s, env=None) -> ExecResult:
-        child_env = dict(os.environ)
-        child_env["PYTHONHASHSEED"] = "0"
-        child_env["PYTHONIOENCODING"] = "utf-8"
-        if env:
-            child_env.update(env)
+        child_env = _child_env(env)
 
         argv = [str(a) for a in args]
         started = clock.now()

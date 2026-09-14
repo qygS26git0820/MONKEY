@@ -9,11 +9,14 @@
 的入口。
 """
 
+import os
 import unittest
+from unittest import mock
 
 from harness import paths
 from harness.config import ConfigError, load_config
 from harness.core.messages import Finish
+from harness.llm.credentials import API_KEY_ENV
 from harness.tasks.loader import load_task
 from harness.trace import read_trace, validate_records
 
@@ -51,6 +54,11 @@ class ConfigCostCapTest(unittest.TestCase):
         self._original = paths.CONFIGS_DIR
         paths.CONFIGS_DIR = self.scratch
         self.addCleanup(setattr, paths, "CONFIGS_DIR", self._original)
+        # 配了 [llm].model 的用例现在会要求凭据存在。放一个占位值，好让这些
+        # 用例仍然只测成本上限；"缺 key 拒绝启动"另在
+        # tests/test_llm_key_check.py 专测。patch.dict 退出时精确还原，
+        # 测试者 shell 里真实的值不受影响。
+        self.enterContext(mock.patch.dict(os.environ, {API_KEY_ENV: "present-for-test"}))
 
     def _write_and_load(self, *, model=None, max_cost_usd=None,
                         max_total_tokens=None):
