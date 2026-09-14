@@ -5,3 +5,4 @@ runs/
 tmp/
 workspace/
 images/
+.claude/
