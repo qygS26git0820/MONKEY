@@ -1,0 +1,117 @@
+# 命令： .venv/Scripts/python.exe -m unittest discover -v
+# 注：discover 必须在仓库根运行、或显式带 -t .；这些测试用相对 import，
+#     'discover -s tests'（缺 -t .）会把 tests/ 当顶层目录，破坏相对 import。
+
+test_default_config_hash_still_matches_the_phase1_sample (tests.test_backcompat.Phase1ConfigHashTest.test_default_config_hash_still_matches_the_phase1_sample) ... ok
+test_sample_meta_matches_schema_version (tests.test_backcompat.Phase1SampleTraceTest.test_sample_meta_matches_schema_version) ... ok
+test_sample_trace_covers_the_promised_event_types (tests.test_backcompat.Phase1SampleTraceTest.test_sample_trace_covers_the_promised_event_types) ... ok
+test_sample_trace_is_still_valid (tests.test_backcompat.Phase1SampleTraceTest.test_sample_trace_is_still_valid) ... ok
+test_sample_trace_schema_version_is_current (tests.test_backcompat.Phase1SampleTraceTest.test_sample_trace_schema_version_is_current) ... ok
+test_common_fields_are_declared_on_run_start (tests.test_contract.ContractShapeTest.test_common_fields_are_declared_on_run_start) ... ok
+test_decision_order_is_a_permutation_of_failure_classes (tests.test_contract.ContractShapeTest.test_decision_order_is_a_permutation_of_failure_classes) ... ok
+test_event_types_unique_and_have_required_fields (tests.test_contract.ContractShapeTest.test_event_types_unique_and_have_required_fields) ... ok
+test_failure_classes_are_at_least_the_frozen_twelve_and_unique (tests.test_contract.ContractShapeTest.test_failure_classes_are_at_least_the_frozen_twelve_and_unique) ... ok
+test_schema_version_is_1 (tests.test_contract.ContractShapeTest.test_schema_version_is_1) ... ok
+test_snapshot_matches_live_contract (tests.test_contract.FrozenSnapshotTest.test_snapshot_matches_live_contract) ... ok
+test_failing_run_is_reproducible (tests.test_determinism.DeterminismTest.test_failing_run_is_reproducible) ... ok
+test_failure_output_embeds_run_path (tests.test_determinism.DeterminismTest.test_failure_output_embeds_run_path) ... ok
+test_passing_run_is_reproducible (tests.test_determinism.DeterminismTest.test_passing_run_is_reproducible) ... ok
+test_trace_records_workspace_relative_paths (tests.test_determinism.DeterminismTest.test_trace_records_workspace_relative_paths) ... ok
+test_every_control_hits_its_designed_label_under_docker (tests.test_docker_executor.DockerControlMatrixTest.test_every_control_hits_its_designed_label_under_docker) ... skipped '本地没有 python:3.12-slim，跳过'
+test_trace_records_container_paths (tests.test_docker_executor.DockerControlMatrixTest.test_trace_records_container_paths) ... skipped '本地没有 python:3.12-slim，跳过'
+test_bind_mount_is_shared_both_ways (tests.test_docker_executor.DockerRunTest.test_bind_mount_is_shared_both_ways) ... skipped '本地没有 python:3.12-slim，跳过'
+test_command_runs_in_container (tests.test_docker_executor.DockerRunTest.test_command_runs_in_container) ... skipped '本地没有 python:3.12-slim，跳过'
+test_run_dir_around_workspace_is_not_mounted (tests.test_docker_executor.DockerRunTest.test_run_dir_around_workspace_is_not_mounted) ... skipped '本地没有 python:3.12-slim，跳过'
+test_timeout_leaves_no_container_behind (tests.test_docker_executor.DockerRunTest.test_timeout_leaves_no_container_behind) ... skipped '本地没有 python:3.12-slim，跳过'
+test_python_placeholder_resolves_per_backend (tests.test_docker_executor.ExpandCommandTest.test_python_placeholder_resolves_per_backend) ... ok
+test_unknown_placeholder_is_passed_through_untouched (tests.test_docker_executor.ExpandCommandTest.test_unknown_placeholder_is_passed_through_untouched) ... ok
+test_outside_workspace_is_not_dressed_up_as_visible (tests.test_docker_executor.VisiblePathTest.test_outside_workspace_is_not_dressed_up_as_visible) ... ok
+test_two_backends_disagree_on_the_same_path (tests.test_docker_executor.VisiblePathTest.test_two_backends_disagree_on_the_same_path) ... ok
+test_a_child_that_enumerates_the_environment_finds_no_monkey_vars (tests.test_env_isolation.ChildEnvTest.test_a_child_that_enumerates_the_environment_finds_no_monkey_vars) ... ok
+test_explicitly_passed_env_reaches_the_child (tests.test_env_isolation.ChildEnvTest.test_explicitly_passed_env_reaches_the_child) ... ok
+test_the_environment_is_not_merely_emptied (tests.test_env_isolation.ChildEnvTest.test_the_environment_is_not_merely_emptied) ... ok
+test_the_canary_never_reaches_the_trace (tests.test_env_isolation.TraceLeakTest.test_the_canary_never_reaches_the_trace) ... ok
+test_labels_are_declared_and_ranked_where_documented (tests.test_llm_failure_labels.LabelDeclarationTest.test_labels_are_declared_and_ranked_where_documented) ... ok
+test_llm_labels_are_not_silently_widened (tests.test_llm_failure_labels.LabelDeclarationTest.test_llm_labels_are_not_silently_widened) ... ok
+test_the_three_labels_are_the_documented_ones (tests.test_llm_failure_labels.LabelDeclarationTest.test_the_three_labels_are_the_documented_ones) ... ok
+test_an_unknown_label_degrades_to_harness_error (tests.test_llm_failure_labels.LabelProducedTest.test_an_unknown_label_degrades_to_harness_error) ... ok
+test_each_label_reaches_run_end (tests.test_llm_failure_labels.LabelProducedTest.test_each_label_reaches_run_end) ... ok
+test_the_error_event_carries_the_label_and_the_llm_origin (tests.test_llm_failure_labels.LabelProducedTest.test_the_error_event_carries_the_label_and_the_llm_origin) ... ok
+test_the_label_wins_over_the_verification_verdict (tests.test_llm_failure_labels.LabelProducedTest.test_the_label_wins_over_the_verification_verdict) ... ok
+test_a_model_with_a_key_loads (tests.test_llm_key_check.ConfigKeyCheckTest.test_a_model_with_a_key_loads) ... ok
+test_a_model_without_a_key_is_refused (tests.test_llm_key_check.ConfigKeyCheckTest.test_a_model_without_a_key_is_refused) ... ok
+test_an_llm_section_without_a_model_needs_no_key (tests.test_llm_key_check.ConfigKeyCheckTest.test_an_llm_section_without_a_model_needs_no_key) ... ok
+test_no_llm_section_needs_no_key (tests.test_llm_key_check.ConfigKeyCheckTest.test_no_llm_section_needs_no_key) ... ok
+test_missing_key_exits_two_and_leaves_no_run_directory (tests.test_llm_key_check.StartupRefusalTest.test_missing_key_exits_two_and_leaves_no_run_directory) ... ok
+test_with_a_key_the_same_command_does_create_a_run (tests.test_llm_key_check.StartupRefusalTest.test_with_a_key_the_same_command_does_create_a_run) ... ok
+test_aborted_by_user_on_keyboard_interrupt (tests.test_loop_guards.LoopGuardTest.test_aborted_by_user_on_keyboard_interrupt) ... ok
+test_agent_gave_up_when_agent_aborts (tests.test_loop_guards.LoopGuardTest.test_agent_gave_up_when_agent_aborts) ... ok
+test_agent_loop_limit_when_agent_never_finishes (tests.test_loop_guards.LoopGuardTest.test_agent_loop_limit_when_agent_never_finishes) ... ok
+test_env_error_when_launcher_is_missing (tests.test_loop_guards.LoopGuardTest.test_env_error_when_launcher_is_missing) ... ok
+test_harness_error_when_agent_returns_illegal_action (tests.test_loop_guards.LoopGuardTest.test_harness_error_when_agent_returns_illegal_action) ... ok
+test_policy_denied_after_repeated_escapes (tests.test_loop_guards.LoopGuardTest.test_policy_denied_after_repeated_escapes) ... ok
+test_timeout_step_when_a_single_step_overruns (tests.test_loop_guards.LoopGuardTest.test_timeout_step_when_a_single_step_overruns) ... ok
+test_timeout_wall_when_steps_accumulate_past_the_budget (tests.test_loop_guards.LoopGuardTest.test_timeout_wall_when_steps_accumulate_past_the_budget) ... ok
+test_tool_error_repeated_on_same_failure_signature (tests.test_loop_guards.LoopGuardTest.test_tool_error_repeated_on_same_failure_signature) ... ok
+test_every_ending_writes_run_end (tests.test_loop_guards.TraceAlwaysClosedTest.test_every_ending_writes_run_end) ... ok
+test_running_tasks_leaves_source_and_templates_untouched (tests.test_no_pollution.NoPollutionTest.test_running_tasks_leaves_source_and_templates_untouched) ... ok
+test_task_templates_survive_a_correct_fix (tests.test_no_pollution.NoPollutionTest.test_task_templates_survive_a_correct_fix) ... ok
+test_absolute_outside_is_rejected (tests.test_paths.EnsureWithinTest.test_absolute_outside_is_rejected) ... ok
+test_inside_project_is_allowed (tests.test_paths.EnsureWithinTest.test_inside_project_is_allowed) ... ok
+test_project_root_itself_is_allowed (tests.test_paths.EnsureWithinTest.test_project_root_itself_is_allowed) ... ok
+test_relative_escape_is_rejected (tests.test_paths.EnsureWithinTest.test_relative_escape_is_rejected) ... ok
+test_absolute_path_outside_is_denied (tests.test_paths.ResolveInWorkspaceTest.test_absolute_path_outside_is_denied) ... ok
+test_empty_and_non_string_are_denied (tests.test_paths.ResolveInWorkspaceTest.test_empty_and_non_string_are_denied) ... ok
+test_nested_relative_path_resolves_inside (tests.test_paths.ResolveInWorkspaceTest.test_nested_relative_path_resolves_inside) ... ok
+test_parent_traversal_is_denied (tests.test_paths.ResolveInWorkspaceTest.test_parent_traversal_is_denied) ... ok
+test_workspace_root_itself_is_allowed (tests.test_paths.ResolveInWorkspaceTest.test_workspace_root_itself_is_allowed) ... ok
+test_every_control_hits_its_designed_label (tests.test_scripted_controls.ScriptedControlMatrixTest.test_every_control_hits_its_designed_label) ... ok
+test_no_cap_records_the_usage_but_never_trips (tests.test_token_budget.BudgetStopTest.test_no_cap_records_the_usage_but_never_trips) ... ok
+test_spending_exactly_at_the_cap_does_not_trip (tests.test_token_budget.BudgetStopTest.test_spending_exactly_at_the_cap_does_not_trip) ... ok
+test_token_cap_trips_on_input_plus_output (tests.test_token_budget.BudgetStopTest.test_token_cap_trips_on_input_plus_output) ... ok
+test_unknown_usage_is_recorded_as_none_and_cannot_trip (tests.test_token_budget.BudgetStopTest.test_unknown_usage_is_recorded_as_none_and_cannot_trip) ... ok
+test_verification_still_runs_after_a_budget_stop (tests.test_token_budget.BudgetStopTest.test_verification_still_runs_after_a_budget_stop) ... ok
+test_blank_lines_are_skipped (tests.test_trace_contract.ReadTraceTest.test_blank_lines_are_skipped) ... ok
+test_malformed_json_line_raises_contract_violation (tests.test_trace_contract.ReadTraceTest.test_malformed_json_line_raises_contract_violation) ... ok
+test_missing_required_field_is_refused (tests.test_trace_contract.TraceWriterGuardTest.test_missing_required_field_is_refused) ... ok
+test_refused_event_does_not_advance_seq (tests.test_trace_contract.TraceWriterGuardTest.test_refused_event_does_not_advance_seq) ... ok
+test_undeclared_event_type_is_refused (tests.test_trace_contract.TraceWriterGuardTest.test_undeclared_event_type_is_refused) ... ok
+test_valid_emission_round_trips_and_validates (tests.test_trace_contract.TraceWriterGuardTest.test_valid_emission_round_trips_and_validates) ... ok
+test_illegal_failure_class_is_detected (tests.test_trace_contract.ValidateRecordsTest.test_illegal_failure_class_is_detected) ... ok
+test_illegal_run_end_status_is_detected (tests.test_trace_contract.ValidateRecordsTest.test_illegal_run_end_status_is_detected) ... ok
+test_illegal_tool_result_status_is_detected (tests.test_trace_contract.ValidateRecordsTest.test_illegal_tool_result_status_is_detected) ... ok
+test_illegal_truncation_strategy_is_detected (tests.test_trace_contract.ValidateRecordsTest.test_illegal_truncation_strategy_is_detected) ... ok
+test_missing_common_field_is_detected (tests.test_trace_contract.ValidateRecordsTest.test_missing_common_field_is_detected) ... ok
+test_missing_required_field_is_detected (tests.test_trace_contract.ValidateRecordsTest.test_missing_required_field_is_detected) ... ok
+test_missing_stream_field_is_detected (tests.test_trace_contract.ValidateRecordsTest.test_missing_stream_field_is_detected) ... ok
+test_reference_sample_is_valid (tests.test_trace_contract.ValidateRecordsTest.test_reference_sample_is_valid) ... ok
+test_seq_gap_is_detected (tests.test_trace_contract.ValidateRecordsTest.test_seq_gap_is_detected) ... ok
+test_unknown_event_type_is_detected (tests.test_trace_contract.ValidateRecordsTest.test_unknown_event_type_is_detected) ... ok
+test_the_delivered_text_is_shorter_than_the_original (tests.test_truncate.MultibyteOverlapTest.test_the_delivered_text_is_shorter_than_the_original) ... ok
+test_truncation_never_delivers_more_than_it_received (tests.test_truncate.MultibyteOverlapTest.test_truncation_never_delivers_more_than_it_received) ... ok
+test_multibyte_split_lands_on_character_boundary (tests.test_truncate.PrepareStreamTest.test_multibyte_split_lands_on_character_boundary) ... ok
+test_over_threshold_truncates_and_keeps_full_blob (tests.test_truncate.PrepareStreamTest.test_over_threshold_truncates_and_keeps_full_blob) ... ok
+test_reconstruct_returns_exactly_what_agent_saw (tests.test_truncate.PrepareStreamTest.test_reconstruct_returns_exactly_what_agent_saw) ... ok
+test_reconstruction_holds_across_many_sizes (tests.test_truncate.PrepareStreamTest.test_reconstruction_holds_across_many_sizes) ... ok
+test_under_threshold_is_passed_through_untouched (tests.test_truncate.PrepareStreamTest.test_under_threshold_is_passed_through_untouched) ... ok
+test_a_missing_field_makes_that_field_unknown (tests.test_usage_ledger.AccumulationTest.test_a_missing_field_makes_that_field_unknown) ... ok
+test_fields_are_independent (tests.test_usage_ledger.AccumulationTest.test_fields_are_independent) ... ok
+test_first_value_after_no_records_is_kept (tests.test_usage_ledger.AccumulationTest.test_first_value_after_no_records_is_kept) ... ok
+test_fresh_ledger_reports_unknown (tests.test_usage_ledger.AccumulationTest.test_fresh_ledger_reports_unknown) ... ok
+test_known_values_accumulate (tests.test_usage_ledger.AccumulationTest.test_known_values_accumulate) ... ok
+test_record_is_keyword_only (tests.test_usage_ledger.AccumulationTest.test_record_is_keyword_only) ... ok
+test_unknown_is_sticky_because_a_later_value_cannot_recover_it (tests.test_usage_ledger.AccumulationTest.test_unknown_is_sticky_because_a_later_value_cannot_recover_it) ... ok
+test_no_caps_never_exceeds (tests.test_usage_ledger.ExceededTest.test_no_caps_never_exceeds) ... ok
+test_token_cap_counts_input_plus_output (tests.test_usage_ledger.ExceededTest.test_token_cap_counts_input_plus_output) ... ok
+test_token_cap_is_unknown_when_only_one_side_is_reported (tests.test_usage_ledger.ExceededTest.test_token_cap_is_unknown_when_only_one_side_is_reported) ... ok
+test_token_cap_not_tripped_by_either_side_alone (tests.test_usage_ledger.ExceededTest.test_token_cap_not_tripped_by_either_side_alone) ... ok
+test_token_exactly_at_cap_does_not_exceed (tests.test_usage_ledger.ExceededTest.test_token_exactly_at_cap_does_not_exceed) ... ok
+test_unknown_never_exceeds_even_with_a_cap (tests.test_usage_ledger.ExceededTest.test_unknown_never_exceeds_even_with_a_cap) ... ok
+
+----------------------------------------------------------------------
+Ran 105 tests in 9.697s
+
+OK (skipped=6)
+run_dir      : D:\SWE Agent\tmp\test-runs-7955ea8f\20260914-124848-toy-001-scripted_ok
+failure_class: none
+report       : D:\SWE Agent\tmp\test-runs-7955ea8f\20260914-124848-toy-001-scripted_ok\report.md

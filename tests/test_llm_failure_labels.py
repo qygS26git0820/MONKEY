@@ -1,8 +1,8 @@
 """三个 LLM 失败标签的**产生点**，以及非法标签的降级分支。
 
 标签在 contract.py 里"声明了"不等于"会产生"——trace-schema.md 记录 1 里
-为 `cost_budget_exceeded` 专门写过这件事（它从"声明了但没有产生点"变成有
-产生点才算数）。本文件让假 agent 抛 ModelFailure，证明主循环真的把它们落进
+为一个预算标签专门写过这件事（它从"声明了但没有产生点"变成有产生点才算
+数；该标签在记录 5 里改名为 `token_budget_exceeded`）。本文件让假 agent 抛 ModelFailure，证明主循环真的把它们落进
 run_end，而不是让它们停在常数表里。
 
 真 LLM 客户端属于后续工作。这里先测主循环侧，是为了让标签的产生点先于
@@ -105,7 +105,7 @@ class LabelDeclarationTest(unittest.TestCase):
                 # 而不是我们代码的 bug。这正是把三者从 harness_error 里
                 # 分出来的理由。
                 self.assertGreater(order.index(label), env_error)
-                self.assertLess(order.index(label), order.index("cost_budget_exceeded"))
+                self.assertLess(order.index(label), order.index("token_budget_exceeded"))
                 self.assertLess(order.index(label), order.index("none"))
 
     def test_the_three_labels_are_the_documented_ones(self):

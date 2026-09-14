@@ -106,16 +106,14 @@ def generate(run_dir: Path) -> Path:
             )
     lines.append("")
 
-    lines.append("## token 与成本")
+    lines.append("## token")
     lines.append("")
     totals = (run_end or {}).get("totals") or {}
     if totals.get("input_tokens") is None:
-        lines.append("阶段 1 无 LLM，token 与成本字段已在 schema 中占位，取值为 `null`。")
+        lines.append("无 LLM，token 字段已在 schema 中占位，取值为 `null`。")
     else:
         lines.append(f"- 输入 token：{totals['input_tokens']}")
         lines.append(f"- 输出 token：{totals['output_tokens']}")
-        lines.append(f"- 成本（估算）：{totals.get('cost')} "
-                     f"{totals.get('pricing_currency', '')}")
     lines.append(f"- 工具调用次数：{totals.get('tool_calls', '-')}")
     lines.append("")
 

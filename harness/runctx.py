@@ -8,7 +8,6 @@ from pathlib import Path
 from . import contract, paths
 from .core.usage import UsageLedger
 from .env.docker import DEFAULT_IMAGE
-from .llm.pricing import CURRENCY
 from .trace import TraceWriter
 
 
@@ -21,12 +20,8 @@ class RunContext:
         self.harness_git_sha = harness_git_sha
         self.python_version = platform.python_version()
         self.task = task
-        # 本次 run 的 token/成本累计。agent 侧写、主循环侧读，都在这一个对象上。
+        # 本次 run 的 token 累计。agent 侧写、主循环侧读，都在这一个对象上。
         self.usage = UsageLedger()
-        # 成本的币种。冻结的 loop.py 要把它写进 run_end.totals，而 loop.py
-        # 不许 import harness.llm——所以在这里取好、由 run_ctx 转交。
-        # 一个没有单位的成本数字，事后无法判断能不能和别的批次的数字相加。
-        self.pricing_currency = CURRENCY
 
         self.run_dir = paths.ensure_within(paths.RUNS_DIR / run_id)
         if self.run_dir.exists():

@@ -1,0 +1,4 @@
+# 命令： grep -rn --include=*.py 'max_cost_cny|pricing_currency|price_for|cost_usd|cost_budget_exceeded' harness/
+# 期望且实际：无输出（exit=1）。已删成本面在 harness/ 里无悬挂引用。
+
+(exit=1)

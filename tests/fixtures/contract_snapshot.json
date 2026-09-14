@@ -31,7 +31,7 @@
     "env_error",
     "harness_error",
     "aborted_by_user",
-    "cost_budget_exceeded",
+    "token_budget_exceeded",
     "llm_transport_error",
     "llm_api_rejected",
     "llm_response_invalid"
@@ -43,7 +43,7 @@
     "llm_transport_error",
     "llm_api_rejected",
     "llm_response_invalid",
-    "cost_budget_exceeded",
+    "token_budget_exceeded",
     "timeout_wall",
     "timeout_step",
     "tool_error_repeated",

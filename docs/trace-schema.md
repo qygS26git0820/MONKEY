@@ -31,7 +31,7 @@
 2. 我们自身代码抛未捕获异常或不变式被破坏 → `harness_error`
 3. 执行环境不可用（执行器起不来、工作区建不出、仓库缺失）→ `env_error`
     - 紧接其后（阶段 2 新增，不改变上面各条编号）：模型调用失败 → `llm_transport_error`（连不上）/ `llm_api_rejected`（网关拒绝）/ `llm_response_invalid`（响应不合协议）
-4. 累计 token/成本超预算 → `cost_budget_exceeded`
+4. 累计 token 超预算 → `token_budget_exceeded`
 5. 整个 run 墙上时钟超 `wall_timeout` → `timeout_wall`
 6. 单个 step 累计耗时超 `step_timeout` → `timeout_step`
 7. 同一工具同一错误签名**连续**失败达到 `max_tool_error_streak` → `tool_error_repeated`
@@ -63,7 +63,7 @@
 | 9 | `env_error` | 环境本身不可用：执行器无法启动（Docker 守护进程未运行、容器创建失败）、工作区无法建立、任务仓库缺失、验证命令无法启动 | 与 #10 的区别：不是我们代码的 bug；与 #5 的区别：命令根本没跑起来 |
 | 10 | `harness_error` | 我们自身代码异常或不变式被破坏：未捕获异常、trace 写入失败、schema 校验失败、任务定义非法、验证结果无法解析 | 工具未注册**不算**：记 `tool_result(status=error, reason=unknown_tool)` 并计入 #4 |
 | 11 | `aborted_by_user` | **【建议新增】** 进程收到外部中断（SIGINT/Ctrl-C、外部 kill） | 原 10 个的**遗漏项**：此前只能勉强归入 #10，会把"用户打断"误导成"我们的代码有 bug" |
-| 12 | `cost_budget_exceeded` | **【建议新增】** 累计 token/成本超预算 | 原 10 个的**第二处遗漏**：阶段 2 必然需要花费上限，且成本是你的一等观察目标，用 #6 代偿语义错误 |
+| 12 | `token_budget_exceeded` | **【建议新增】** 累计 token 超预算 | 原 10 个的**第二处遗漏**：阶段 2 必然需要预算上限，且用量是你的一等观察目标，用 #6 代偿语义错误 |
 | 13 | `llm_transport_error` | 模型请求没能完成一次"传输"：DNS 解析失败、TCP/TLS 连不上、连接或读取超时、连接被重置 | 与 #10 的区别：请求根本没到达网关，不是我们拼错了请求；与 #5 的区别：没有任何响应可比对 |
 | 14 | `llm_api_rejected` | 网关**明确**拒绝了请求：带错误体的 4xx/5xx（鉴权失败、余额不足、限流、模型名不存在） | 与 #13 的区别：拿到了明确的拒绝理由，可据此改配置；与 #15 的区别：拒绝是网关给的，不是我们解析出来的 |
 | 15 | `llm_response_invalid` | 网关返回成功状态，但响应不合协议：非 JSON、缺必需字段、结构与约定不符 | 与 #14 的区别：HTTP 层面成功；与 #10 的区别：不是我们代码抛的异常，是外部数据不合约定 |
@@ -73,7 +73,7 @@
 你要求确认"互斥、无遗漏"。互斥性由 §1.2 的顺序判定保证；**无遗漏这一条我没能做到——原 10 个标签有两处缺口**：
 
 - **#11 外部中断**：这是任何交互式实验都会遇到的最常见终止原因之一，且塞进 `harness_error` 会污染"我们代码有 bug"这一信号。
-- **#12 成本预算**：阶段 2 引入 LLM 后这是刚需，且与你的"token/成本是一等观察目标"直接相关。
+- **#12 预算上限**：阶段 2 引入 LLM 后这是刚需，且与你的"token 是一等观察目标"直接相关。（该标签引入时名为 `cost_budget_exceeded`，记录 5 里改名为 `token_budget_exceeded`。）
 
 两处现在补上代价为零（尚未写任何代码），冻结之后再补就必须迁移历史数据——这正是我在设计文档里用来说服你"token 字段从第一天就在"的同一个理由，所以我对自己的标签集用同一标准。是否接受由你定；若你否决，我会把这两类情况显式记录为"归入 #10 并附加 `sub_reason` 字段"的降级方案。
 
@@ -293,4 +293,71 @@ git diff -U0 $OLD HEAD -- harness/core/loop.py | grep "^[+-]"   # 唯一的 "-" 
 
 事后核对命令：`git diff eadd1a8 --stat` 应只列出 `docs/trace-schema.md`；
 `git diff eadd1a8 -- harness/` 应无输出。
+
+### 记录 5：第三次冻结基线移动——删除成本面 + 标签改名（2026-09-14）
+
+**基线**：主题含 `第三次移动冻结基线` 的提交。本次**移动了冻结基线**（`contract.py`
+与 `loop.py` 都被改），这是阶段 2 的第三次移动。
+
+**这次移动与前两次有一个机械差别，必须记在最前面**：前两次的判据是"`contract.py`
+形如 `N 0`（0 删除行）"。本次 `contract.py` **第一次出现删除行**——旧标签名被删。
+"只增不改"在标签名这一处被**有意让路**一次，理由见 5.1。此判据在本次作废；若以后
+再有人拿"冻结清单 0 删除行"当不变式，以本条为准。
+
+#### 5.1 改：`cost_budget_exceeded` → `token_budget_exceeded`
+
+- **位置**：§1.2 判定顺序第 4 条、§1.3 表格 #12（`contract.py` 的 `FAILURE_CLASSES`
+  与 `FAILURE_DECISION_ORDER` 各一处；`tests/fixtures/contract_snapshot.json` 同步）。
+- **理由**：成本上限被砍（见 5.2），该标签所指的上限只剩 token。名字必须跟着它所指的
+  东西走——否则就是又一次"名字说的是成本、判的是 token"，与 D7 同类。
+- **这是唯一一次对冻结标签名的删除。** 可行性依据：**没有任何已归档轨迹带此标签**。
+  它的唯一产生点是测试（`tests/test_token_budget.py`）；`tests/fixtures/phase1-sample-trace.jsonl`
+  的 `run_end` 是 `none`。故改名不使任何历史产物失效。
+- 标签**数量未变**（仍 15 个），判定顺序中它的位置未变（仍排第 4）。
+
+#### 5.2 删：成本面（你裁定砍掉的三项：成本上限、峰谷判定、缓存命中率）
+
+后两项（峰谷、缓存命中率）从未实现，无代码可删。实际删掉的：
+
+- `harness/llm/pricing.py` —— **整文件**（`CURRENCY`、`PRICES`、`price_for`）。
+- `harness/core/usage.py` —— `cost` 属性、`record()` 的 `cost` 关键字参数、
+  `exceeded()` 的成本分支。**保留** input/output token。
+- `harness/config.py` —— `Budgets.max_cost_cny` 字段、成本上限不变量整块、`price_for`
+  import。**记录 2 §3.3 登记的"第四条配置不变量"就此作废**，现存不变量回到三条
+  （`max_denied_calls < max_tool_error_streak < max_steps`、`step_timeout < wall_timeout`、
+  `head+tail <= threshold`），外加缺 `[llm].model` 凭据时的启动前拒绝。
+- `harness/runctx.py` —— `pricing_currency` 属性及其对 `pricing.CURRENCY` 的引用。
+- `harness/report/text_report.py` —— 成本行；章节名 `token 与成本` → `token`。
+
+#### 5.3 改：`run_end.totals` 删 `cost` 与 `pricing_currency`，保留 token
+
+- 新形状：`{steps, tool_calls, input_tokens, output_tokens}`。
+- **保留 token 的理由**：`max_total_tokens` 保留 ⇒ token 仍必须计数；一条因 token
+  越限而死（`token_budget_exceeded`）的轨迹必须能看到超了多少——有标签、没数量，
+  正是要避免的"不可观测"。
+- **字段读写的语义未变**：`totals` 只是少了两个键。旧轨迹里的 `cost`/`cost_usd`/
+  `pricing_currency` 键照旧留在文件里，`validate_records` 不校验 `totals` 子键，故旧
+  轨迹仍合法、`text_report.py` 的 `.get()` 读取不受影响。
+
+#### 5.4 保留未动
+
+- **防线不变**：不重试（客户端批次）、单次请求超时（客户端批次）、`max_steps`、
+  `max_total_tokens`。本次没有削弱任何一条。
+- `run_end.status` 的映射表未动：`token_budget_exceeded` 仍落到默认值 `aborted`。
+- `contract.py` 的 `LLM_FAILURE_CLASSES`、三个 LLM 标签、`REQUIRED_FIELDS` 均未动。
+- 记录 1/2/3/4 **不重写**（本文件是追加式的变更台账）。
+
+#### 5.5 未处理的发现
+
+登记在 `docs/known-residues.md`，本次不处理。
+
+事后核对命令：
+
+```bash
+git diff --numstat dee4e57 HEAD -- harness/contract.py harness/core/loop.py \
+    harness/agent/base.py harness/tools/base.py harness/env/base.py
+# 期望：contract.py、loop.py 有 + 与 - 行；后三个文件不出现
+grep -rn "max_cost_cny\|pricing_currency\|price_for" harness/
+# 期望：无输出
+```
 

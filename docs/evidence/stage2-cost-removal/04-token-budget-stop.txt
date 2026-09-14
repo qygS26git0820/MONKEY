@@ -1,0 +1,24 @@
+# 命令： .venv/Scripts/python.exe tmp/probe-token-stop.py
+# 三种情形：越限 / 恰好用满 / 只报一半
+
+usage={'input_tokens': 60, 'output_tokens': 50}  max_total_tokens=100
+    failure_class = token_budget_exceeded
+    run_end: status=aborted failure_class=token_budget_exceeded
+    run_end: totals={'input_tokens': 60, 'output_tokens': 50, 'steps': 1, 'tool_calls': 0}
+    verification = failed
+    validate_records = []
+
+usage={'input_tokens': 50, 'output_tokens': 50}  max_total_tokens=100
+    failure_class = verification_failed
+    run_end: status=failed failure_class=verification_failed
+    run_end: totals={'input_tokens': 50, 'output_tokens': 50, 'steps': 1, 'tool_calls': 0}
+    verification = failed
+    validate_records = []
+
+usage={'input_tokens': 1000000}  max_total_tokens=100
+    failure_class = verification_failed
+    run_end: status=failed failure_class=verification_failed
+    run_end: totals={'input_tokens': 1000000, 'output_tokens': None, 'steps': 1, 'tool_calls': 0}
+    verification = failed
+    validate_records = []
+
