@@ -27,7 +27,10 @@ head_chars = 3000
 tail_chars = 3000
 
 [llm]
-# 端点在冒烟探针里第一次被真实触碰，模型名如有出入会在那里以 400/404 暴露。
-model = "deepseek-chat"
+# 端点在 2026-09-14 的单调用探针里第一次被真实触碰。实测：不需要 /v1 前缀，
+# 鉴权头 `Bearer` 正确，模型回**原生 tool_calls**（stop_reason="tool_calls"）。
+# 请求 "deepseek-chat"（别名）时端点在响应里回显 "deepseek-flash"——名字以
+# **回显**为准，否则轨迹里的 llm_request.model 会和实际跑的模型对不上。
+model = "deepseek-flash"
 base_url = "https://api.deepseek.com"
 max_output_tokens = 2048
