@@ -1,0 +1,33 @@
+# cmd: kubectl get pods -A -o wide
+# at: 2026-09-17T05:14:26Z
+
+NAMESPACE            NAME                                                    READY   STATUS    RESTARTS       AGE     IP            NODE                  NOMINATED NODE   READINESS GATES
+chaos-mesh           chaos-controller-manager-59b7dc547f-4w9md               1/1     Running   10 (40m ago)   10d     10.244.0.11   chaos-control-plane   <none>           <none>
+chaos-mesh           chaos-controller-manager-59b7dc547f-fkvjj               1/1     Running   10 (40m ago)   10d     10.244.0.12   chaos-control-plane   <none>           <none>
+chaos-mesh           chaos-controller-manager-59b7dc547f-gg6c6               1/1     Running   10 (40m ago)   10d     10.244.0.14   chaos-control-plane   <none>           <none>
+chaos-mesh           chaos-daemon-f8vwf                                      1/1     Running   10 (40m ago)   10d     10.244.0.13   chaos-control-plane   <none>           <none>
+chaos-mesh           chaos-dashboard-597b64c86-g97lg                         1/1     Running   10 (40m ago)   10d     10.244.0.8    chaos-control-plane   <none>           <none>
+chaos-mesh           chaos-dns-server-6c69c57bd6-vptdf                       1/1     Running   10 (40m ago)   10d     10.244.0.9    chaos-control-plane   <none>           <none>
+chaos-test           curl-client                                             0/1     Unknown   0              5d17h   <none>        chaos-control-plane   <none>           <none>
+chaos-test           nginx-f8d4cc44c-8lbzg                                   1/1     Running   6 (40m ago)    6d23h   10.244.0.3    chaos-control-plane   <none>           <none>
+chaos-test           nginx-f8d4cc44c-dzdpp                                   1/1     Running   6 (40m ago)    6d23h   10.244.0.4    chaos-control-plane   <none>           <none>
+chaos-test           nginx-f8d4cc44c-vjtgd                                   1/1     Running   4 (40m ago)    5d16h   10.244.0.5    chaos-control-plane   <none>           <none>
+default              client                                                  1/1     Running   0              16m     10.244.0.22   chaos-control-plane   <none>           <none>
+default              nginx-6559559688-ggv7d                                  1/1     Running   0              18m     10.244.0.21   chaos-control-plane   <none>           <none>
+default              nginx-6559559688-mvlcx                                  1/1     Running   0              18m     10.244.0.19   chaos-control-plane   <none>           <none>
+default              nginx-6559559688-tlcvs                                  1/1     Running   0              18m     10.244.0.20   chaos-control-plane   <none>           <none>
+kube-system          coredns-6f6b679f8f-rz7lk                                1/1     Running   10 (40m ago)   10d     10.244.0.7    chaos-control-plane   <none>           <none>
+kube-system          coredns-6f6b679f8f-zflbh                                1/1     Running   10 (40m ago)   10d     10.244.0.10   chaos-control-plane   <none>           <none>
+kube-system          etcd-chaos-control-plane                                1/1     Running   10 (40m ago)   10d     172.18.0.2    chaos-control-plane   <none>           <none>
+kube-system          kindnet-74tbj                                           1/1     Running   10 (40m ago)   10d     172.18.0.2    chaos-control-plane   <none>           <none>
+kube-system          kube-apiserver-chaos-control-plane                      1/1     Running   10 (40m ago)   10d     172.18.0.2    chaos-control-plane   <none>           <none>
+kube-system          kube-controller-manager-chaos-control-plane             1/1     Running   10 (40m ago)   10d     172.18.0.2    chaos-control-plane   <none>           <none>
+kube-system          kube-proxy-lmvhs                                        1/1     Running   10 (40m ago)   10d     172.18.0.2    chaos-control-plane   <none>           <none>
+kube-system          kube-scheduler-chaos-control-plane                      1/1     Running   10 (40m ago)   10d     172.18.0.2    chaos-control-plane   <none>           <none>
+local-path-storage   local-path-provisioner-ccc7bf7fc-2jcpc                  1/1     Running   20 (39m ago)   10d     10.244.0.15   chaos-control-plane   <none>           <none>
+monitoring           alertmanager-kps-kube-prometheus-stack-alertmanager-0   2/2     Running   12 (40m ago)   7d14h   10.244.0.17   chaos-control-plane   <none>           <none>
+monitoring           kps-grafana-c4ff4768c-lt6gj                             3/3     Running   15 (40m ago)   6d17h   10.244.0.6    chaos-control-plane   <none>           <none>
+monitoring           kps-kube-prometheus-stack-operator-56cb6c6cd9-4l7fj     1/1     Running   12 (39m ago)   7d14h   10.244.0.2    chaos-control-plane   <none>           <none>
+monitoring           kps-kube-state-metrics-556886696-rpgbr                  1/1     Running   12 (39m ago)   7d14h   10.244.0.16   chaos-control-plane   <none>           <none>
+monitoring           kps-prometheus-node-exporter-dh6ln                      1/1     Running   6 (40m ago)    7d14h   172.18.0.2    chaos-control-plane   <none>           <none>
+monitoring           prometheus-kps-kube-prometheus-stack-prometheus-0       2/2     Running   12 (40m ago)   7d14h   10.244.0.18   chaos-control-plane   <none>           <none>

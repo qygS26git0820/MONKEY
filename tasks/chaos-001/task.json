@@ -1,0 +1,13 @@
+{
+  "id": "chaos-001",
+  "description": "生产环境里有一个对外提供服务的 nginx 工作负载。从某个时刻开始，客户端请求大量超时，服务实际不可用。\n\n值班同学在事发时用 kubectl 采集了现场快照，快照已经放在你的工作区里；每个快照文件头部记着产生它的命令与采集时刻。\n\n现场环境已经隔离：你没有集群访问权限，也无法重启或修改任何集群资源。你的目标仍然是让这个服务恢复可用——而一份站得住的根因判断，就是恢复服务的第一步。本次你只能依据快照给出这份判断。\n\n请把结论写成工作区根目录下的 diagnosis.json。下面三个字段必须齐全、且都是非空字符串（额外字段允许）：\n- root_cause_kind：你判定的根因所对应的 Kubernetes 资源类型（kind）\n- namespace：该资源所在的命名空间\n- workload：直接受影响的工作负载\n\n只写快照里能证实的结论。",
+  "repo": "repo",
+  "verify": {
+    "command": [
+      "{python}",
+      "-c",
+      "import json,sys\ntry:\n    d=json.load(open('diagnosis.json',encoding='utf-8'))\nexcept Exception as exc:\n    print('diagnosis.json 不可读或不是合法 JSON:',exc);sys.exit(1)\nif not isinstance(d,dict):\n    print('diagnosis.json 顶层必须是 JSON 对象');sys.exit(1)\ndef norm(v):\n    return ''.join(c for c in str(v).lower() if c.isalnum())\nmissing=[k for k in ('root_cause_kind','namespace','workload') if not str(d.get(k,'')).strip()]\nif missing:\n    print('缺字段或字段为空:',missing);sys.exit(1)\nif norm(d['root_cause_kind'])!='networkchaos':\n    print('root_cause_kind 与现场不符');sys.exit(1)\nif norm(d['namespace'])!='default':\n    print('namespace 与现场不符');sys.exit(1)\nif 'nginx' not in str(d['workload']).lower():\n    print('workload 未指向受影响的工作负载');sys.exit(1)\nprint('命中: 根因类型 / 命名空间 / 受影响工作负载 三者均与现场一致')\n"
+    ],
+    "cwd": "."
+  }
+}

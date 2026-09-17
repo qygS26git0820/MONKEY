@@ -1,0 +1,22 @@
+# cmd: kubectl get svc -A
+# at: 2026-09-17T05:14:26Z
+
+NAMESPACE     NAME                                     TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)                           AGE
+chaos-mesh    chaos-daemon                             ClusterIP   None            <none>        31767/TCP,31766/TCP               10d
+chaos-mesh    chaos-dashboard                          NodePort    10.96.96.53     <none>        2333:30147/TCP,2334:31179/TCP     10d
+chaos-mesh    chaos-mesh-controller-manager            ClusterIP   10.96.173.114   <none>        443/TCP,10081/TCP,10080/TCP       10d
+chaos-mesh    chaos-mesh-dns-server                    ClusterIP   10.96.212.155   <none>        53/UDP,53/TCP,9153/TCP,9288/TCP   10d
+chaos-test    nginx-svc                                ClusterIP   10.96.163.53    <none>        80/TCP                            5d17h
+default       kubernetes                               ClusterIP   10.96.0.1       <none>        443/TCP                           10d
+default       nginx-svc                                ClusterIP   10.96.98.126    <none>        80/TCP                            18m
+kube-system   kps-kube-prometheus-stack-coredns        ClusterIP   None            <none>        9153/TCP                          7d14h
+kube-system   kps-kube-prometheus-stack-kubelet        ClusterIP   None            <none>        10250/TCP,4194/TCP,10255/TCP      7d14h
+kube-system   kube-dns                                 ClusterIP   10.96.0.10      <none>        53/UDP,53/TCP,9153/TCP            10d
+monitoring    alertmanager-operated                    ClusterIP   None            <none>        9093/TCP,9094/TCP,9094/UDP        7d14h
+monitoring    kps-grafana                              ClusterIP   10.96.38.130    <none>        80/TCP                            7d14h
+monitoring    kps-kube-prometheus-stack-alertmanager   ClusterIP   10.96.28.73     <none>        9093/TCP,8080/TCP                 7d14h
+monitoring    kps-kube-prometheus-stack-operator       ClusterIP   10.96.219.93    <none>        443/TCP                           7d14h
+monitoring    kps-kube-prometheus-stack-prometheus     ClusterIP   10.96.37.222    <none>        9090/TCP,8080/TCP                 7d14h
+monitoring    kps-kube-state-metrics                   ClusterIP   10.96.80.196    <none>        8080/TCP                          7d14h
+monitoring    kps-prometheus-node-exporter             ClusterIP   10.96.97.48     <none>        9100/TCP                          7d14h
+monitoring    prometheus-operated                      ClusterIP   None            <none>        9090/TCP                          7d14h

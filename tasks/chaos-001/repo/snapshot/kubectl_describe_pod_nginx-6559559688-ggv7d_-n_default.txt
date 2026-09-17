@@ -1,0 +1,56 @@
+# cmd: kubectl describe pod nginx-6559559688-ggv7d -n default
+# at: 2026-09-17T05:15:46Z
+
+Name:             nginx-6559559688-ggv7d
+Namespace:        default
+Priority:         0
+Service Account:  default
+Node:             chaos-control-plane/172.18.0.2
+Start Time:       Thu, 17 Sep 2026 12:55:50 +0800
+Labels:           app=nginx
+                  pod-template-hash=6559559688
+Annotations:      <none>
+Status:           Running
+IP:               10.244.0.21
+IPs:
+  IP:           10.244.0.21
+Controlled By:  ReplicaSet/nginx-6559559688
+Containers:
+  nginx:
+    Container ID:   containerd://db2ec3c1a544b4238f9ff1642d038174e373a09a83940ba044fcacc738726973
+    Image:          docker.m.daocloud.io/library/nginx:latest
+    Image ID:       docker.m.daocloud.io/library/nginx@sha256:05b8cb60c354a44ab824ea6e7dc69b46d50762cdbe728a347a5b656e6fb3d7c4
+    Port:           80/TCP
+    Host Port:      0/TCP
+    State:          Running
+      Started:      Thu, 17 Sep 2026 12:55:51 +0800
+    Ready:          True
+    Restart Count:  0
+    Environment:    <none>
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-thhhk (ro)
+Conditions:
+  Type                        Status
+  PodReadyToStartContainers   True 
+  Initialized                 True 
+  Ready                       True 
+  ContainersReady             True 
+  PodScheduled                True 
+Volumes:
+  kube-api-access-thhhk:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    Optional:                false
+    DownwardAPI:             true
+QoS Class:                   BestEffort
+Node-Selectors:              <none>
+Tolerations:                 node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type    Reason     Age   From               Message
+  ----    ------     ----  ----               -------
+  Normal  Scheduled  19m   default-scheduler  Successfully assigned default/nginx-6559559688-ggv7d to chaos-control-plane
+  Normal  Pulled     19m   kubelet            spec.containers{nginx}: Container image "docker.m.daocloud.io/library/nginx:latest" already present on machine
+  Normal  Created    19m   kubelet            spec.containers{nginx}: Created container nginx
+  Normal  Started    19m   kubelet            spec.containers{nginx}: Started container nginx

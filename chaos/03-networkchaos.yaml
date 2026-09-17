@@ -1,0 +1,19 @@
+apiVersion: chaos-mesh.org/v1alpha1
+kind: NetworkChaos
+metadata:
+  name: nginx-delay
+  namespace: default
+spec:
+  action: delay
+  mode: all
+  selector:
+    namespaces:
+      - default
+    labelSelectors:
+      app: nginx
+  direction: to
+  delay:
+    latency: "10s"
+    jitter: "0ms"
+    correlation: "0"
+  duration: 30m

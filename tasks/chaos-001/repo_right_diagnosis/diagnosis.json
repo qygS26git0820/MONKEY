@@ -1,0 +1,5 @@
+{
+  "root_cause_kind": "NetworkChaos",
+  "namespace": "default",
+  "workload": "deployment/nginx"
+}

@@ -1,0 +1,17 @@
+# cmd: kubectl exec -n default client -- sh -c "wget -S -O /dev/null --timeout=5 http://nginx-svc.default.svc.cluster.local/ 2>&1"
+# at: 2026-09-17T04:58:56Z
+
+Connecting to nginx-svc.default.svc.cluster.local (10.96.98.126:80)
+  HTTP/1.1 200 OK
+  Server: nginx/1.31.5
+  Date: Thu, 17 Sep 2026 04:58:56 GMT
+  Content-Type: text/html
+  Content-Length: 896
+  Last-Modified: Wed, 02 Sep 2026 11:17:13 GMT
+  Connection: close
+  ETag: "6a9805b9-380"
+  Accept-Ranges: bytes
+  
+saving to '/dev/null'
+null                 100% |********************************|   896  0:00:00 ETA
+'/dev/null' saved

@@ -1,0 +1,5 @@
+# cmd: kubectl exec -n default client -- sh -c "wget -S -O /dev/null --timeout=5 http://nginx-svc.default.svc.cluster.local/ 2>&1"
+# at: 2026-09-17T05:03:31Z
+
+Connecting to nginx-svc.default.svc.cluster.local (10.96.98.126:80)
+wget: download timed out

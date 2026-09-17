@@ -1,0 +1,47 @@
+# 混沌实验（版本 A：MONKEY 只诊断，不碰集群）的配置。
+#
+# 与 llm.toml 的差别只有三处，都是有意的：
+#
+#   1. executor = docker。容器默认 --network none、且只挂载工作区（见
+#      harness/env/docker.py）。这与版本 A "不碰集群" 是同一件事的机械保证：
+#      宿主上装着 kubectl 与 ~/.kube/config，用 local 后端等于把集群直接递给
+#      MONKEY。假 agent 的离线段（时段 2 对照）仍用 default.toml 的 local。
+#
+#   2. max_tool_error_streak 3 → 4。诊断任务里"探路式命令"更常见（试一个路径、
+#      不存在、换一个），放宽一格以免把正常探路误判成卡死。注意仍须满足
+#      max_denied_calls < max_tool_error_streak < max_steps（2 < 4 < 20）。
+#
+#   3. max_total_tokens = 150000。账本记的是 input+output 的**累计和**，且每步
+#      都要重发整段历史；快照里有大文件，读进来就长期占住上下文。留空则无上限，
+#      设 60000 又会在半途截断观测（粗估 20 步落在 80k~120k），故取 150000
+#      （约 0.2 元量级）。花费上界的职责交给 max_steps。
+#
+# "同一工具+同一参数+同一结果" 的重复检测**没有做**：已有的 max_steps /
+# max_total_tokens / wall_timeout_s 已把花费锁在小额内，而"卡住"本身正是这次
+# 要观测的现象，熔断器会把它剪掉。裁决与理由见本批设计。
+
+[executor]
+kind = "docker"
+image = "python:3.12-slim"
+
+[budgets]
+max_steps = 20
+wall_timeout_s = 600.0
+# 必须大于客户端的单次请求总时限（90s，harness/llm/client.py）：
+# "慢而未挂"的调用应先落成更具体的 llm_transport_error，而不是泛化的 timeout_step。
+step_timeout_s = 120.0
+per_tool_timeout_s = 10.0
+verify_timeout_s = 30.0
+max_tool_error_streak = 4
+max_denied_calls = 2
+max_total_tokens = 150000
+
+[trace]
+truncate_threshold_bytes = 8192
+head_chars = 3000
+tail_chars = 3000
+
+[llm]
+model = "deepseek-flash"
+base_url = "https://api.deepseek.com"
+max_output_tokens = 2048
