@@ -11,10 +11,11 @@
 #      不存在、换一个），放宽一格以免把正常探路误判成卡死。注意仍须满足
 #      max_denied_calls < max_tool_error_streak < max_steps（2 < 4 < 20）。
 #
-#   3. max_total_tokens = 150000。账本记的是 input+output 的**累计和**，且每步
+#   3. max_total_tokens = 200000。账本记的是 input+output 的**累计和**，且每步
 #      都要重发整段历史；快照里有大文件，读进来就长期占住上下文。留空则无上限，
-#      设 60000 又会在半途截断观测（粗估 20 步落在 80k~120k），故取 150000
-#      （约 0.2 元量级）。花费上界的职责交给 max_steps。
+#      设 60000 又会在半途截断观测。首次实跑（2026-09-17）在 153373 触顶，而该次
+#      诊断已正确、验证已 passed——只差一个上限值就能干净收尾，故抬到 200000。
+#      max_steps=20 是步数的硬上限；token 上限是独立的花费闸门，两者谁先到谁生效。
 #
 # "同一工具+同一参数+同一结果" 的重复检测**没有做**：已有的 max_steps /
 # max_total_tokens / wall_timeout_s 已把花费锁在小额内，而"卡住"本身正是这次
@@ -34,7 +35,7 @@ per_tool_timeout_s = 10.0
 verify_timeout_s = 30.0
 max_tool_error_streak = 4
 max_denied_calls = 2
-max_total_tokens = 150000
+max_total_tokens = 200000
 
 [trace]
 truncate_threshold_bytes = 8192
