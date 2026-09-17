@@ -1,0 +1,314 @@
+# cmd: kubectl get events -A
+# at: 2026-09-17T05:14:26Z
+
+NAMESPACE            LAST SEEN   TYPE      REASON                    OBJECT                                                      MESSAGE
+chaos-mesh           39h         Normal    SandboxChanged            pod/chaos-controller-manager-59b7dc547f-4w9md               Pod sandbox changed, it will be killed and re-created.
+chaos-mesh           39h         Normal    Pulled                    pod/chaos-controller-manager-59b7dc547f-4w9md               Container image "ghcr.io/chaos-mesh/chaos-mesh:v2.8.4" already present on machine
+chaos-mesh           39h         Normal    Created                   pod/chaos-controller-manager-59b7dc547f-4w9md               Created container chaos-mesh
+chaos-mesh           39h         Normal    Started                   pod/chaos-controller-manager-59b7dc547f-4w9md               Started container chaos-mesh
+chaos-mesh           40m         Normal    SandboxChanged            pod/chaos-controller-manager-59b7dc547f-4w9md               Pod sandbox changed, it will be killed and re-created.
+chaos-mesh           40m         Normal    Pulled                    pod/chaos-controller-manager-59b7dc547f-4w9md               Container image "ghcr.io/chaos-mesh/chaos-mesh:v2.8.4" already present on machine
+chaos-mesh           40m         Normal    Created                   pod/chaos-controller-manager-59b7dc547f-4w9md               Created container chaos-mesh
+chaos-mesh           40m         Normal    Started                   pod/chaos-controller-manager-59b7dc547f-4w9md               Started container chaos-mesh
+chaos-mesh           39h         Normal    SandboxChanged            pod/chaos-controller-manager-59b7dc547f-fkvjj               Pod sandbox changed, it will be killed and re-created.
+chaos-mesh           39h         Normal    Pulled                    pod/chaos-controller-manager-59b7dc547f-fkvjj               Container image "ghcr.io/chaos-mesh/chaos-mesh:v2.8.4" already present on machine
+chaos-mesh           39h         Normal    Created                   pod/chaos-controller-manager-59b7dc547f-fkvjj               Created container chaos-mesh
+chaos-mesh           39h         Normal    Started                   pod/chaos-controller-manager-59b7dc547f-fkvjj               Started container chaos-mesh
+chaos-mesh           40m         Normal    SandboxChanged            pod/chaos-controller-manager-59b7dc547f-fkvjj               Pod sandbox changed, it will be killed and re-created.
+chaos-mesh           40m         Normal    Pulled                    pod/chaos-controller-manager-59b7dc547f-fkvjj               Container image "ghcr.io/chaos-mesh/chaos-mesh:v2.8.4" already present on machine
+chaos-mesh           40m         Normal    Created                   pod/chaos-controller-manager-59b7dc547f-fkvjj               Created container chaos-mesh
+chaos-mesh           40m         Normal    Started                   pod/chaos-controller-manager-59b7dc547f-fkvjj               Started container chaos-mesh
+chaos-mesh           39h         Normal    SandboxChanged            pod/chaos-controller-manager-59b7dc547f-gg6c6               Pod sandbox changed, it will be killed and re-created.
+chaos-mesh           39h         Normal    Pulled                    pod/chaos-controller-manager-59b7dc547f-gg6c6               Container image "ghcr.io/chaos-mesh/chaos-mesh:v2.8.4" already present on machine
+chaos-mesh           39h         Normal    Created                   pod/chaos-controller-manager-59b7dc547f-gg6c6               Created container chaos-mesh
+chaos-mesh           39h         Normal    Started                   pod/chaos-controller-manager-59b7dc547f-gg6c6               Started container chaos-mesh
+chaos-mesh           40m         Normal    SandboxChanged            pod/chaos-controller-manager-59b7dc547f-gg6c6               Pod sandbox changed, it will be killed and re-created.
+chaos-mesh           40m         Normal    Pulled                    pod/chaos-controller-manager-59b7dc547f-gg6c6               Container image "ghcr.io/chaos-mesh/chaos-mesh:v2.8.4" already present on machine
+chaos-mesh           40m         Normal    Created                   pod/chaos-controller-manager-59b7dc547f-gg6c6               Created container chaos-mesh
+chaos-mesh           40m         Normal    Started                   pod/chaos-controller-manager-59b7dc547f-gg6c6               Started container chaos-mesh
+chaos-mesh           39h         Normal    SandboxChanged            pod/chaos-daemon-f8vwf                                      Pod sandbox changed, it will be killed and re-created.
+chaos-mesh           39h         Normal    Pulled                    pod/chaos-daemon-f8vwf                                      Container image "ghcr.io/chaos-mesh/chaos-daemon:v2.8.4" already present on machine
+chaos-mesh           39h         Normal    Created                   pod/chaos-daemon-f8vwf                                      Created container chaos-daemon
+chaos-mesh           39h         Normal    Started                   pod/chaos-daemon-f8vwf                                      Started container chaos-daemon
+chaos-mesh           40m         Normal    SandboxChanged            pod/chaos-daemon-f8vwf                                      Pod sandbox changed, it will be killed and re-created.
+chaos-mesh           40m         Normal    Pulled                    pod/chaos-daemon-f8vwf                                      Container image "ghcr.io/chaos-mesh/chaos-daemon:v2.8.4" already present on machine
+chaos-mesh           40m         Normal    Created                   pod/chaos-daemon-f8vwf                                      Created container chaos-daemon
+chaos-mesh           40m         Normal    Started                   pod/chaos-daemon-f8vwf                                      Started container chaos-daemon
+chaos-mesh           39h         Normal    SandboxChanged            pod/chaos-dashboard-597b64c86-g97lg                         Pod sandbox changed, it will be killed and re-created.
+chaos-mesh           39h         Normal    Pulled                    pod/chaos-dashboard-597b64c86-g97lg                         Container image "ghcr.io/chaos-mesh/chaos-dashboard:v2.8.4" already present on machine
+chaos-mesh           39h         Normal    Created                   pod/chaos-dashboard-597b64c86-g97lg                         Created container chaos-dashboard
+chaos-mesh           39h         Normal    Started                   pod/chaos-dashboard-597b64c86-g97lg                         Started container chaos-dashboard
+chaos-mesh           40m         Normal    SandboxChanged            pod/chaos-dashboard-597b64c86-g97lg                         Pod sandbox changed, it will be killed and re-created.
+chaos-mesh           40m         Normal    Pulled                    pod/chaos-dashboard-597b64c86-g97lg                         Container image "ghcr.io/chaos-mesh/chaos-dashboard:v2.8.4" already present on machine
+chaos-mesh           40m         Normal    Created                   pod/chaos-dashboard-597b64c86-g97lg                         Created container chaos-dashboard
+chaos-mesh           40m         Normal    Started                   pod/chaos-dashboard-597b64c86-g97lg                         Started container chaos-dashboard
+chaos-mesh           39h         Normal    SandboxChanged            pod/chaos-dns-server-6c69c57bd6-vptdf                       Pod sandbox changed, it will be killed and re-created.
+chaos-mesh           39h         Normal    Pulled                    pod/chaos-dns-server-6c69c57bd6-vptdf                       Container image "ghcr.io/chaos-mesh/chaos-coredns:v0.2.8" already present on machine
+chaos-mesh           39h         Normal    Created                   pod/chaos-dns-server-6c69c57bd6-vptdf                       Created container chaos-dns-server
+chaos-mesh           39h         Normal    Started                   pod/chaos-dns-server-6c69c57bd6-vptdf                       Started container chaos-dns-server
+chaos-mesh           39h         Warning   Unhealthy                 pod/chaos-dns-server-6c69c57bd6-vptdf                       Readiness probe failed: HTTP probe failed with statuscode: 503
+chaos-mesh           40m         Normal    SandboxChanged            pod/chaos-dns-server-6c69c57bd6-vptdf                       Pod sandbox changed, it will be killed and re-created.
+chaos-mesh           40m         Normal    Pulled                    pod/chaos-dns-server-6c69c57bd6-vptdf                       Container image "ghcr.io/chaos-mesh/chaos-coredns:v0.2.8" already present on machine
+chaos-mesh           40m         Normal    Created                   pod/chaos-dns-server-6c69c57bd6-vptdf                       Created container chaos-dns-server
+chaos-mesh           40m         Normal    Started                   pod/chaos-dns-server-6c69c57bd6-vptdf                       Started container chaos-dns-server
+chaos-mesh           40m         Warning   Unhealthy                 pod/chaos-dns-server-6c69c57bd6-vptdf                       Readiness probe failed: HTTP probe failed with statuscode: 503
+chaos-mesh           39h         Normal    LeaderElection            lease/chaos-mesh                                            chaos-controller-manager-59b7dc547f-4w9md_8850bc1f-6bf2-4c56-b2a5-79b71460c843 became leader
+chaos-mesh           39m         Normal    LeaderElection            lease/chaos-mesh                                            chaos-controller-manager-59b7dc547f-4w9md_0b890098-0efb-42ae-ace9-42968038edbf became leader
+chaos-test           39h         Normal    SandboxChanged            pod/nginx-f8d4cc44c-8lbzg                                   Pod sandbox changed, it will be killed and re-created.
+chaos-test           39h         Normal    Pulled                    pod/nginx-f8d4cc44c-8lbzg                                   Container image "docker.m.daocloud.io/library/nginx:latest" already present on machine
+chaos-test           39h         Normal    Created                   pod/nginx-f8d4cc44c-8lbzg                                   Created container nginx
+chaos-test           39h         Normal    Started                   pod/nginx-f8d4cc44c-8lbzg                                   Started container nginx
+chaos-test           40m         Normal    SandboxChanged            pod/nginx-f8d4cc44c-8lbzg                                   Pod sandbox changed, it will be killed and re-created.
+chaos-test           40m         Normal    Pulled                    pod/nginx-f8d4cc44c-8lbzg                                   Container image "docker.m.daocloud.io/library/nginx:latest" already present on machine
+chaos-test           40m         Normal    Created                   pod/nginx-f8d4cc44c-8lbzg                                   Created container nginx
+chaos-test           40m         Normal    Started                   pod/nginx-f8d4cc44c-8lbzg                                   Started container nginx
+chaos-test           39h         Normal    SandboxChanged            pod/nginx-f8d4cc44c-dzdpp                                   Pod sandbox changed, it will be killed and re-created.
+chaos-test           39h         Normal    Pulled                    pod/nginx-f8d4cc44c-dzdpp                                   Container image "docker.m.daocloud.io/library/nginx:latest" already present on machine
+chaos-test           39h         Normal    Created                   pod/nginx-f8d4cc44c-dzdpp                                   Created container nginx
+chaos-test           39h         Normal    Started                   pod/nginx-f8d4cc44c-dzdpp                                   Started container nginx
+chaos-test           40m         Normal    SandboxChanged            pod/nginx-f8d4cc44c-dzdpp                                   Pod sandbox changed, it will be killed and re-created.
+chaos-test           40m         Normal    Pulled                    pod/nginx-f8d4cc44c-dzdpp                                   Container image "docker.m.daocloud.io/library/nginx:latest" already present on machine
+chaos-test           40m         Normal    Created                   pod/nginx-f8d4cc44c-dzdpp                                   Created container nginx
+chaos-test           40m         Normal    Started                   pod/nginx-f8d4cc44c-dzdpp                                   Started container nginx
+chaos-test           39h         Normal    SandboxChanged            pod/nginx-f8d4cc44c-vjtgd                                   Pod sandbox changed, it will be killed and re-created.
+chaos-test           39h         Normal    Pulled                    pod/nginx-f8d4cc44c-vjtgd                                   Container image "docker.m.daocloud.io/library/nginx:latest" already present on machine
+chaos-test           39h         Normal    Created                   pod/nginx-f8d4cc44c-vjtgd                                   Created container nginx
+chaos-test           39h         Normal    Started                   pod/nginx-f8d4cc44c-vjtgd                                   Started container nginx
+chaos-test           40m         Normal    SandboxChanged            pod/nginx-f8d4cc44c-vjtgd                                   Pod sandbox changed, it will be killed and re-created.
+chaos-test           40m         Normal    Pulled                    pod/nginx-f8d4cc44c-vjtgd                                   Container image "docker.m.daocloud.io/library/nginx:latest" already present on machine
+chaos-test           40m         Normal    Created                   pod/nginx-f8d4cc44c-vjtgd                                   Created container nginx
+chaos-test           40m         Normal    Started                   pod/nginx-f8d4cc44c-vjtgd                                   Started container nginx
+default              39h         Normal    Starting                  node/chaos-control-plane                                    Starting kubelet.
+default              39h         Normal    NodeHasSufficientMemory   node/chaos-control-plane                                    Node chaos-control-plane status is now: NodeHasSufficientMemory
+default              39h         Normal    NodeHasNoDiskPressure     node/chaos-control-plane                                    Node chaos-control-plane status is now: NodeHasNoDiskPressure
+default              39h         Normal    NodeHasSufficientPID      node/chaos-control-plane                                    Node chaos-control-plane status is now: NodeHasSufficientPID
+default              39h         Normal    NodeAllocatableEnforced   node/chaos-control-plane                                    Updated Node Allocatable limit across pods
+default              39h         Normal    Starting                  node/chaos-control-plane                                    
+default              39h         Normal    RegisteredNode            node/chaos-control-plane                                    Node chaos-control-plane event: Registered Node chaos-control-plane in Controller
+default              40m         Normal    Starting                  node/chaos-control-plane                                    Starting kubelet.
+default              40m         Normal    NodeHasSufficientMemory   node/chaos-control-plane                                    Node chaos-control-plane status is now: NodeHasSufficientMemory
+default              40m         Normal    NodeHasNoDiskPressure     node/chaos-control-plane                                    Node chaos-control-plane status is now: NodeHasNoDiskPressure
+default              40m         Normal    NodeHasSufficientPID      node/chaos-control-plane                                    Node chaos-control-plane status is now: NodeHasSufficientPID
+default              40m         Normal    NodeAllocatableEnforced   node/chaos-control-plane                                    Updated Node Allocatable limit across pods
+default              40m         Normal    Starting                  node/chaos-control-plane                                    
+default              40m         Normal    RegisteredNode            node/chaos-control-plane                                    Node chaos-control-plane event: Registered Node chaos-control-plane in Controller
+default              16m         Normal    Scheduled                 pod/client                                                  Successfully assigned default/client to chaos-control-plane
+default              16m         Normal    Pulled                    pod/client                                                  Container image "docker.m.daocloud.io/library/busybox:1.38.0" already present on machine
+default              16m         Normal    Created                   pod/client                                                  Created container client
+default              16m         Normal    Started                   pod/client                                                  Started container client
+default              18m         Normal    Scheduled                 pod/nginx-6559559688-ggv7d                                  Successfully assigned default/nginx-6559559688-ggv7d to chaos-control-plane
+default              18m         Normal    Pulled                    pod/nginx-6559559688-ggv7d                                  Container image "docker.m.daocloud.io/library/nginx:latest" already present on machine
+default              18m         Normal    Created                   pod/nginx-6559559688-ggv7d                                  Created container nginx
+default              18m         Normal    Started                   pod/nginx-6559559688-ggv7d                                  Started container nginx
+default              11m         Normal    Updated                   podnetworkchaos/nginx-6559559688-ggv7d                      Successfully update ObservedGeneration and FailedMessage of resource
+default              18m         Normal    Scheduled                 pod/nginx-6559559688-mvlcx                                  Successfully assigned default/nginx-6559559688-mvlcx to chaos-control-plane
+default              18m         Normal    Pulled                    pod/nginx-6559559688-mvlcx                                  Container image "docker.m.daocloud.io/library/nginx:latest" already present on machine
+default              18m         Normal    Created                   pod/nginx-6559559688-mvlcx                                  Created container nginx
+default              18m         Normal    Started                   pod/nginx-6559559688-mvlcx                                  Started container nginx
+default              11m         Normal    Updated                   podnetworkchaos/nginx-6559559688-mvlcx                      Successfully update ObservedGeneration and FailedMessage of resource
+default              18m         Normal    Scheduled                 pod/nginx-6559559688-tlcvs                                  Successfully assigned default/nginx-6559559688-tlcvs to chaos-control-plane
+default              18m         Normal    Pulled                    pod/nginx-6559559688-tlcvs                                  Container image "docker.m.daocloud.io/library/nginx:latest" already present on machine
+default              18m         Normal    Created                   pod/nginx-6559559688-tlcvs                                  Created container nginx
+default              18m         Normal    Started                   pod/nginx-6559559688-tlcvs                                  Started container nginx
+default              11m         Normal    Updated                   podnetworkchaos/nginx-6559559688-tlcvs                      Successfully update ObservedGeneration and FailedMessage of resource
+default              18m         Normal    SuccessfulCreate          replicaset/nginx-6559559688                                 Created pod: nginx-6559559688-mvlcx
+default              18m         Normal    SuccessfulCreate          replicaset/nginx-6559559688                                 Created pod: nginx-6559559688-ggv7d
+default              18m         Normal    SuccessfulCreate          replicaset/nginx-6559559688                                 Created pod: nginx-6559559688-tlcvs
+default              11m         Normal    FinalizerInited           networkchaos/nginx-delay                                    Finalizer has been inited
+default              11m         Normal    Updated                   networkchaos/nginx-delay                                    Successfully update finalizer of resource
+default              11m         Normal    Started                   networkchaos/nginx-delay                                    Experiment has started
+default              11m         Normal    Updated                   networkchaos/nginx-delay                                    Successfully update desiredPhase of resource
+default              11m         Normal    Updated                   networkchaos/nginx-delay                                    Successfully update records of resource
+default              11m         Normal    Applied                   networkchaos/nginx-delay                                    Successfully apply chaos for default/nginx-6559559688-mvlcx
+default              11m         Normal    Updated                   networkchaos/nginx-delay                                    Successfully update records of resource
+default              11m         Normal    Applied                   networkchaos/nginx-delay                                    Successfully apply chaos for default/nginx-6559559688-tlcvs
+default              11m         Normal    Updated                   networkchaos/nginx-delay                                    Successfully update records of resource
+default              11m         Normal    Applied                   networkchaos/nginx-delay                                    Successfully apply chaos for default/nginx-6559559688-ggv7d
+default              11m         Normal    Updated                   networkchaos/nginx-delay                                    Successfully update records of resource
+default              18m         Normal    ScalingReplicaSet         deployment/nginx                                            Scaled up replica set nginx-6559559688 to 3
+kube-system          39h         Normal    SandboxChanged            pod/coredns-6f6b679f8f-rz7lk                                Pod sandbox changed, it will be killed and re-created.
+kube-system          39h         Normal    Pulled                    pod/coredns-6f6b679f8f-rz7lk                                Container image "registry.k8s.io/coredns/coredns:v1.11.1" already present on machine
+kube-system          39h         Normal    Created                   pod/coredns-6f6b679f8f-rz7lk                                Created container coredns
+kube-system          39h         Normal    Started                   pod/coredns-6f6b679f8f-rz7lk                                Started container coredns
+kube-system          39h         Warning   Unhealthy                 pod/coredns-6f6b679f8f-rz7lk                                Readiness probe failed: HTTP probe failed with statuscode: 503
+kube-system          40m         Normal    SandboxChanged            pod/coredns-6f6b679f8f-rz7lk                                Pod sandbox changed, it will be killed and re-created.
+kube-system          40m         Normal    Pulled                    pod/coredns-6f6b679f8f-rz7lk                                Container image "registry.k8s.io/coredns/coredns:v1.11.1" already present on machine
+kube-system          40m         Normal    Created                   pod/coredns-6f6b679f8f-rz7lk                                Created container coredns
+kube-system          40m         Normal    Started                   pod/coredns-6f6b679f8f-rz7lk                                Started container coredns
+kube-system          40m         Warning   Unhealthy                 pod/coredns-6f6b679f8f-rz7lk                                Readiness probe failed: HTTP probe failed with statuscode: 503
+kube-system          39h         Normal    SandboxChanged            pod/coredns-6f6b679f8f-zflbh                                Pod sandbox changed, it will be killed and re-created.
+kube-system          39h         Normal    Pulled                    pod/coredns-6f6b679f8f-zflbh                                Container image "registry.k8s.io/coredns/coredns:v1.11.1" already present on machine
+kube-system          39h         Normal    Created                   pod/coredns-6f6b679f8f-zflbh                                Created container coredns
+kube-system          39h         Normal    Started                   pod/coredns-6f6b679f8f-zflbh                                Started container coredns
+kube-system          39h         Warning   Unhealthy                 pod/coredns-6f6b679f8f-zflbh                                Readiness probe failed: HTTP probe failed with statuscode: 503
+kube-system          40m         Normal    SandboxChanged            pod/coredns-6f6b679f8f-zflbh                                Pod sandbox changed, it will be killed and re-created.
+kube-system          40m         Normal    Pulled                    pod/coredns-6f6b679f8f-zflbh                                Container image "registry.k8s.io/coredns/coredns:v1.11.1" already present on machine
+kube-system          40m         Normal    Created                   pod/coredns-6f6b679f8f-zflbh                                Created container coredns
+kube-system          40m         Normal    Started                   pod/coredns-6f6b679f8f-zflbh                                Started container coredns
+kube-system          39m         Warning   Unhealthy                 pod/coredns-6f6b679f8f-zflbh                                Readiness probe failed: HTTP probe failed with statuscode: 503
+kube-system          39h         Normal    SandboxChanged            pod/etcd-chaos-control-plane                                Pod sandbox changed, it will be killed and re-created.
+kube-system          39h         Normal    Pulled                    pod/etcd-chaos-control-plane                                Container image "registry.k8s.io/etcd:3.5.15-0" already present on machine
+kube-system          39h         Normal    Created                   pod/etcd-chaos-control-plane                                Created container etcd
+kube-system          39h         Normal    Started                   pod/etcd-chaos-control-plane                                Started container etcd
+kube-system          40m         Normal    SandboxChanged            pod/etcd-chaos-control-plane                                Pod sandbox changed, it will be killed and re-created.
+kube-system          40m         Normal    Pulled                    pod/etcd-chaos-control-plane                                Container image "registry.k8s.io/etcd:3.5.15-0" already present on machine
+kube-system          40m         Normal    Created                   pod/etcd-chaos-control-plane                                Created container etcd
+kube-system          40m         Normal    Started                   pod/etcd-chaos-control-plane                                Started container etcd
+kube-system          39h         Normal    SandboxChanged            pod/kindnet-74tbj                                           Pod sandbox changed, it will be killed and re-created.
+kube-system          39h         Normal    Pulled                    pod/kindnet-74tbj                                           Container image "docker.io/kindest/kindnetd:v20241108-5c6d2daf" already present on machine
+kube-system          39h         Normal    Created                   pod/kindnet-74tbj                                           Created container kindnet-cni
+kube-system          39h         Normal    Started                   pod/kindnet-74tbj                                           Started container kindnet-cni
+kube-system          40m         Normal    SandboxChanged            pod/kindnet-74tbj                                           Pod sandbox changed, it will be killed and re-created.
+kube-system          40m         Normal    Pulled                    pod/kindnet-74tbj                                           Container image "docker.io/kindest/kindnetd:v20241108-5c6d2daf" already present on machine
+kube-system          40m         Normal    Created                   pod/kindnet-74tbj                                           Created container kindnet-cni
+kube-system          40m         Normal    Started                   pod/kindnet-74tbj                                           Started container kindnet-cni
+kube-system          39h         Normal    SandboxChanged            pod/kube-apiserver-chaos-control-plane                      Pod sandbox changed, it will be killed and re-created.
+kube-system          39h         Normal    Pulled                    pod/kube-apiserver-chaos-control-plane                      Container image "registry.k8s.io/kube-apiserver:v1.31.0" already present on machine
+kube-system          39h         Normal    Created                   pod/kube-apiserver-chaos-control-plane                      Created container kube-apiserver
+kube-system          39h         Normal    Started                   pod/kube-apiserver-chaos-control-plane                      Started container kube-apiserver
+kube-system          40m         Normal    SandboxChanged            pod/kube-apiserver-chaos-control-plane                      Pod sandbox changed, it will be killed and re-created.
+kube-system          40m         Normal    Pulled                    pod/kube-apiserver-chaos-control-plane                      Container image "registry.k8s.io/kube-apiserver:v1.31.0" already present on machine
+kube-system          40m         Normal    Created                   pod/kube-apiserver-chaos-control-plane                      Created container kube-apiserver
+kube-system          40m         Normal    Started                   pod/kube-apiserver-chaos-control-plane                      Started container kube-apiserver
+kube-system          39h         Normal    SandboxChanged            pod/kube-controller-manager-chaos-control-plane             Pod sandbox changed, it will be killed and re-created.
+kube-system          39h         Normal    Pulled                    pod/kube-controller-manager-chaos-control-plane             Container image "registry.k8s.io/kube-controller-manager:v1.31.0" already present on machine
+kube-system          39h         Normal    Created                   pod/kube-controller-manager-chaos-control-plane             Created container kube-controller-manager
+kube-system          39h         Normal    Started                   pod/kube-controller-manager-chaos-control-plane             Started container kube-controller-manager
+kube-system          40m         Normal    SandboxChanged            pod/kube-controller-manager-chaos-control-plane             Pod sandbox changed, it will be killed and re-created.
+kube-system          40m         Normal    Pulled                    pod/kube-controller-manager-chaos-control-plane             Container image "registry.k8s.io/kube-controller-manager:v1.31.0" already present on machine
+kube-system          40m         Normal    Created                   pod/kube-controller-manager-chaos-control-plane             Created container kube-controller-manager
+kube-system          40m         Normal    Started                   pod/kube-controller-manager-chaos-control-plane             Started container kube-controller-manager
+kube-system          39h         Normal    LeaderElection            lease/kube-controller-manager                               chaos-control-plane_72c521d8-598e-40d4-a8fe-9112f1dbf7be became leader
+kube-system          40m         Normal    LeaderElection            lease/kube-controller-manager                               chaos-control-plane_e478cc28-0a95-41ec-bb1f-44a60cb46845 became leader
+kube-system          39h         Normal    SandboxChanged            pod/kube-proxy-lmvhs                                        Pod sandbox changed, it will be killed and re-created.
+kube-system          39h         Normal    Pulled                    pod/kube-proxy-lmvhs                                        Container image "registry.k8s.io/kube-proxy:v1.31.0" already present on machine
+kube-system          39h         Normal    Created                   pod/kube-proxy-lmvhs                                        Created container kube-proxy
+kube-system          39h         Normal    Started                   pod/kube-proxy-lmvhs                                        Started container kube-proxy
+kube-system          40m         Normal    SandboxChanged            pod/kube-proxy-lmvhs                                        Pod sandbox changed, it will be killed and re-created.
+kube-system          40m         Normal    Pulled                    pod/kube-proxy-lmvhs                                        Container image "registry.k8s.io/kube-proxy:v1.31.0" already present on machine
+kube-system          40m         Normal    Created                   pod/kube-proxy-lmvhs                                        Created container kube-proxy
+kube-system          40m         Normal    Started                   pod/kube-proxy-lmvhs                                        Started container kube-proxy
+kube-system          39h         Normal    SandboxChanged            pod/kube-scheduler-chaos-control-plane                      Pod sandbox changed, it will be killed and re-created.
+kube-system          39h         Normal    Pulled                    pod/kube-scheduler-chaos-control-plane                      Container image "registry.k8s.io/kube-scheduler:v1.31.0" already present on machine
+kube-system          39h         Normal    Created                   pod/kube-scheduler-chaos-control-plane                      Created container kube-scheduler
+kube-system          39h         Normal    Started                   pod/kube-scheduler-chaos-control-plane                      Started container kube-scheduler
+kube-system          40m         Normal    SandboxChanged            pod/kube-scheduler-chaos-control-plane                      Pod sandbox changed, it will be killed and re-created.
+kube-system          40m         Normal    Pulled                    pod/kube-scheduler-chaos-control-plane                      Container image "registry.k8s.io/kube-scheduler:v1.31.0" already present on machine
+kube-system          40m         Normal    Created                   pod/kube-scheduler-chaos-control-plane                      Created container kube-scheduler
+kube-system          40m         Normal    Started                   pod/kube-scheduler-chaos-control-plane                      Started container kube-scheduler
+kube-system          39h         Normal    LeaderElection            lease/kube-scheduler                                        chaos-control-plane_347c4d4b-8e1b-4a19-a8d3-457701eebdbc became leader
+kube-system          40m         Normal    LeaderElection            lease/kube-scheduler                                        chaos-control-plane_b765ae8d-53d2-4437-8421-fb825416e77c became leader
+local-path-storage   39h         Normal    SandboxChanged            pod/local-path-provisioner-ccc7bf7fc-2jcpc                  Pod sandbox changed, it will be killed and re-created.
+local-path-storage   39h         Normal    Pulled                    pod/local-path-provisioner-ccc7bf7fc-2jcpc                  Container image "docker.io/kindest/local-path-provisioner:v20241108-5c6d2daf" already present on machine
+local-path-storage   39h         Normal    Created                   pod/local-path-provisioner-ccc7bf7fc-2jcpc                  Created container local-path-provisioner
+local-path-storage   39h         Normal    Started                   pod/local-path-provisioner-ccc7bf7fc-2jcpc                  Started container local-path-provisioner
+local-path-storage   39h         Warning   BackOff                   pod/local-path-provisioner-ccc7bf7fc-2jcpc                  Back-off restarting failed container local-path-provisioner in pod local-path-provisioner-ccc7bf7fc-2jcpc_local-path-storage(274b6d84-1d68-45c2-9f9c-baa7137fca91)
+local-path-storage   40m         Normal    SandboxChanged            pod/local-path-provisioner-ccc7bf7fc-2jcpc                  Pod sandbox changed, it will be killed and re-created.
+local-path-storage   39m         Normal    Pulled                    pod/local-path-provisioner-ccc7bf7fc-2jcpc                  Container image "docker.io/kindest/local-path-provisioner:v20241108-5c6d2daf" already present on machine
+local-path-storage   39m         Normal    Created                   pod/local-path-provisioner-ccc7bf7fc-2jcpc                  Created container local-path-provisioner
+local-path-storage   39m         Normal    Started                   pod/local-path-provisioner-ccc7bf7fc-2jcpc                  Started container local-path-provisioner
+local-path-storage   39m         Warning   BackOff                   pod/local-path-provisioner-ccc7bf7fc-2jcpc                  Back-off restarting failed container local-path-provisioner in pod local-path-provisioner-ccc7bf7fc-2jcpc_local-path-storage(274b6d84-1d68-45c2-9f9c-baa7137fca91)
+monitoring           39h         Normal    SandboxChanged            pod/alertmanager-kps-kube-prometheus-stack-alertmanager-0   Pod sandbox changed, it will be killed and re-created.
+monitoring           39h         Normal    Pulled                    pod/alertmanager-kps-kube-prometheus-stack-alertmanager-0   Container image "m.daocloud.io/quay.io/prometheus-operator/prometheus-config-reloader:v0.93.1" already present on machine
+monitoring           39h         Normal    Created                   pod/alertmanager-kps-kube-prometheus-stack-alertmanager-0   Created container init-config-reloader
+monitoring           39h         Normal    Started                   pod/alertmanager-kps-kube-prometheus-stack-alertmanager-0   Started container init-config-reloader
+monitoring           39h         Normal    Pulled                    pod/alertmanager-kps-kube-prometheus-stack-alertmanager-0   Container image "m.daocloud.io/quay.io/prometheus/alertmanager:v0.34.0" already present on machine
+monitoring           39h         Normal    Created                   pod/alertmanager-kps-kube-prometheus-stack-alertmanager-0   Created container alertmanager
+monitoring           39h         Normal    Started                   pod/alertmanager-kps-kube-prometheus-stack-alertmanager-0   Started container alertmanager
+monitoring           39h         Normal    Pulled                    pod/alertmanager-kps-kube-prometheus-stack-alertmanager-0   Container image "m.daocloud.io/quay.io/prometheus-operator/prometheus-config-reloader:v0.93.1" already present on machine
+monitoring           39h         Normal    Created                   pod/alertmanager-kps-kube-prometheus-stack-alertmanager-0   Created container config-reloader
+monitoring           39h         Normal    Started                   pod/alertmanager-kps-kube-prometheus-stack-alertmanager-0   Started container config-reloader
+monitoring           40m         Normal    SandboxChanged            pod/alertmanager-kps-kube-prometheus-stack-alertmanager-0   Pod sandbox changed, it will be killed and re-created.
+monitoring           40m         Normal    Pulled                    pod/alertmanager-kps-kube-prometheus-stack-alertmanager-0   Container image "m.daocloud.io/quay.io/prometheus-operator/prometheus-config-reloader:v0.93.1" already present on machine
+monitoring           40m         Normal    Created                   pod/alertmanager-kps-kube-prometheus-stack-alertmanager-0   Created container init-config-reloader
+monitoring           40m         Normal    Started                   pod/alertmanager-kps-kube-prometheus-stack-alertmanager-0   Started container init-config-reloader
+monitoring           40m         Normal    Pulled                    pod/alertmanager-kps-kube-prometheus-stack-alertmanager-0   Container image "m.daocloud.io/quay.io/prometheus/alertmanager:v0.34.0" already present on machine
+monitoring           40m         Normal    Created                   pod/alertmanager-kps-kube-prometheus-stack-alertmanager-0   Created container alertmanager
+monitoring           40m         Normal    Started                   pod/alertmanager-kps-kube-prometheus-stack-alertmanager-0   Started container alertmanager
+monitoring           40m         Normal    Pulled                    pod/alertmanager-kps-kube-prometheus-stack-alertmanager-0   Container image "m.daocloud.io/quay.io/prometheus-operator/prometheus-config-reloader:v0.93.1" already present on machine
+monitoring           40m         Normal    Created                   pod/alertmanager-kps-kube-prometheus-stack-alertmanager-0   Created container config-reloader
+monitoring           40m         Normal    Started                   pod/alertmanager-kps-kube-prometheus-stack-alertmanager-0   Started container config-reloader
+monitoring           39h         Normal    SandboxChanged            pod/kps-grafana-c4ff4768c-lt6gj                             Pod sandbox changed, it will be killed and re-created.
+monitoring           39h         Normal    Pulled                    pod/kps-grafana-c4ff4768c-lt6gj                             Container image "docker.m.daocloud.io/library/busybox:1.38.0" already present on machine
+monitoring           39h         Normal    Created                   pod/kps-grafana-c4ff4768c-lt6gj                             Created container init-chown-data
+monitoring           39h         Normal    Started                   pod/kps-grafana-c4ff4768c-lt6gj                             Started container init-chown-data
+monitoring           39h         Normal    Pulled                    pod/kps-grafana-c4ff4768c-lt6gj                             Container image "m.daocloud.io/quay.io/kiwigrid/k8s-sidecar:2.11.2" already present on machine
+monitoring           39h         Normal    Created                   pod/kps-grafana-c4ff4768c-lt6gj                             Created container grafana-sc-dashboard
+monitoring           39h         Normal    Started                   pod/kps-grafana-c4ff4768c-lt6gj                             Started container grafana-sc-dashboard
+monitoring           39h         Normal    Pulled                    pod/kps-grafana-c4ff4768c-lt6gj                             Container image "m.daocloud.io/quay.io/kiwigrid/k8s-sidecar:2.11.2" already present on machine
+monitoring           39h         Normal    Created                   pod/kps-grafana-c4ff4768c-lt6gj                             Created container grafana-sc-datasources
+monitoring           39h         Normal    Started                   pod/kps-grafana-c4ff4768c-lt6gj                             Started container grafana-sc-datasources
+monitoring           39h         Normal    Pulled                    pod/kps-grafana-c4ff4768c-lt6gj                             Container image "docker.m.daocloud.io/grafana/grafana:13.2.1-distroless" already present on machine
+monitoring           39h         Normal    Created                   pod/kps-grafana-c4ff4768c-lt6gj                             Created container grafana
+monitoring           39h         Normal    Started                   pod/kps-grafana-c4ff4768c-lt6gj                             Started container grafana
+monitoring           40m         Normal    SandboxChanged            pod/kps-grafana-c4ff4768c-lt6gj                             Pod sandbox changed, it will be killed and re-created.
+monitoring           40m         Normal    Pulled                    pod/kps-grafana-c4ff4768c-lt6gj                             Container image "docker.m.daocloud.io/library/busybox:1.38.0" already present on machine
+monitoring           40m         Normal    Created                   pod/kps-grafana-c4ff4768c-lt6gj                             Created container init-chown-data
+monitoring           40m         Normal    Started                   pod/kps-grafana-c4ff4768c-lt6gj                             Started container init-chown-data
+monitoring           40m         Normal    Pulled                    pod/kps-grafana-c4ff4768c-lt6gj                             Container image "m.daocloud.io/quay.io/kiwigrid/k8s-sidecar:2.11.2" already present on machine
+monitoring           40m         Normal    Created                   pod/kps-grafana-c4ff4768c-lt6gj                             Created container grafana-sc-dashboard
+monitoring           40m         Normal    Started                   pod/kps-grafana-c4ff4768c-lt6gj                             Started container grafana-sc-dashboard
+monitoring           40m         Normal    Pulled                    pod/kps-grafana-c4ff4768c-lt6gj                             Container image "m.daocloud.io/quay.io/kiwigrid/k8s-sidecar:2.11.2" already present on machine
+monitoring           40m         Normal    Created                   pod/kps-grafana-c4ff4768c-lt6gj                             Created container grafana-sc-datasources
+monitoring           40m         Normal    Started                   pod/kps-grafana-c4ff4768c-lt6gj                             Started container grafana-sc-datasources
+monitoring           40m         Normal    Pulled                    pod/kps-grafana-c4ff4768c-lt6gj                             Container image "docker.m.daocloud.io/grafana/grafana:13.2.1-distroless" already present on machine
+monitoring           40m         Normal    Created                   pod/kps-grafana-c4ff4768c-lt6gj                             Created container grafana
+monitoring           40m         Normal    Started                   pod/kps-grafana-c4ff4768c-lt6gj                             Started container grafana
+monitoring           40m         Warning   Unhealthy                 pod/kps-grafana-c4ff4768c-lt6gj                             Readiness probe failed: Get "http://10.244.0.6:3000/api/health": dial tcp 10.244.0.6:3000: connect: connection refused
+monitoring           39h         Normal    SandboxChanged            pod/kps-kube-prometheus-stack-operator-56cb6c6cd9-4l7fj     Pod sandbox changed, it will be killed and re-created.
+monitoring           39h         Normal    Pulled                    pod/kps-kube-prometheus-stack-operator-56cb6c6cd9-4l7fj     Container image "m.daocloud.io/quay.io/prometheus-operator/prometheus-operator:v0.93.1" already present on machine
+monitoring           39h         Normal    Created                   pod/kps-kube-prometheus-stack-operator-56cb6c6cd9-4l7fj     Created container kube-prometheus-stack
+monitoring           39h         Normal    Started                   pod/kps-kube-prometheus-stack-operator-56cb6c6cd9-4l7fj     Started container kube-prometheus-stack
+monitoring           39h         Warning   Unhealthy                 pod/kps-kube-prometheus-stack-operator-56cb6c6cd9-4l7fj     Readiness probe failed: Get "https://10.244.0.2:10250/healthz": dial tcp 10.244.0.2:10250: connect: connection refused
+monitoring           39h         Warning   Unhealthy                 pod/kps-kube-prometheus-stack-operator-56cb6c6cd9-4l7fj     Liveness probe failed: Get "https://10.244.0.2:10250/healthz": dial tcp 10.244.0.2:10250: connect: connection refused
+monitoring           39h         Normal    Killing                   pod/kps-kube-prometheus-stack-operator-56cb6c6cd9-4l7fj     Container kube-prometheus-stack failed liveness probe, will be restarted
+monitoring           40m         Normal    SandboxChanged            pod/kps-kube-prometheus-stack-operator-56cb6c6cd9-4l7fj     Pod sandbox changed, it will be killed and re-created.
+monitoring           39m         Normal    Pulled                    pod/kps-kube-prometheus-stack-operator-56cb6c6cd9-4l7fj     Container image "m.daocloud.io/quay.io/prometheus-operator/prometheus-operator:v0.93.1" already present on machine
+monitoring           39m         Normal    Created                   pod/kps-kube-prometheus-stack-operator-56cb6c6cd9-4l7fj     Created container kube-prometheus-stack
+monitoring           39m         Normal    Started                   pod/kps-kube-prometheus-stack-operator-56cb6c6cd9-4l7fj     Started container kube-prometheus-stack
+monitoring           39m         Warning   Unhealthy                 pod/kps-kube-prometheus-stack-operator-56cb6c6cd9-4l7fj     Readiness probe failed: Get "https://10.244.0.2:10250/healthz": dial tcp 10.244.0.2:10250: connect: connection refused
+monitoring           39m         Warning   Unhealthy                 pod/kps-kube-prometheus-stack-operator-56cb6c6cd9-4l7fj     Liveness probe failed: Get "https://10.244.0.2:10250/healthz": dial tcp 10.244.0.2:10250: connect: connection refused
+monitoring           39m         Normal    Killing                   pod/kps-kube-prometheus-stack-operator-56cb6c6cd9-4l7fj     Container kube-prometheus-stack failed liveness probe, will be restarted
+monitoring           39h         Normal    SandboxChanged            pod/kps-kube-state-metrics-556886696-rpgbr                  Pod sandbox changed, it will be killed and re-created.
+monitoring           39h         Normal    Pulled                    pod/kps-kube-state-metrics-556886696-rpgbr                  Container image "m.daocloud.io/registry.k8s.io/kube-state-metrics/kube-state-metrics:v2.20.0" already present on machine
+monitoring           39h         Normal    Created                   pod/kps-kube-state-metrics-556886696-rpgbr                  Created container kube-state-metrics
+monitoring           39h         Normal    Started                   pod/kps-kube-state-metrics-556886696-rpgbr                  Started container kube-state-metrics
+monitoring           39h         Warning   Unhealthy                 pod/kps-kube-state-metrics-556886696-rpgbr                  Liveness probe failed: Get "http://10.244.0.11:8080/livez": dial tcp 10.244.0.11:8080: connect: connection refused
+monitoring           39h         Warning   Unhealthy                 pod/kps-kube-state-metrics-556886696-rpgbr                  Readiness probe failed: Get "http://10.244.0.11:8081/readyz": dial tcp 10.244.0.11:8081: connect: connection refused
+monitoring           39h         Normal    Killing                   pod/kps-kube-state-metrics-556886696-rpgbr                  Container kube-state-metrics failed liveness probe, will be restarted
+monitoring           40m         Normal    SandboxChanged            pod/kps-kube-state-metrics-556886696-rpgbr                  Pod sandbox changed, it will be killed and re-created.
+monitoring           39m         Normal    Pulled                    pod/kps-kube-state-metrics-556886696-rpgbr                  Container image "m.daocloud.io/registry.k8s.io/kube-state-metrics/kube-state-metrics:v2.20.0" already present on machine
+monitoring           39m         Normal    Created                   pod/kps-kube-state-metrics-556886696-rpgbr                  Created container kube-state-metrics
+monitoring           39m         Normal    Started                   pod/kps-kube-state-metrics-556886696-rpgbr                  Started container kube-state-metrics
+monitoring           39m         Warning   Unhealthy                 pod/kps-kube-state-metrics-556886696-rpgbr                  Liveness probe failed: Get "http://10.244.0.16:8080/livez": dial tcp 10.244.0.16:8080: connect: connection refused
+monitoring           39m         Warning   Unhealthy                 pod/kps-kube-state-metrics-556886696-rpgbr                  Readiness probe failed: Get "http://10.244.0.16:8081/readyz": dial tcp 10.244.0.16:8081: connect: connection refused
+monitoring           39m         Normal    Killing                   pod/kps-kube-state-metrics-556886696-rpgbr                  Container kube-state-metrics failed liveness probe, will be restarted
+monitoring           39h         Normal    SandboxChanged            pod/kps-prometheus-node-exporter-dh6ln                      Pod sandbox changed, it will be killed and re-created.
+monitoring           39h         Normal    Pulled                    pod/kps-prometheus-node-exporter-dh6ln                      Container image "m.daocloud.io/quay.io/prometheus/node-exporter:v1.12.1-distroless" already present on machine
+monitoring           39h         Normal    Created                   pod/kps-prometheus-node-exporter-dh6ln                      Created container node-exporter
+monitoring           39h         Normal    Started                   pod/kps-prometheus-node-exporter-dh6ln                      Started container node-exporter
+monitoring           40m         Normal    SandboxChanged            pod/kps-prometheus-node-exporter-dh6ln                      Pod sandbox changed, it will be killed and re-created.
+monitoring           40m         Normal    Pulled                    pod/kps-prometheus-node-exporter-dh6ln                      Container image "m.daocloud.io/quay.io/prometheus/node-exporter:v1.12.1-distroless" already present on machine
+monitoring           40m         Normal    Created                   pod/kps-prometheus-node-exporter-dh6ln                      Created container node-exporter
+monitoring           40m         Normal    Started                   pod/kps-prometheus-node-exporter-dh6ln                      Started container node-exporter
+monitoring           39h         Normal    SandboxChanged            pod/prometheus-kps-kube-prometheus-stack-prometheus-0       Pod sandbox changed, it will be killed and re-created.
+monitoring           39h         Normal    Pulled                    pod/prometheus-kps-kube-prometheus-stack-prometheus-0       Container image "m.daocloud.io/quay.io/prometheus-operator/prometheus-config-reloader:v0.93.1" already present on machine
+monitoring           39h         Normal    Created                   pod/prometheus-kps-kube-prometheus-stack-prometheus-0       Created container init-config-reloader
+monitoring           39h         Normal    Started                   pod/prometheus-kps-kube-prometheus-stack-prometheus-0       Started container init-config-reloader
+monitoring           39h         Normal    Pulled                    pod/prometheus-kps-kube-prometheus-stack-prometheus-0       Container image "m.daocloud.io/quay.io/prometheus/prometheus:v3.14.0-distroless" already present on machine
+monitoring           39h         Normal    Created                   pod/prometheus-kps-kube-prometheus-stack-prometheus-0       Created container prometheus
+monitoring           39h         Normal    Started                   pod/prometheus-kps-kube-prometheus-stack-prometheus-0       Started container prometheus
+monitoring           39h         Normal    Pulled                    pod/prometheus-kps-kube-prometheus-stack-prometheus-0       Container image "m.daocloud.io/quay.io/prometheus-operator/prometheus-config-reloader:v0.93.1" already present on machine
+monitoring           39h         Normal    Created                   pod/prometheus-kps-kube-prometheus-stack-prometheus-0       Created container config-reloader
+monitoring           39h         Normal    Started                   pod/prometheus-kps-kube-prometheus-stack-prometheus-0       Started container config-reloader
+monitoring           39h         Warning   Unhealthy                 pod/prometheus-kps-kube-prometheus-stack-prometheus-0       Startup probe failed: HTTP probe failed with statuscode: 503
+monitoring           40m         Normal    SandboxChanged            pod/prometheus-kps-kube-prometheus-stack-prometheus-0       Pod sandbox changed, it will be killed and re-created.
+monitoring           40m         Normal    Pulled                    pod/prometheus-kps-kube-prometheus-stack-prometheus-0       Container image "m.daocloud.io/quay.io/prometheus-operator/prometheus-config-reloader:v0.93.1" already present on machine
+monitoring           40m         Normal    Created                   pod/prometheus-kps-kube-prometheus-stack-prometheus-0       Created container init-config-reloader
+monitoring           40m         Normal    Started                   pod/prometheus-kps-kube-prometheus-stack-prometheus-0       Started container init-config-reloader
+monitoring           40m         Normal    Pulled                    pod/prometheus-kps-kube-prometheus-stack-prometheus-0       Container image "m.daocloud.io/quay.io/prometheus/prometheus:v3.14.0-distroless" already present on machine
+monitoring           40m         Normal    Created                   pod/prometheus-kps-kube-prometheus-stack-prometheus-0       Created container prometheus
+monitoring           40m         Normal    Started                   pod/prometheus-kps-kube-prometheus-stack-prometheus-0       Started container prometheus
+monitoring           40m         Normal    Pulled                    pod/prometheus-kps-kube-prometheus-stack-prometheus-0       Container image "m.daocloud.io/quay.io/prometheus-operator/prometheus-config-reloader:v0.93.1" already present on machine
+monitoring           40m         Normal    Created                   pod/prometheus-kps-kube-prometheus-stack-prometheus-0       Created container config-reloader
+monitoring           40m         Normal    Started                   pod/prometheus-kps-kube-prometheus-stack-prometheus-0       Started container config-reloader

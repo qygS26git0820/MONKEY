@@ -1,0 +1,16 @@
+{
+  "root_cause_kind": "NetworkChaos",
+  "namespace": "default",
+  "workload": "nginx",
+  "root_cause_name": "nginx-delay",
+  "root_cause_ref": "NetworkChaos/nginx-delay (namespace default)",
+  "affected_workload_kind": "Deployment",
+  "affected_workload_ref": "deployment/nginx",
+  "evidence": [
+    "kubectl get all -A -o yaml 转储中存在 chaos-mesh.org/v1alpha1 NetworkChaos/default/nginx-delay：spec.action=delay, spec.delay.latency=10s, spec.direction=to, spec.mode=all, selector.labelSelectors.app=nginx, selector.namespaces=[default]；creationTimestamp=2026-09-17T05:02:55Z，status 显示 AllInjected=True、三个 nginx-6559559688-* Pod 均 Injected。",
+    "三个对应 PodNetworkChaos 资源 (default/nginx-6559559688-ggv7d|mvlcx|tlcvs) 的 spec.tcs 均含 type=netem 的 10s delay，source=default/nginx-delay，即延迟被真实注入到 Pod 网络。",
+    "对照组：注入前 2026-09-17T04:58:56Z 同一客户端 wget http://nginx-svc.default.svc.cluster.local/ 返回 HTTP/1.1 200 OK；注入后 05:03:31Z 同一命令在 5s 超时（wget: download timed out）。",
+    "default/nginx 三个 Pod 均 1/1 Running、Ready=True、RESTARTS=0，Service nginx-svc 的 Endpoints/EndpointSlice 正常指向 10.244.0.19/20/21:80，可排除 Pod 故障与 Service/Endpoint 配置问题。",
+    "10s 注入延迟远大于客户端 5s 超时，故表现为请求大量超时、服务不可用。"
+  ]
+}

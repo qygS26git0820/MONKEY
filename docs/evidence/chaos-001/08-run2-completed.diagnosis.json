@@ -1,0 +1,14 @@
+{
+  "root_cause_kind": "NetworkChaos",
+  "namespace": "default",
+  "workload": "nginx",
+  "root_cause_name": "nginx-delay",
+  "summary": "default 命名空间下存在 Chaos Mesh 的 NetworkChaos/nginx-delay，于 2026-09-17T05:02:55Z 对 label app=nginx 的三个 Pod（nginx-6559559688-ggv7d/mvlcx/tlcvs）注入 10s 固定延迟（action=delay, latency=10s, direction=to, mode=all, duration=30m），状态 AllInjected。客户端 wget 超时阈值为 5s，故请求到达 Service 后必然超时；nginx Pod 本身 Running/Ready、0 重启，排除工作负载自身故障。",
+  "evidence": [
+    "快照 kubectl_get_all-...yaml 中 kind: NetworkChaos, metadata.name=nginx-delay, namespace=default, creationTimestamp=2026-09-17T05:02:55Z, spec.action=delay, spec.delay.latency=10s, selector.labelSelectors.app=nginx, namespaces=[default], mode=all, duration=30m, status.experiment 显示三个 nginx Pod phase=Injected",
+    "kubectl get events -A 中 default/networkchaos/nginx-delay: Experiment has started / Successfully apply chaos for default/nginx-6559559688-{mvlcx,tlcvs,ggv7d}",
+    "故障前 2026-09-17T04:58:56Z 同一客户端命令返回 HTTP/1.1 200 OK；注入后 2026-09-17T05:03:31Z 同一命令 wget: download timed out（--timeout=5）",
+    "kubectl get pods -A 显示 default/nginx 三副本均 1/1 Running、RESTARTS=0；describe 显示 Ready=True、容器 Running；说明 Pod 侧健康，问题在到 Pod 的网络路径",
+    "nginx 访问日志仅见 05:02:22 一次 200，注入时刻之后无任何请求到达，符合 ingress 方向 10s 延迟导致客户端提前超时"
+  ]
+}

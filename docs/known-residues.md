@@ -87,3 +87,44 @@
   在 `harness/llm/prompt.py` 里，`git log` 可查；`trace.jsonl` 的每条 `llm_request`
   都带当时的 `messages`/`tools` 全文，故**逐条可复核**。
 
+## R-008 成功收尾的那一步被预算检查丢弃时，轨迹缺少分类事件
+
+- **是什么**：`loop.py:88` 的用量检查排在动作分类（`loop.py:92`）之前，中间只隔了
+  `step += 1` 与 `agent.next_action()`。若第 N 步取回的动作是 `Finish`，而该次响应
+  使累计用量越过 `max_total_tokens`，循环会在**识别出这是 `Finish` 之前** `break`。
+  后果三条同时出现：该 run 的 `agent_message` 计数为 0（正常应有 1）、该步没有
+  `step_end`（`steps=13` 而 `step_end=12`）、`run_end.status = aborted`，而
+  `verification_status` 可以同时是 `passed`。该步的文本**没有丢**——它逐字存在于
+  `llm_response` 事件的 `content` 字段（`llm_response` 不走 `prepare_stream`，只有工具
+  输出才截断）；丢的是"这段文本是一次 Finish"这个**分类事件**。
+- **为什么不处理**：修它必须改 `loop.py` 的检查顺序（冻结文件），代价是第 4 次基线
+  移动。裁定（2026-09-17）："那是第 4 次基线移动，不值得"，上限职责交给
+  `max_steps=20`。检查排在动作分类之前本身是有理由的（`loop.py:86` 的注释：不等到下
+  一轮开头，否则被观测到的越限会多出整整一步），代价是这条副作用。
+- **影响**：任何按 `agent_message` 或 `run_end.status` 判断"agent 是否给出了收尾陈述"
+  的下游分析，在这个情形下会漏读或误读。`chaos-001` 的第 1 次实跑就落在这一格。
+- **出处**：`harness/core/loop.py:73/88/92/149`；`docs/chaos-retrospective.md` §1.3 偏离 2；
+  证据 `docs/evidence/chaos-001/01-run1-token-budget-exceeded.trace.jsonl`（`seq 81`）。
+
+## R-009 `chaos-001` 的判据对 `workload` 只做子串匹配
+
+- **是什么**：`tasks/chaos-001/task.json` 的判据原为
+  `'nginx' not in str(d['workload']).lower()`——只要 `workload` 里含 `nginx` 即通过。
+  于是把根因归到**别的**恰好名字含 nginx 的对象也能过：`nginx-svc`（Service）、
+  `nginx-6559559688-ggv7d`（Pod 名）、`endpoints/nginx`。判据**通过 ≠ 诊断正确**。
+- **为什么不处理**（原文）→ **【已处理：2026-09-17，随本条登记同批提交】**：裁定为
+  "登记，并同时修判据"。修改后的规则：先把 `workload` 做 alnum 归一，剥掉前缀与后缀
+  的 `default`/`deployment`/`deploy` 令牌，余下必须**恰好等于** `nginx`。这接受
+  `nginx`、`deployment/nginx`、`default/nginx`、`Deployment nginx`、`nginx Deployment`
+  等自然写法，拒绝指向 Service / Pod / Endpoints 的答案。真值表从 10 例扩到 17 例
+  （新增 `11-指向Service`、`12-指向Pod名`、`13-指向Endpoints` 三条反例与 4 条正例），
+  全部符合预期；两次已归档的实跑诊断（均为 `workload: "nginx"`）**仍 `exit 0`**，
+  故本次收紧不使任何历史证据失效。
+- **影响**：`chaos-001` 的判据现在能区分"指向工作负载"与"指向别的含 nginx 的对象"。
+  仍未覆盖的：若有人把 `workload` 写成一段散文（例如 `"nginx 三副本"`），会被判失败
+  而不是被解析；判据要的是标识符不是句子。`task.json` 的 `description` **未改**
+  （改它等于改实验条件），因此收紧后的规则必须只依赖 `description` 已有的措辞
+  （"直接受影响的工作负载"）就能满足——已按实测的自然写法逐条核对。
+- **出处**：`tasks/chaos-001/task.json` 的 `verify.command`；正反控制探针
+  `tmp/probe-verify-predicate.py`（不入库）；`docs/chaos-retrospective.md` §3.3。
+
