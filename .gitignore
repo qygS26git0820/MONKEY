@@ -6,4 +6,4 @@ tmp/
 workspace/
 images/
 .claude/
-*.docx
+/docs/*.docx
